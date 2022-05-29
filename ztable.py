@@ -23,11 +23,18 @@ def graphNormalDistribution():
 
 def normalProbabilityDensity(x):
     coefficient = 1.0 / math.sqrt(2 * math.pi)
-    return coefficient * math.exp((-x ** 2)/ 2.0)
+    return coefficient * math.exp((-x ** 2) / 2.0)
 
 
-while True:
-    lower_bound = float(input('enter lower integration bound'))
-    upper_bound = float(input('enter upper integration bound'))
-    print(quad(normalProbabilityDensity, lower_bound, upper_bound))
+# value = 99/300
+# print(quad(normalProbabilityDensity, value, np.PINF))
+# print(quad(normalProbabilityDensity, np.NINF, value))
+
+
+print(quad(normalProbabilityDensity, -2.4, -.9))
+
+# while True:
+#     lower_bound = float(input('enter lower integration bound'))
+#     upper_bound = float(input('enter upper integration bound'))
+#     print(quad(normalProbabilityDensity, lower_bound, upper_bound))
 
