@@ -31,7 +31,7 @@ def normalProbabilityDensity(x):
 # print(quad(normalProbabilityDensity, np.NINF, value))
 
 
-print(quad(normalProbabilityDensity, -2.4, -.9))
+print(quad(normalProbabilityDensity, 0.85, np.PINF))
 
 # while True:
 #     lower_bound = float(input('enter lower integration bound'))
