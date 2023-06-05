@@ -22,27 +22,20 @@ def createWikiLinks():
 		name = name.replace(' ', '_')
 		nameBuilder: str = ''
 
-		# when _ or ' detected, next char is capitalized to comply with fandom wiki
 		nextCharCaps: bool = False
 
+		# when _ or ' detected, next char capitalized to comply with fandom wiki
 		for ch in name:
-
-
-			match ch:
-				case '_':
-					nextCharCaps = True
+			if ch in ['_', '\'']:
+				nextCharCaps = True
+				nameBuilder += ch
+				continue
+			else:
+				if nextCharCaps:
+					nameBuilder += ch.upper()
+					nextCharCaps = False
+				else:
 					nameBuilder += ch
-					continue
-				case '\'':
-					nextCharCaps = True
-					nameBuilder += ch
-					continue
-				case _:
-					if nextCharCaps:
-						nameBuilder += ch.upper()
-						nextCharCaps = False
-					else:
-						nameBuilder += ch
 
 		championNames.append(nameBuilder)
 

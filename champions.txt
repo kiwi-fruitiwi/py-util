@@ -1,3 +1,16 @@
-		lee sin
-		kha'zix
+		azir
+		darius
+		diana
+		fiora
+		gnar
+		heimerdinger
+		jax
+		jinx
+		karma
+		nami
+		nocturne
 		renata glasc
+		shyvana
+		sivir
+		xerath
+		zac
