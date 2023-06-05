@@ -1,4 +1,6 @@
 # utility methods to help with League of Legends learning
+#   creates list of youtube channel links given champion name input
+
 import string
 from typing import List
 
