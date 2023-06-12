@@ -1,36 +1,40 @@
 # from: askpython.com/python/examples/convert-csv-to-json
-# purpose: convert 17L csv data into JSON format for 🚂17Lgrades
+# purpose: convert 17L csv data into JSON format for 🚂17L-grades
+# last ratings update: 2023.06.11: top, all colors
 
 import csv
 import json
 
 
-def csv_to_json(csvPath, jsonPath):
-	# create a dictionary
-	data_dict = {}
 
-	# Step 2
+def csvToJSON(csvPath, jsonPath):
+	"""
+	take 17L csv card ratings in csv and convert them to JSON
+	:param csvPath:
+	:param jsonPath:
+	"""
+	# create a dictionary of card info
+	cards = {}
+
 	# open a csv file handler
+	#
+	# note: using utf-8-sig to read a file will treat the BOM as metadata that
+	# explains how to interpret the file, instead of as part of the file
+	# contents.
 	with open(csvPath, encoding='utf-8-sig') as csv_file_handler:
 		csv_reader = csv.DictReader(csv_file_handler)
 
-		# convert each row into a dictionary
-		# and add the converted data to the data_variable
-
+		# convert each row into a dictionary; add converted data to cards dict
 		for row in csv_reader:
-			# primary key is the name of the file, 0
+
+			# primary key is the name of the card
 			key = row['Name']
-			data_dict[key] = row
-			# print(f'{key}')
+			cards[key] = row
+			print(f'{key}')
 
-			print(f'{row}')
-
-	# open a json file handler and use json.dumps
-	# method to dump the data
-	# Step 3
+	# open a json file handler and use json.dumps method to dump data
 	with open(jsonPath, 'w', encoding='utf-8') as json_file_handler:
-		# Step 4
-		json_file_handler.write(json.dumps(data_dict, indent=4))
+		json_file_handler.write(json.dumps(cards, indent=4))
 
 
-csv_to_json('ratings.csv', 'ratings.json')
+csvToJSON('ratings.csv', 'ratings.json')
