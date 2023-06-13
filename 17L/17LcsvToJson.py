@@ -4,6 +4,8 @@
 
 import csv
 import json
+import statistics
+from typing import List
 
 
 def csvToJSON(csvPath, jsonPath):
@@ -40,9 +42,20 @@ def csvToJSON(csvPath, jsonPath):
 		# Load the JSON data from the file
 		data = json.load(file)
 
-	# access the data from the JSON object, printing a list of keys
+	# access the data from the JSON object
+	# first create GIH WR array
+	gameInHandWinRates: List[str] = []
 	for key in data.keys():
-		print(key)
+		# the data is actually in string format
+		# so we need to do the following to convert to decimal:
+		#   verify right-most char is '%'
+		#   strip it
+		#   convert to number
+		#   divide by 100
+		gameInHandWinRates.append(data[key]["GIH WR"])
+		print(f'{key} → {data[key]["GIH WR"]}')
+
+	print(gameInHandWinRates)
 
 
 csvToJSON('ratings.csv', 'ratings.json')
