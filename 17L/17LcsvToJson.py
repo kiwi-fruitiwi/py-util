@@ -65,10 +65,15 @@ def csvToJSON(csvPath, jsonPath):
 		else:
 			print(f'!added: 🍆 {key}')
 
-
 	# print(gameInHandWinRates)
-	print(f'GIH WR μ → {statistics.mean(gameInHandWinRates)}')
-	print(f'GIH WR σ → {statistics.stdev(gameInHandWinRates)}')
+	μ: float = statistics.mean(gameInHandWinRates)
+	σ: float = statistics.stdev(gameInHandWinRates)
+	print(f'GIH WR μ → {μ}')
+	print(f'GIH WR σ → {σ}')
+
+	# calculate z-score: (data - μ) / σ
+	zScores: List[float] = [(x - μ) / σ for x in gameInHandWinRates]
+	print(zScores)
 
 
 csvToJSON('ratings.csv', 'ratings.json')
