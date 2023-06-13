@@ -4,6 +4,7 @@
 
 import csv
 import json
+import math
 import statistics
 from typing import List, Dict
 
@@ -88,7 +89,21 @@ def csvToJSON(csvPath, jsonPath):
 	for name in cardWinRates.keys():
 		x: float = cardWinRates[name]
 		zScore: float = (x - μ) / σ
-		print(f'{zScore:7.3f} ← {name}')
+		zStr = ' ' # empty space for alignment
+		match zScore:
+			case n if 1.5 <= n < 10: # 10 is arbitrary impossibly high stddev
+				zStr = 'A'
+			case n if 0.5 <= n < 1.5:
+				zStr = 'B'
+			case n if -0.5 <= n < 0.5: # one σ within μ is a C
+				zStr = 'C'
+			case n if -1.5 <= n < -0.5:
+				zStr = 'D'
+			case n if -2.5 <= n < -1.5:
+				zStr = 'F'
+
+		print(f'{zStr} {zScore:7.3f} {cardWinRates[name]: 6.3f} ← {name}')
+
 
 
 csvToJSON('ratings.csv', 'ratings.json')
