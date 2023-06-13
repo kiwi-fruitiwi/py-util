@@ -5,7 +5,7 @@
 import csv
 import json
 import statistics
-from typing import List
+from typing import List, Dict
 
 
 def csvToJSON(csvPath, jsonPath):
@@ -27,11 +27,10 @@ def csvToJSON(csvPath, jsonPath):
 
 		# convert each row into a dictionary; add converted data to cards dict
 		for row in csv_reader:
-
 			# primary key is the name of the card
 			key = row['Name']
 			cards[key] = row
-			# print(f'{key}')
+		# print(f'{key}')
 
 	# open a json file handler and use json.dumps method to dump data
 	with open(jsonPath, 'w', encoding='utf-8') as json_file_handler:
@@ -45,6 +44,10 @@ def csvToJSON(csvPath, jsonPath):
 	# access the data from the JSON object
 	# first create GIH WR array
 	gameInHandWinRates: List[float] = []
+
+	# CardName, GIH WR dictionary
+	cardWinRates: Dict[str, float] = {}
+
 	for key in data.keys():
 		# print(f'{key} → {data[key]["GIH WR"]}')
 
@@ -62,6 +65,7 @@ def csvToJSON(csvPath, jsonPath):
 			assert winRateString[-1] == '%'
 			wr = float(winRateString.replace('%', 'e-2'))
 			gameInHandWinRates.append(wr)
+			cardWinRates[key] = wr
 		else:
 			print(f'!added: 🍆 {key}')
 
@@ -73,7 +77,18 @@ def csvToJSON(csvPath, jsonPath):
 
 	# calculate z-score: (data - μ) / σ
 	zScores: List[float] = [(x - μ) / σ for x in gameInHandWinRates]
-	print(zScores)
+	# print(zScores)
+
+	# display cardName, GIH WR pairs
+	# for key in cardWinRates.keys():
+	# print(f'z: {cardWinRates[key]: .3f} ← {key}')
+
+	# create cardName, zScore dictionary
+	cardNamesAndZScores: Dict[str, float] = {}
+	for name in cardWinRates.keys():
+		x: float = cardWinRates[name]
+		zScore: float = (x - μ) / σ
+		print(f'{zScore:7.3f} ← {name}')
 
 
 csvToJSON('ratings.csv', 'ratings.json')
