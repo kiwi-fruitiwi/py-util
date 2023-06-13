@@ -44,18 +44,31 @@ def csvToJSON(csvPath, jsonPath):
 
 	# access the data from the JSON object
 	# first create GIH WR array
-	gameInHandWinRates: List[str] = []
+	gameInHandWinRates: List[float] = []
 	for key in data.keys():
+		# print(f'{key} → {data[key]["GIH WR"]}')
+
 		# the data is actually in string format
 		# so we need to do the following to convert to decimal:
 		#   verify right-most char is '%'
-		#   strip it
-		#   convert to number
-		#   divide by 100
-		gameInHandWinRates.append(data[key]["GIH WR"])
-		print(f'{key} → {data[key]["GIH WR"]}')
+		#   cast to float with 'e-2'
 
-	print(gameInHandWinRates)
+		# some cards don't have enough data and their GIH WR is empty: ''. so
+		# we simply ignore these in the data set, e.g.
+		#   invasion of arcavios
+		#   jin-gitaxias, core augur
+		winRateString: str = data[key]["GIH WR"]
+		if winRateString != '':
+			assert winRateString[-1] == '%'
+			wr = float(winRateString.replace('%', 'e-2'))
+			gameInHandWinRates.append(wr)
+		else:
+			print(f'!added: 🍆 {key}')
+
+
+	# print(gameInHandWinRates)
+	print(f'GIH WR μ → {statistics.mean(gameInHandWinRates)}')
+	print(f'GIH WR σ → {statistics.stdev(gameInHandWinRates)}')
 
 
 csvToJSON('ratings.csv', 'ratings.json')
