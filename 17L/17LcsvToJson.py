@@ -6,7 +6,6 @@ import csv
 import json
 
 
-
 def csvToJSON(csvPath, jsonPath):
 	"""
 	take 17L csv card ratings in csv and convert them to JSON
@@ -30,11 +29,20 @@ def csvToJSON(csvPath, jsonPath):
 			# primary key is the name of the card
 			key = row['Name']
 			cards[key] = row
-			print(f'{key}')
+			# print(f'{key}')
 
 	# open a json file handler and use json.dumps method to dump data
 	with open(jsonPath, 'w', encoding='utf-8') as json_file_handler:
 		json_file_handler.write(json.dumps(cards, indent=4))
+
+	# it's time to actually read the JSON we created
+	with open(jsonPath) as file:
+		# Load the JSON data from the file
+		data = json.load(file)
+
+	# access the data from the JSON object, printing a list of keys
+	for key in data.keys():
+		print(key)
 
 
 csvToJSON('ratings.csv', 'ratings.json')
