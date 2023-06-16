@@ -91,43 +91,52 @@ def csvToJSON(csvPath, jsonPath):
 		zScore: float = (x - μ) / σ
 		zStr = ' ' # empty space for alignment
 
+		# iterate through reversed list
+		# if zScore is greater than current iterated value:
+		# 	replace gradeStr with key
+
+
+
 		# set letter grade based on zScore range
-		match zScore:
-			case n if Grade.S.value <= n < Grade.CEILING.value:
-				zStr = 'S'
-			case n if Grade.A_PLUS.value <= n < Grade.S.value:
-				zStr = 'A+'
-			case n if Grade.A.value <= n < Grade.A_PLUS.value:
-				zStr = 'A'
-			case n if Grade.A_MINUS.value <= n < Grade.A.value:
-				zStr = 'A-'
-
-			case n if Grade.B_PLUS.value <= n < Grade.A_MINUS.value:
-				zStr = 'B+'
-			case n if Grade.B.value <= n < Grade.B_PLUS.value:
-				zStr = 'B'
-			case n if Grade.B_MINUS.value <= n < Grade.B.value:
-				zStr = 'B-'
-
-			case n if Grade.C_PLUS.value <= n < Grade.B_MINUS.value:
-				zStr = 'C+'
-			case n if Grade.C.value <= n < Grade.C_PLUS.value:
-				zStr = 'C'
-			case n if Grade.C_MINUS.value <= n < Grade.C.value:
-				zStr = 'C-'
-
-			case n if Grade.D_PLUS.value <= n < Grade.C_MINUS.value:
-				zStr = 'D+'
-			case n if Grade.D.value <= n < Grade.D_PLUS.value:
-				zStr = 'D'
-			case n if Grade.D_MINUS.value <= n < Grade.D.value:
-				zStr = 'D-'
-
-			case n if n < Grade.D_MINUS.value:
-				zStr = 'F'
+		# match zScore:
+		# 	case n if Grade.S.value <= n < Grade.CEILING.value:
+		# 		zStr = 'S'
+		# 	case n if Grade.A_PLUS.value <= n < Grade.S.value:
+		# 		zStr = 'A+'
+		# 	case n if Grade.A.value <= n < Grade.A_PLUS.value:
+		# 		zStr = 'A'
+		# 	case n if Grade.A_MINUS.value <= n < Grade.A.value:
+		# 		zStr = 'A-'
+		#
+		# 	case n if Grade.B_PLUS.value <= n < Grade.A_MINUS.value:
+		# 		zStr = 'B+'
+		# 	case n if Grade.B.value <= n < Grade.B_PLUS.value:
+		# 		zStr = 'B'
+		# 	case n if Grade.B_MINUS.value <= n < Grade.B.value:
+		# 		zStr = 'B-'
+		#
+		# 	case n if Grade.C_PLUS.value <= n < Grade.B_MINUS.value:
+		# 		zStr = 'C+'
+		# 	case n if Grade.C.value <= n < Grade.C_PLUS.value:
+		# 		zStr = 'C'
+		# 	case n if Grade.C_MINUS.value <= n < Grade.C.value:
+		# 		zStr = 'C-'
+		#
+		# 	case n if Grade.D_PLUS.value <= n < Grade.C_MINUS.value:
+		# 		zStr = 'D+'
+		# 	case n if Grade.D.value <= n < Grade.D_PLUS.value:
+		# 		zStr = 'D'
+		# 	case n if Grade.D_MINUS.value <= n < Grade.D.value:
+		# 		zStr = 'D-'
+		#
+		# 	case n if n < Grade.D_MINUS.value:
+		# 		zStr = 'F'
 
 
 		print(f'{zStr:2} {zScore:7.3f} {cardWinRates[name]: 6.3f} ← {name}')
+
+	for pair in gradeBounds:
+		print(f'{pair}')
 
 
 # defines lower bound zScore values for letter grades like A-, D+, B, etc.
@@ -155,5 +164,22 @@ class Grade(Enum):
 	F = -1 * CEILING
 
 
+# a list of tuples containing lower bounds for grades, e.g. S:2.5, A:1.83
+# invariant: this is sorted by zScore value
+gradeBounds: List[tuple] = [
+	('S',   2.5),
+	('A+',  2.17),
+	('A',   1.83),
+	('A-',  1.5),
+	('B+',  1.17),
+	('B',   0.83),
+	('B-',  0.5),
+	('C+',  0.17),
+	('C',   0),
+	('C-', -0.17),
+	('D+', -0.83),
+	('D',  -1.17),
+	('D-', -1.5)
+]
 
 csvToJSON('ratings.csv', 'ratings.json')
