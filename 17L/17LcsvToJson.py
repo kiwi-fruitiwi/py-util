@@ -31,7 +31,6 @@ def csvToJSON(csvPath, jsonPath):
 			# primary key is the name of the card
 			cardName = row['Name']
 			cards[cardName] = row
-	# print(f'{key}')
 
 	# open a json file handler and use json.dumps method to dump data
 	with open(jsonPath, 'w', encoding='utf-8') as json_file_handler:
@@ -39,7 +38,6 @@ def csvToJSON(csvPath, jsonPath):
 
 	# it's time to actually read the JSON we created
 	with open(jsonPath) as file:
-		# Load the JSON data from the file
 		data = json.load(file)
 
 	# access the data from the JSON object
@@ -49,6 +47,7 @@ def csvToJSON(csvPath, jsonPath):
 	# CardName, GIH WR dictionary
 	cardWinRates: Dict[str, float] = {}
 
+	# iterate through JSON data to determine σ and μ for data set first
 	for cardName in data.keys():
 		# print(f'{key} → {data[key]["GIH WR"]}')
 
@@ -70,26 +69,26 @@ def csvToJSON(csvPath, jsonPath):
 		else:
 			print(f'!added: 🍆 {cardName}')
 
-	# print(gameInHandWinRates)
+
 	μ: float = statistics.mean(gameInHandWinRates)
 	σ: float = statistics.stdev(gameInHandWinRates)
-	print(f'GIH WR μ → {μ}')
-	print(f'GIH WR σ → {σ}')
+	print(f'\nGIH WR μ → {μ}')
+	print(f'GIH WR σ → {σ}\n')
 
 	# calculate z-score using list comprehension: (data - μ) / σ
 	zScores: List[float] = [(x - μ) / σ for x in gameInHandWinRates]
 
 	# now that we have the GIH WR σ and μ, display data:
-	# some cards don't have data, so we check if it's actually in our GIHWR dict
 	for cardName in data.keys():
+		# some cards don't have data: check if it's actually in our GIHWR dict
 		if cardName in cardWinRates:
 			x: float = cardWinRates[cardName]  # GIH WR
 			zScore: float = (x - μ) / σ  # how many stdDevs away from the mean?
 			gradeStr = ' '  # empty space for alignment
 
-			# iterate through reversed list
+			# iterate reversed gradeBounds list: ('A+', 2.17) ('B', 0.83)
 			# if zScore is greater than current iterated value:
-			# 	replace gradeStr with key
+			# 	replace gradeStr with key: 'A+', 'B', etc.
 			for gradePair in gradeBounds[::-1]:
 				if zScore >= gradePair[1]:
 					gradeStr = gradePair[0]
