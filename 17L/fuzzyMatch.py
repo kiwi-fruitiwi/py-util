@@ -6,5 +6,10 @@ import json
 with open('ratings.json') as file:
     data = json.load(file)
 
-bestMatches = process.extractBests("arwen", data.keys())
-[print(e) for e in bestMatches]
+done: bool = False
+
+while not done:
+    userInput: str = input('\nEnter card name to match: ')
+
+    bestMatches = process.extractBests(userInput, data.keys())
+    [print(e) for e in bestMatches]
