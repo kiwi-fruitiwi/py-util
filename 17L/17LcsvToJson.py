@@ -6,7 +6,6 @@ import csv
 import json
 import statistics
 from typing import List, Dict
-from enum import Enum
 
 
 def csvToJSON(csvPath, jsonPath):
@@ -17,6 +16,7 @@ def csvToJSON(csvPath, jsonPath):
 	"""
 	# create a dictionary of card info
 	cards = {}
+
 
 	# open a csv file handler
 	#
