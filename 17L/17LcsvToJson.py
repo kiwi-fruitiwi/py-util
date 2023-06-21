@@ -29,9 +29,9 @@ def csvToJSON(csvPath, jsonPath):
 		# convert each row into a dictionary; add converted data to cards dict
 		for row in csv_reader:
 			# primary key is the name of the card
-			key = row['Name']
-			cards[key] = row
-		# print(f'{key}')
+			cardName = row['Name']
+			cards[cardName] = row
+	# print(f'{key}')
 
 	# open a json file handler and use json.dumps method to dump data
 	with open(jsonPath, 'w', encoding='utf-8') as json_file_handler:
@@ -49,7 +49,7 @@ def csvToJSON(csvPath, jsonPath):
 	# CardName, GIH WR dictionary
 	cardWinRates: Dict[str, float] = {}
 
-	for key in data.keys():
+	for cardName in data.keys():
 		# print(f'{key} → {data[key]["GIH WR"]}')
 
 		# the data is actually in string format
@@ -61,14 +61,14 @@ def csvToJSON(csvPath, jsonPath):
 		# we simply ignore these in the data set, e.g.
 		#   invasion of arcavios
 		#   jin-gitaxias, core augur
-		winRateString: str = data[key]["GIH WR"]
+		winRateString: str = data[cardName]["GIH WR"]
 		if winRateString != '':
 			assert winRateString[-1] == '%'
 			wr = float(winRateString.replace('%', 'e-2'))
 			gameInHandWinRates.append(wr)
-			cardWinRates[key] = wr
+			cardWinRates[cardName] = wr
 		else:
-			print(f'!added: 🍆 {key}')
+			print(f'!added: 🍆 {cardName}')
 
 	# print(gameInHandWinRates)
 	μ: float = statistics.mean(gameInHandWinRates)
@@ -76,29 +76,29 @@ def csvToJSON(csvPath, jsonPath):
 	print(f'GIH WR μ → {μ}')
 	print(f'GIH WR σ → {σ}')
 
-	# calculate z-score: (data - μ) / σ
+	# calculate z-score using list comprehension: (data - μ) / σ
 	zScores: List[float] = [(x - μ) / σ for x in gameInHandWinRates]
-	# print(zScores)
 
-	# display cardName, GIH WR pairs
-	# for key in cardWinRates.keys():
-	# print(f'z: {cardWinRates[key]: .3f} ← {key}')
+	# now that we have the GIH WR σ and μ, display data:
+	# some cards don't have data, so we check if it's actually in our GIHWR dict
+	for cardName in data.keys():
+		if cardName in cardWinRates:
+			x: float = cardWinRates[cardName]  # GIH WR
+			zScore: float = (x - μ) / σ  # how many stdDevs away from the mean?
+			gradeStr = ' '  # empty space for alignment
 
-	# create cardName, zScore dictionary
-	cardNamesAndZScores: Dict[str, float] = {}
-	for name in cardWinRates.keys():
-		x: float = cardWinRates[name]
-		zScore: float = (x - μ) / σ
-		gradeStr = ' ' # empty space for alignment
+			# iterate through reversed list
+			# if zScore is greater than current iterated value:
+			# 	replace gradeStr with key
+			for gradePair in gradeBounds[::-1]:
+				if zScore >= gradePair[1]:
+					gradeStr = gradePair[0]
 
-		# iterate through reversed list
-		# if zScore is greater than current iterated value:
-		# 	replace gradeStr with key
-		for gradePair in gradeBounds[::-1]:
-			if zScore >= gradePair[1]:
-				gradeStr = gradePair[0]
+			color: str = data[cardName]["Color"]
+			rarity: str = data[cardName]["Rarity"]
 
-		print(f'{gradeStr:2} {zScore:7.3f} {cardWinRates[name]: 6.3f} ← {name}')
+			print(f'{gradeStr:2} {zScore:7.3f} {cardWinRates[cardName]: 6.3f}'
+				  f' ← {rarity} [{color}] {cardName}')
 
 
 # defines lower bound zScore values for letter grades like A-, D+, B, etc.
@@ -106,20 +106,20 @@ def csvToJSON(csvPath, jsonPath):
 # a list of tuples containing lower bounds for grades, e.g. S:2.5, A:1.83
 # invariant: this is sorted by zScore value
 gradeBounds: List[tuple] = [
-	('S',   2.5),
-	('A+',  2.17),
-	('A',   1.83),
-	('A-',  1.5),
-	('B+',  1.17),
-	('B',   0.83),
-	('B-',  0.5),
-	('C+',  0.17),
-	('C',   0),
+	('S', 2.5),
+	('A+', 2.17),
+	('A', 1.83),
+	('A-', 1.5),
+	('B+', 1.17),
+	('B', 0.83),
+	('B-', 0.5),
+	('C+', 0.17),
+	('C', 0),
 	('C-', -0.17),
 	('D+', -0.83),
-	('D',  -1.17),
+	('D', -1.17),
 	('D-', -1.5),
 	('F', -10)
 ]
 
-csvToJSON('ratings.csv', 'ratings.json')
+csvToJSON('ltr/2023-06-21.csv', 'ratings.json')
