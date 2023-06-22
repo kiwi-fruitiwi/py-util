@@ -4,7 +4,7 @@ from typing import List
 import json
 
 # load json from our 17L csv to json converter
-with open('ratings.json') as file:
+with open('../data/ratings.json') as file:
     data = json.load(file)
 
 done: bool = False
