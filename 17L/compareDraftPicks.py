@@ -56,12 +56,12 @@ def main(data):
 				print(f'🍆 best match not found for {value}')
 
 		# use cardFetchList to grab JSON data from data variable
-		[print(name) for name in cardFetchList]
+		# [print(name) for name in cardFetchList]
 		printCardData(cardFetchList, data)
 
 
-# get card data from data/ratings.json
-# noinspection DuplicatedCode
+# get card data from data/ratings.json and display it for each cardName in
+# cardNameList :D If the JSON is sorted by GIHWR, so will the results.
 def printCardData(cardNameList: List[str], jsonData):
 	# load JSON converted from 17L csv export, where each entry looks like this:
 	# 	"Sunfall": {
@@ -82,8 +82,9 @@ def printCardData(cardNameList: List[str], jsonData):
 
 	# CardName, GIH WR dictionary
 	cardWinRates: Dict[str, float] = {}
-	# iterate through JSON data to determine σ and μ for data set first
 
+
+	# iterate through JSON data to determine σ and μ for data set first
 	for cardName in jsonData.keys():
 		# the data is actually in string format: e.g. "GIH WR": "67.0%",
 		# so we need to do the following to convert to decimal:
@@ -107,8 +108,10 @@ def printCardData(cardNameList: List[str], jsonData):
 
 	μ: float = statistics.mean(filteredWRs)
 	σ: float = statistics.stdev(filteredWRs)
-	print(f'\nGIH WR μ → {μ}')
-	print(f'GIH WR σ → {σ}\n')
+
+	# header
+	print(f'\n   zscore  ata  ohwr gihwr    iwd   r      μ:{μ:.3f}, σ:{σ:.3f}')
+	# print(f'------------------------------------------------------------')
 
 	# now that we have the GIH WR σ and μ, display data:
 	# note the JSON will be sorted however it was when the csv was requested
@@ -116,9 +119,10 @@ def printCardData(cardNameList: List[str], jsonData):
 	for cardName in jsonData.keys():
 		# some cards don't have data: check if it's actually in our GIHWR dict
 		if (cardName in cardWinRates) and (cardName in cardNameList):
+			cardData = jsonData[cardName] # card data json object
 			x: float = cardWinRates[cardName]  # GIH WR
-			color: str = jsonData[cardName]["Color"]
-			rarity: str = jsonData[cardName]["Rarity"]
+			color: str = cardData["Color"]
+			rarity: str = cardData["Rarity"]
 			gradeStr = ' '  # empty space for alignment
 
 			if x:  # x is set to None if no GIH WR was available
@@ -132,11 +136,50 @@ def printCardData(cardNameList: List[str], jsonData):
 					if zScore >= gradePair[1]:
 						gradeStr = gradePair[0]
 
-				# header
-				print(f'')
+				''' ratings.json format:
+				
+				    "Orcish Bowmasters": {
+						"Name": "Orcish Bowmasters",
+						"Color": "B",
+						"Rarity": "R",
+						"# Seen": "632",
+						"ALSA": "1.57",
+						"# Picked": "484",
+						"ATA": "1.54",
+						"# GP": "2483",
+						"GP WR": "61.7%",
+						"# OH": "438",
+						"OH WR": "74.0%",
+						"# GD": "615",
+						"GD WR": "68.6%",
+						"# GIH": "1053",
+						"GIH WR": "70.8%",
+						"# GNS": "1424",
+						"GNS WR": "54.8%",
+						"IWD": "16.1pp"
+					},
+				'''
+
+				iwd: str = cardData["IWD"]
+				ata: str = float(cardData["ATA"])
+
+				# if GIH WR exists, OH WR should too, so no extra check needed
+				ohwrStr:str = jsonData[cardName]["OH WR"]
+
+				if ohwrStr != '':
+					ohwr: float = float(cardData["OH WR"].replace('%', 'e-2'))
+				else:
+					ohwr = 0  # temp value to indicate it's not available
+
+				# each row
 				print(
-					f'{gradeStr:2} {zScore:7.3f} {cardWinRates[cardName]: 6.3f}'
-					f' ← {rarity} [{color}] {cardName}')
+					f'{gradeStr:2} '
+					f'{zScore:6.3f} '
+					f'{ata:4.1f} '
+					f'{ohwr*100:4.1f}% '
+					f'{cardWinRates[cardName]*100:4.1f}% '
+					f'{iwd:>6} '
+					f'← {rarity} {color:4} {cardName}')
 			else:
 				print(
 					f'insufficient data: {rarity} [{color}] {cardName}')
