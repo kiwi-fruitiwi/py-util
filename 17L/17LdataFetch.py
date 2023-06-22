@@ -12,8 +12,9 @@ example request uses this URL:
 import requests
 import json
 
+# it's possible to leave out start and end date. defaults to entire format?
 url = 'https://www.17lands.com/card_ratings/data?expansion=LTR&' \
-	  'format=PremierDraft&start_date=2023-06-20&end_date=2023-06-21&colors=WU'
+	  'format=PremierDraft&start_date=2023-06-20&end_date=2023-06-21'
 
 response = requests.get(url)
 data = response.json()
@@ -22,7 +23,7 @@ data = response.json()
 # ...
 
 # Example: Print the JSON data
-print(json.dumps(data, indent=4))
+print(json.dumps(data, indent=2))
 
 '''
 sample JSON element from 17L request:
