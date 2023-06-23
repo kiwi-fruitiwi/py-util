@@ -28,12 +28,20 @@ gradeBounds: List[tuple] = [
 	('F', -10)
 ]
 
+# if we're only comparing one card, skip newlines so subsequent queries
+# are easier to visually compare
+compareOne = False
+
 
 # main input loop to ask for user input → return list of card stats
 def main(json17L, jsonScryfall):
+	global compareOne
 	done: bool = False
+
 	while not done:
-		userInput: str = input('\nEnter cards: ')
+		if not compareOne:
+			print('')
+		userInput: str = input('→ ')
 
 		# split the input string into a list using ',' as delimiter
 		names = userInput.split(',')
@@ -56,14 +64,22 @@ def main(json17L, jsonScryfall):
 				print(f'🍆 best match not found for {value}')
 
 		# use cardFetchList to grab JSON data from data variable
-		# [print(name) for name in cardFetchList]
-		print(cardFetchList)
+		if len(cardFetchList) == 1:
+			compareOne = True
+		else:
+			compareOne = False  # use newlines to reduce clutter for big tables
+			# print a list of names if we're matching more than one card
+			[print(name) for name in cardFetchList]
+
+		# print(cardFetchList)
 		printCardData(cardFetchList, json17L, jsonScryfall)
 
 
 # get card data from data/ratings.json and display it for each cardName in
-# cardNameList :D If the JSON is sorted by GIHWR, so will the results.
+# cardNameList! If the JSON is sorted by GIHWR, so will the results.
 def printCardData(cardNameList: List[str], json17L, jsonScryfall):
+	global compareOne
+
 	# load JSON converted from 17L csv export, where each entry looks like this:
 	# 	"Sunfall": {
 	#		"Name": "Sunfall",
@@ -83,7 +99,6 @@ def printCardData(cardNameList: List[str], json17L, jsonScryfall):
 
 	# CardName, GIH WR dictionary
 	cardWinRates: Dict[str, float] = {}
-
 
 	# iterate through JSON data to determine σ and μ for data set first
 	for cardName in json17L.keys():
@@ -110,8 +125,12 @@ def printCardData(cardNameList: List[str], json17L, jsonScryfall):
 	μ: float = statistics.mean(filteredWRs)
 	σ: float = statistics.stdev(filteredWRs)
 
+	# extra newline if we're comparing multiple cards
+	if not compareOne:
+		print('')
+
 	# header
-	print(f'\n   zscore  ata  ohwr gihwr    iwd   r       μ:{μ:.3f}, σ:{σ:.3f}')
+	print(f'   zscore alsa  ohwr gihwr    iwd           μ:{μ:.3f}, σ:{σ:.3f}')
 	# print(f'------------------------------------------------------------')
 
 	# now that we have the GIH WR σ and μ, display data:
@@ -162,7 +181,7 @@ def printCardData(cardNameList: List[str], json17L, jsonScryfall):
 				'''
 
 				iwd: str = cardData["IWD"]
-				ata: str = float(cardData["ATA"])
+				alsa: float = float(cardData["ALSA"])
 
 				# if GIH WR exists, OH WR should too, so no extra check needed
 				ohwrStr: str = json17L[cardName]["OH WR"]
@@ -181,11 +200,14 @@ def printCardData(cardNameList: List[str], json17L, jsonScryfall):
 				print(
 					f'{gradeStr:2} '
 					f'{zScore:6.3f} '
-					f'{ata:4.1f} '
+					f'{alsa:4.1f} '
 					f'{ohwr*100:4.1f}% '
 					f'{cardWinRates[cardName]*100:4.1f}% '
 					f'{iwd:>6} '
-					f'← {rarity} {manacost:5} {cardName}')
+					f'← '
+					# 8 spaces needed for rarity and mana cost
+					f'{rarity} {manacost:5} '
+					f'{cardName}')
 			else:
 				print(
 					f'insufficient data: {rarity} [{color}] {cardName}')
@@ -212,7 +234,7 @@ with open('data/ratings.json') as file:
 	data17Ljson = json.load(file)
 
 # load card info from scryfall json
-with open('scryfall-ltr.json', encoding='utf-8-sig') as file:
+with open('data/ltr/scryfall-ltr.json', encoding='utf-8-sig') as file:
 	scryfallData = json.load(file)
 
 

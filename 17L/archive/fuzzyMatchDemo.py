@@ -4,7 +4,7 @@ from typing import List
 import json
 
 # load json from our 17L csv to json converter
-with open('../data/ratings.json') as file:
+with open('data/ratings.json') as file:
     data = json.load(file)
 
 done: bool = False
@@ -30,6 +30,8 @@ while not done:
         #       ('Mordor Muster', 66)
         #       ('Bitter Downfall', 60)
         bestMatches = process.extractBests(value, data.keys())
+        [print(m) for m in bestMatches]
+
         bestMatchTuple = bestMatches[0]
 
         # we want the name part of the best match. we could use extractOne :P

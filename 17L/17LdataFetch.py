@@ -19,11 +19,9 @@ url = 'https://www.17lands.com/card_ratings/data?expansion=LTR&' \
 response = requests.get(url)
 data = response.json()
 
-# Process the JSON data
-# ...
-
-# Example: Print the JSON data
-print(json.dumps(data, indent=2))
+# open a json file handler and use json.dumps method to dump data
+with open('custom17Lrequest.json', 'w', encoding='utf-8') as json_file_handler:
+	json_file_handler.write(json.dumps(data, indent=4))
 
 '''
 sample JSON element from 17L request:
