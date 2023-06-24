@@ -64,7 +64,8 @@ def main(json17L, jsonScryfall):
 
 		# use cardFetchList to grab JSON data from data variable
 		if len(cardFetchList) == 1:
-			compareOne = True
+			pass
+			# compareOne = True
 		else:
 			compareOne = False  # use newlines to reduce clutter for big tables
 			# print a list of names if we're matching more than one card
