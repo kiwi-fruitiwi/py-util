@@ -216,18 +216,21 @@ def printCardData(cardNameList: List[str], json17L, jsonScryfall):
 				iwd: str = cardData["IWD"]
 				alsa: float = float(cardData["ALSA"])
 
+
 				# if GIH WR exists, OH WR should too, so no extra check needed
 				ohwrStr: str = cardData["OH WR"]
 
 				if ohwrStr != '':
 					ohwr: float = float(cardData["OH WR"].replace('%', 'e-2'))
+					ohwrStr: str = f'{ohwr*100:4.1f}%'
 				else:
-					ohwr: float = 0  # temp value to indicate it's not available
+					ohwrStr: str = f'    -'
 
 				if ohwrZScore:
 					ogDif: float = ohwrZScore - gihwrZScore
+					ogDifStr: str = f'{ogDif:5.2f}'
 				else:
-					ogDif: float = -9.999
+					ogDifStr: str = '    -'
 
 				# grab the mana cost from our collapsed scryfall dictionary:
 				# format is [cardName, mana cost] where latter is formatted
@@ -239,17 +242,19 @@ def printCardData(cardNameList: List[str], json17L, jsonScryfall):
 					f'{gihwrGrade:2} '
 					f'{gihwrZScore:5.2f} '
 					f'{alsa:4.1f} '
-					f'{ohwr * 100:4.1f}% '
 					f'{nameGihwrDict[cardName] * 100:4.1f}% '
-					f'{ogDif:5.2f} '
+					f'{ohwrStr} '
+					f'{ogDifStr} '
 					f'{iwd:>6} '
 					f'← '
 					# 8 spaces needed for rarity and mana cost
 					f'{rarity} {manacost:5} '
 					f'{cardName}')
 			else:
+				manacost: str = jsonScryfall[cardName]
 				print(
-					f'insufficient data: {rarity} [{color}] {cardName}')
+					f'-                                      '
+					f'← {rarity} {manacost:5} {cardName}')
 
 
 # generates a dictionary mapping card names to their mana costs in format '2UUU'
