@@ -4,7 +4,6 @@ from typing import List, Dict
 import json
 import statistics
 
-
 # defines lower bound zScore values for letter grades like A-, D+, B, etc.
 # each letter grade is one standard deviation, with C centered around the mean μ
 # a list of tuples containing lower bounds for grades, e.g. S:2.5, A:1.83
@@ -41,7 +40,7 @@ def main(json17L, jsonScryfall):
 	while not done:
 		if not compareOne:
 			print('')
-		userInput: str = input('→ ')
+		userInput: str = input('Enter cards: ')
 
 		# split the input string into a list using ',' as delimiter
 		names = userInput.split(',')
@@ -94,43 +93,66 @@ def printCardData(cardNameList: List[str], json17L, jsonScryfall):
 	#		"IWD": "14.0pp"
 	#	},
 
-	# first create GIH WR array
-	gameInHandWinRates: List[float] = []
+	# first create GIH WR and OH WR arrays
+	gihwr: List[float] = []
+	ohwr: List[float] = []
 
-	# CardName, GIH WR dictionary
-	cardWinRates: Dict[str, float] = {}
+	# 🔑 CardName, GIH WR dictionary and OH WR counterpart
+	nameGihwrDict: Dict[str, float] = {}
+	nameOhwrDict: Dict[str, float] = {}
 
-	# iterate through JSON data to determine σ and μ for data set first
+	# iterate through JSON data to determine σ and μ for data set first:
+	# 	both GIH WR and OH WR
 	for cardName in json17L.keys():
-		# the data is actually in string format: e.g. "GIH WR": "67.0%",
-		# so we need to do the following to convert to decimal:
-		#   verify right-most char is '%', then cast to float with 'e-2'
-
 		# some cards don't have enough data and their GIH WR is empty: ''. so
 		# we can simply ignore these in the data set, e.g.
 		#   invasion of arcavios
 		#   jin-gitaxias, core augur
 		# we use None and test for that later if data is not present
-		winRateString: str = json17L[cardName]["GIH WR"]
-		if winRateString != '':
-			assert winRateString[-1] == '%'
-			wr = float(winRateString.replace('%', 'e-2'))
-			gameInHandWinRates.append(wr)
-			cardWinRates[cardName] = wr
+		gihwrStr: str = json17L[cardName]["GIH WR"]
+		if gihwrStr != '':
+			# the data is actually in string format: e.g. "GIH WR": "67.0%",
+			# so we need to do the following to convert to decimal:
+			#   verify right-most char is '%', then cast to float with 'e-2'
+			assert gihwrStr[-1] == '%'
+			wr = float(gihwrStr.replace('%', 'e-2'))
+			gihwr.append(wr)
+			nameGihwrDict[cardName] = wr
 		else:
-			cardWinRates[cardName] = None # test for None later when printing
+			nameGihwrDict[cardName] = None  # test for None later when printing
 
-	filteredWRs = [x for x in cardWinRates.values() if x is not None]
+		# repeat for OH WR
+		ohwrStr: str = json17L[cardName]["OH WR"]
+		if ohwrStr != '':
+			assert ohwrStr[-1] == '%'
+			wr = float(ohwrStr.replace('%', 'e-2'))
+			ohwr.append(wr)
+			nameOhwrDict[cardName] = wr
+		else:
+			nameOhwrDict[cardName] = None  # test for None later when printing
 
-	μ: float = statistics.mean(filteredWRs)
-	σ: float = statistics.stdev(filteredWRs)
+	filteredGIHWRs = [x for x in nameGihwrDict.values() if x is not None]
+	filteredOHWRs = [x for x in nameOhwrDict.values() if x is not None]
+
+	μ_gihwr: float = statistics.mean(filteredGIHWRs)
+	σ_gihwr: float = statistics.stdev(filteredGIHWRs)
+	μ_ohwr: float = statistics.mean(filteredOHWRs)
+	σ_ohwr: float = statistics.stdev(filteredOHWRs)
+
+	# find μ and σ of ohwr as well
+	# sort by ohwr
+	ohwrJson = dict(sorted(
+		json17L.items(), key=lambda item: item[1]["OH WR"], reverse=True))
+
+	# print(f'🥝 {ohwrJson}')
 
 	# extra newline if we're comparing multiple cards
 	if not compareOne:
 		print('')
 
+	# print(f'μ:{μ_ohwr:.3f}, σ:{σ_ohwr:.3f}')
 	# header
-	print(f'   zscore alsa  ohwr gihwr    iwd           μ:{μ:.3f}, σ:{σ:.3f}')
+	print(f'       z alsa   gih    oh   dif    iwd           μ:{μ_gihwr:.3f}, σ:{σ_gihwr:.3f}')
 	# print(f'------------------------------------------------------------')
 
 	# now that we have the GIH WR σ and μ, display data:
@@ -138,23 +160,34 @@ def printCardData(cardNameList: List[str], json17L, jsonScryfall):
 	# by default it will be by collector ID: alphabetical in wubrg order
 	for cardName in json17L.keys():
 		# some cards don't have data: check if it's actually in our GIHWR dict
-		if (cardName in cardWinRates) and (cardName in cardNameList):
-			cardData = json17L[cardName] # card data json object
-			x: float = cardWinRates[cardName]  # GIH WR
+		if (cardName in nameGihwrDict) and (cardName in cardNameList):
+			cardData = ohwrJson[cardName]  # card data json object
+			gihwr: float = nameGihwrDict[cardName]  # GIH WR
+			ohwr: float = nameOhwrDict[cardName]  # OH WR
 			color: str = cardData["Color"]
 			rarity: str = cardData["Rarity"]
-			gradeStr = ' '  # empty space for alignment
+			gihwrGrade: str = ' '  # empty space for alignment
+			ohwrGrade: str = ' '
 
-			if x:  # x is set to None if no GIH WR was available
+			# pretty sure ohwr has to exist if gihwr does. false, not Glamdring
+			if gihwr:  # x is set to None if no GIH WR was available
 				# calculate how many stdDevs away from the mean?
-				zScore: float = (x - μ) / σ
+				gihwrZScore: float = (gihwr - μ_gihwr) / σ_gihwr
 
 				# iterate reversed gradeBounds list: ('A+', 2.17) ('B', 0.83)
 				# if zScore is greater than current iterated value:
 				# 	replace gradeStr with key: 'A+', 'B', etc.
 				for gradePair in gradeBounds[::-1]:
-					if zScore >= gradePair[1]:
-						gradeStr = gradePair[0]
+					if gihwrZScore >= gradePair[1]:
+						gihwrGrade = gradePair[0]
+
+				ohwrZScore = None
+				if ohwr:
+					ohwrZScore: float = (ohwr - μ_ohwr) / σ_ohwr
+					# repeat for ohwr
+					for gradePair in gradeBounds[::-1]:
+						if ohwrZScore >= gradePair[1]:
+							ohwrGrade = gradePair[0]
 
 				''' ratings.json format:
 				
@@ -184,12 +217,17 @@ def printCardData(cardNameList: List[str], json17L, jsonScryfall):
 				alsa: float = float(cardData["ALSA"])
 
 				# if GIH WR exists, OH WR should too, so no extra check needed
-				ohwrStr: str = json17L[cardName]["OH WR"]
+				ohwrStr: str = cardData["OH WR"]
 
 				if ohwrStr != '':
 					ohwr: float = float(cardData["OH WR"].replace('%', 'e-2'))
 				else:
-					ohwr = 0  # temp value to indicate it's not available
+					ohwr: float = 0  # temp value to indicate it's not available
+
+				if ohwrZScore:
+					ogDif: float = ohwrZScore - gihwrZScore
+				else:
+					ogDif: float = -9.999
 
 				# grab the mana cost from our collapsed scryfall dictionary:
 				# format is [cardName, mana cost] where latter is formatted
@@ -198,11 +236,12 @@ def printCardData(cardNameList: List[str], json17L, jsonScryfall):
 
 				# each row
 				print(
-					f'{gradeStr:2} '
-					f'{zScore:6.3f} '
+					f'{gihwrGrade:2} '
+					f'{gihwrZScore:5.2f} '
 					f'{alsa:4.1f} '
-					f'{ohwr*100:4.1f}% '
-					f'{cardWinRates[cardName]*100:4.1f}% '
+					f'{ohwr * 100:4.1f}% '
+					f'{nameGihwrDict[cardName] * 100:4.1f}% '
+					f'{ogDif:5.2f} '
 					f'{iwd:>6} '
 					f'← '
 					# 8 spaces needed for rarity and mana cost
@@ -236,6 +275,5 @@ with open('data/ratings.json') as file:
 # load card info from scryfall json
 with open('data/ltr/scryfall-ltr.json', encoding='utf-8-sig') as file:
 	scryfallData = json.load(file)
-
 
 main(data17Ljson, generateNameManacostDict(scryfallData))
