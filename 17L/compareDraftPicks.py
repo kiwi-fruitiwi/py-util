@@ -168,12 +168,13 @@ def printCardData(cardNameList: List[str], json17L, jsonScryfall):
 	if not compareOne:
 		print('')
 
-	print(f'  iwd μ:{μ_iwd:.3f}, σ:{σ_iwd:.3f}')
-	print(f' ohwr μ:{μ_ohwr:.3f}, σ:{σ_ohwr:.3f}')
-	print(f'gihwr μ:{μ_gihwr:.3f}, σ:{σ_gihwr:.3f}')
-	print(f'')
+	# print(f'  iwd μ:{μ_iwd:.3f}, σ:{σ_iwd:.3f}')
+	# print(f' ohwr μ:{μ_ohwr:.3f}, σ:{σ_ohwr:.3f}')
+	# print(f'gihwr μ:{μ_gihwr:.3f}, σ:{σ_gihwr:.3f}')
+	# print(f'')
+
 	# header
-	print(f'       z alsa   gih    oh   dif    iwd              .')
+	print(f'       z alsa   gih    oh   dif    iwd              μ:{μ_gihwr:.3f}, σ:{σ_gihwr:.3f}')
 	# print(f'------------------------------------------------------------')
 
 	# now that we have the GIH WR σ and μ, display data:
