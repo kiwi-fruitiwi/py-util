@@ -1,6 +1,7 @@
 import Levenshtein  # makes finding the L-distance between strings much faster
 from fuzzywuzzy import process
 from typing import List, Dict
+from scryfallCardFetch import printCardText
 import json
 import statistics
 
@@ -33,20 +34,30 @@ compareOne = False
 
 
 # main input loop to ask for user input → return list of card stats
-def main(json17L, jsonScryfall):
+def main(json17L, nameManacostDict):
 	global compareOne
 	done: bool = False
+	printFlag: bool = False
 
 	while not done:
+		printFlag = False
 		if not compareOne:
 			print('')
 		userInput: str = input('Enter cards: ')
 
 		# split the input string into a list using ',' as delimiter
-		names = userInput.split(',')
+		names: List[str] = userInput.split(',')
 
 		# trim leading and trailing whitespace
-		values = [name.strip() for name in names]
+		values: List[str] = [name.strip() for name in names]
+
+		# special command: print card text if first char is '!'
+		# this is done only if there's one card name in the input
+		firstElement: str = values[0]
+		if firstElement[0] == '!':
+			printFlag = True
+			updatedFirstElement = firstElement[1:]  # remove the '!'
+			values[0] = updatedFirstElement
 
 		# set up list of card names matched to our input
 		cardFetchList: List[str] = []
@@ -72,12 +83,17 @@ def main(json17L, jsonScryfall):
 			[print(name) for name in cardFetchList]
 
 		# print(cardFetchList)
-		printCardData(cardFetchList, json17L, jsonScryfall)
+		printCardData(cardFetchList, json17L, nameManacostDict)
+
+		# if there's only one card name input and it's preceded by '!'
+		# print the card's spoiler text
+		if printFlag and len(cardFetchList) == 1:
+			printCardText(cardFetchList[0], scryfallJson)
 
 
 # get card data from data/ratings.json and display it for each cardName in
 # cardNameList! If the JSON is sorted by GIHWR, so will the results.
-def printCardData(cardNameList: List[str], json17L, jsonScryfall):
+def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 	global compareOne
 
 	# load JSON converted from 17L csv export, where each entry looks like this:
@@ -266,7 +282,7 @@ def printCardData(cardNameList: List[str], json17L, jsonScryfall):
 				# grab the mana cost from our collapsed scryfall dictionary:
 				# format is [cardName, mana cost] where latter is formatted
 				# 1UUU instead of {1}{U}{U}{U}
-				manacost: str = jsonScryfall[cardName]
+				manacost: str = nameManacostDict[cardName]
 
 				# each row
 				print(
@@ -283,7 +299,7 @@ def printCardData(cardNameList: List[str], json17L, jsonScryfall):
 					f'{rarity} {manacost:5} '
 					f'{cardName}')
 			else:
-				manacost: str = jsonScryfall[cardName]
+				manacost: str = nameManacostDict[cardName]
 				print(
 					f'-                                      '
 					f'← {rarity} {manacost:5} {cardName}')
@@ -311,6 +327,6 @@ with open('data/ratings.json') as file:
 
 # load card info from scryfall json
 with open('data/ltr/scryfall-ltr.json', encoding='utf-8-sig') as file:
-	scryfallData = json.load(file)
+	scryfallJson = json.load(file)
 
-main(data17Ljson, generateNameManacostDict(scryfallData))
+main(data17Ljson, generateNameManacostDict(scryfallJson))
