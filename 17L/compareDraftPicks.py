@@ -30,12 +30,16 @@ gradeBounds: List[tuple] = [
 
 # if we're only comparing one card, skip newlines so subsequent queries
 # are easier to visually compare
-compareOne = False
+compareOne: bool = False
+displayIwdGrade: bool = True
+displayCardFetchList: bool = False
 
 
 # main input loop to ask for user input → return list of card stats
 def main(json17L, nameManacostDict):
 	global compareOne
+	global displayCardFetchList
+
 	done: bool = False
 	printFlag: bool = False
 
@@ -80,7 +84,8 @@ def main(json17L, nameManacostDict):
 		else:
 			compareOne = False  # use newlines to reduce clutter for big tables
 			# print a list of names if we're matching more than one card
-			[print(name) for name in cardFetchList]
+			if displayCardFetchList:
+				[print(name) for name in cardFetchList]
 
 		# print(cardFetchList)
 		printCardData(cardFetchList, json17L, nameManacostDict)
@@ -95,6 +100,7 @@ def main(json17L, nameManacostDict):
 # cardNameList! If the JSON is sorted by GIHWR, so will the results.
 def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 	global compareOne
+	global displayIwdGrade
 
 	# load JSON converted from 17L csv export, where each entry looks like this:
 	# 	"Sunfall": {
@@ -190,7 +196,15 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 	# print(f'')
 
 	# header
-	print(f'       z alsa   gih    oh   dif    iwd              μ:{μ_gihwr:.3f}, σ:{σ_gihwr:.3f}')
+	iwdGradeHeaderStr: str = ''  # add 3 spaces for iwd grade, e.g. A+, C-
+	if displayIwdGrade:
+		iwdGradeHeaderStr = '   '
+
+	print(
+		f'       z alsa   gih    oh   dif    iwd'
+		f'{iwdGradeHeaderStr}'
+		f'           μ:{μ_gihwr:.3f}, σ:{σ_gihwr:.3f}'
+	)
 	# print(f'------------------------------------------------------------')
 
 	# now that we have the GIH WR σ and μ, display data:
@@ -284,6 +298,10 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 				# 1UUU instead of {1}{U}{U}{U}
 				manacost: str = nameManacostDict[cardName]
 
+				iwdGradeStr: str = ''
+				if displayIwdGrade:
+					iwdGradeStr = f'{iwdGrade:2} '
+
 				# each row
 				print(
 					f'{gihwrGrade:2} '
@@ -293,7 +311,7 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 					f'{ohwrStr} '
 					f'{ogDifStr} '
 					f'{iwd:>6} '					
-					f'{iwdGrade:2} '
+					f'{iwdGradeStr}'
 					f'← '
 					# 8 spaces needed for rarity and mana cost
 					f'{rarity} {manacost:5} '
