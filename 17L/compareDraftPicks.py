@@ -196,6 +196,13 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 	# print(f'gihwr μ:{μ_gihwr:.3f}, σ:{σ_gihwr:.3f}')
 	# print(f'')
 
+	# sort by GIH WR manually in case it's not already sorted that way in csv
+	gihwrJson = dict(sorted(
+		json17L.items(), key=lambda item: item[1]["GIH WR"], reverse = True
+	))
+
+	[print(e) for e in json17L.items()]
+
 	# header
 	iwdGradeHeaderStr: str = ''  # add 3 spaces for iwd grade, e.g. A+, C-
 	if displayIwdGrade:
@@ -211,7 +218,7 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 	# now that we have the GIH WR σ and μ, display data:
 	# note the JSON will be sorted however it was when the csv was requested
 	# by default it will be by collector ID: alphabetical in wubrg order
-	for cardName in json17L.keys():
+	for cardName in gihwrJson.keys():
 		# some cards don't have data: check if it's actually in our GIHWR dict
 		if (cardName in nameGihwrDict) and (cardName in cardNameList):
 			cardData = json17L[cardName]  # card data json object
