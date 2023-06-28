@@ -12,6 +12,7 @@ import statistics
 
 # noinspection DuplicatedCode
 gradeBounds: List[tuple] = [
+	('S+', 3.0),
 	('S', 2.5),
 	('A+', 2.17),
 	('A', 1.83),
@@ -213,7 +214,7 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 	for cardName in json17L.keys():
 		# some cards don't have data: check if it's actually in our GIHWR dict
 		if (cardName in nameGihwrDict) and (cardName in cardNameList):
-			cardData = ohwrJson[cardName]  # card data json object
+			cardData = json17L[cardName]  # card data json object
 			gihwr: float = nameGihwrDict[cardName]  # GIH WR
 			ohwr: float = nameOhwrDict[cardName]  # OH WR
 			iwd: float = nameIwdDict[cardName]  # IWD
