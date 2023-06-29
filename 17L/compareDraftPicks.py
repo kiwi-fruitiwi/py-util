@@ -32,7 +32,7 @@ gradeBounds: List[tuple] = [
 # if we're only comparing one card, skip newlines so subsequent queries
 # are easier to visually compare
 compareOne: bool = False
-displayIwdGrade: bool = True
+displayIwdGrade: bool = False
 displayCardFetchList: bool = False
 
 
@@ -201,7 +201,7 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 		json17L.items(), key=lambda item: item[1]["GIH WR"], reverse = True
 	))
 
-	[print(e) for e in json17L.items()]
+	# [print(e) for e in json17L.items()]
 
 	# header
 	iwdGradeHeaderStr: str = ''  # add 3 spaces for iwd grade, e.g. A+, C-
