@@ -34,6 +34,7 @@ gradeBounds: List[tuple] = [
 compareOne: bool = False
 displayIwdGrade: bool = False
 displayCardFetchList: bool = False
+displayGihOhDiff: bool = False  # difference in zScore between GIH and OH WRs
 
 
 # main input loop to ask for user input → return list of card stats
