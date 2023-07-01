@@ -36,6 +36,7 @@ displayIwdGrade: bool = False
 displayCardFetchList: bool = False
 displayGihOhDiff: bool = False  # difference in zScore between GIH and OH WRs
 displayOhZscore: bool = True
+displayRarityAndMv: bool = True
 
 
 # main input loop to ask for user input → return list of card stats
@@ -103,7 +104,8 @@ def main(json17L, nameManacostDict):
 # cardNameList! If the JSON is sorted by GIHWR, so will the results.
 def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 	global compareOne
-	global displayIwdGrade, displayGihOhDiff, displayOhZscore
+	global displayIwdGrade, displayGihOhDiff, displayOhZscore, \
+		displayRarityAndMv
 
 	# load JSON converted from 17L csv export, where each entry looks like this:
 	# 	"Sunfall": {
@@ -214,6 +216,11 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 	if displayGihOhDiff:
 		ogDifHeader = '   dif'
 
+	rarityMvHeader: str = ''
+	if displayRarityAndMv:
+		rarityMvHeader = '         '  # 8 char width and a whitespace
+
+
 	print(  # metric and how many characters each metric takes, plus spacing
 		f'alsa ' 	# ALSA 4 chars + 1 whitespace
 		f'   '  	# grade is 2 + 1 space
@@ -224,7 +231,8 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 		f'{ogDifHeader}'
 		f'    iwd '
 		f'{iwdGradeHeaderStr}'
-		f'           μ:{μ_gihwr:.3f}, σ:{σ_gihwr:.3f}'
+		f'{rarityMvHeader}'
+		f'  μ:{μ_gihwr:.3f}, σ:{σ_gihwr:.3f}'  # leading spaces for '← '
 	)
 	# print(f'------------------------------------------------------------')
 
@@ -332,6 +340,12 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 				if displayIwdGrade:
 					iwdGradeStr = f'{iwdGrade:2} '
 
+				rarityMvStr: str = ''
+				if rarityMvHeader:
+					# 8 spaces needed for rarity and mana cost, +1 space
+					# mv must be 6 because 3WUBRG costs
+					rarityMvStr = f'{rarity} {manacost:6} '
+
 
 				# each row
 				print(
@@ -345,8 +359,7 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 					f'{iwd:>6} '					
 					f'{iwdGradeStr}'
 					f'← '
-					# 8 spaces needed for rarity and mana cost
-					f'{rarity} {manacost:5} '
+					f'{rarityMvStr}'
 					f'{cardName}')
 			else:
 				manacost: str = nameManacostDict[cardName]
