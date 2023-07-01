@@ -102,7 +102,7 @@ def main(json17L, nameManacostDict):
 # cardNameList! If the JSON is sorted by GIHWR, so will the results.
 def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 	global compareOne
-	global displayIwdGrade
+	global displayIwdGrade, displayGihOhDiff
 
 	# load JSON converted from 17L csv export, where each entry looks like this:
 	# 	"Sunfall": {
@@ -209,8 +209,14 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 	if displayIwdGrade:
 		iwdGradeHeaderStr = '   '
 
+	ogDifHeader: str = ''
+	if displayGihOhDiff:
+		ogDifHeader = '   dif'
+
 	print(
-		f'       z alsa   gih    oh   dif    iwd'
+		f'       z alsa   gih    oh'
+		f'{ogDifHeader}'
+		f'    iwd'
 		f'{iwdGradeHeaderStr}'
 		f'           μ:{μ_gihwr:.3f}, σ:{σ_gihwr:.3f}'
 	)
@@ -296,11 +302,14 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 				else:
 					ohwrStr: str = f'    -'
 
-				if ohwrZScore:
-					ogDif: float = ohwrZScore - gihwrZScore
-					ogDifStr: str = f'{ogDif:5.2f}'
-				else:
-					ogDifStr: str = '    -'
+				# display difference in zscore between GIHWR and OHWR
+				ogDifStr: str = ''
+				if displayGihOhDiff:
+					if ohwrZScore:
+						ogDif: float = ohwrZScore - gihwrZScore
+						ogDifStr = f'{ogDif:5.2f}'
+					else:
+						ogDifStr = '    -'
 
 				# grab the mana cost from our collapsed scryfall dictionary:
 				# format is [cardName, mana cost] where latter is formatted
@@ -310,6 +319,7 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 				iwdGradeStr: str = ''
 				if displayIwdGrade:
 					iwdGradeStr = f'{iwdGrade:2} '
+
 
 				# each row
 				print(
