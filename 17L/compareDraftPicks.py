@@ -35,6 +35,7 @@ compareOne: bool = False
 displayIwdGrade: bool = False
 displayCardFetchList: bool = False
 displayGihOhDiff: bool = False  # difference in zScore between GIH and OH WRs
+displayOhZscore: bool = True
 
 
 # main input loop to ask for user input → return list of card stats
@@ -102,7 +103,7 @@ def main(json17L, nameManacostDict):
 # cardNameList! If the JSON is sorted by GIHWR, so will the results.
 def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 	global compareOne
-	global displayIwdGrade, displayGihOhDiff
+	global displayIwdGrade, displayGihOhDiff, displayOhZscore
 
 	# load JSON converted from 17L csv export, where each entry looks like this:
 	# 	"Sunfall": {
@@ -199,7 +200,7 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 
 	# sort by GIH WR manually in case it's not already sorted that way in csv
 	gihwrJson = dict(sorted(
-		json17L.items(), key=lambda item: item[1]["GIH WR"], reverse = True
+		json17L.items(), key=lambda item: item[1]["GIH WR"], reverse=True
 	))
 
 	# [print(e) for e in json17L.items()]
@@ -213,10 +214,15 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 	if displayGihOhDiff:
 		ogDifHeader = '   dif'
 
-	print(
-		f'       z alsa   gih    oh'
+	print(  # metric and how many characters each metric takes, plus spacing
+		f'alsa ' 	# ALSA 4 chars + 1 whitespace
+		f'   '  	# grade is 2 + 1 space
+		f'  gih ' 	# GIHWR: 6
+		f'    z ' 	# gihwr zscore 5 + 1
+		f' oh-z ' 	# ohwr zscore 5 + 1
+		f'   oh '	# OHWR: 6
 		f'{ogDifHeader}'
-		f'    iwd'
+		f'    iwd '
 		f'{iwdGradeHeaderStr}'
 		f'           μ:{μ_gihwr:.3f}, σ:{σ_gihwr:.3f}'
 	)
@@ -311,6 +317,12 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 					else:
 						ogDifStr = '    -'
 
+				# opening hand win rate z score display
+				ohwrZscoreStr: str = ''
+				if displayOhZscore:
+					if ohwrZScore:
+						ohwrZscoreStr = f'{ohwrZScore:5.2f}'
+
 				# grab the mana cost from our collapsed scryfall dictionary:
 				# format is [cardName, mana cost] where latter is formatted
 				# 1UUU instead of {1}{U}{U}{U}
@@ -323,10 +335,11 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 
 				# each row
 				print(
-					f'{gihwrGrade:2} '
-					f'{gihwrZScore:5.2f} '
 					f'{alsa:4.1f} '
+					f'{gihwrGrade:2} '
 					f'{nameGihwrDict[cardName] * 100:4.1f}% '
+					f'{gihwrZScore:5.2f} '
+					f'{ohwrZscoreStr} '
 					f'{ohwrStr} '
 					f'{ogDifStr} '
 					f'{iwd:>6} '					
