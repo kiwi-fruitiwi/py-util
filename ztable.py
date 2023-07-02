@@ -26,12 +26,12 @@ def normalProbabilityDensity(x):
     return coefficient * math.exp((-x ** 2) / 2.0)
 
 
-# value = 99/300
-# print(quad(normalProbabilityDensity, value, np.PINF))
-# print(quad(normalProbabilityDensity, np.NINF, value))
+value: float = 99/300
+print(quad(normalProbabilityDensity, value, np.PINF))
+print(quad(normalProbabilityDensity, np.NINF, value))
 
 
-print(quad(normalProbabilityDensity, 0.85, np.PINF))
+# print(quad(normalProbabilityDensity, 0.85, np.PINF))
 
 # while True:
 #     lower_bound = float(input('enter lower integration bound'))

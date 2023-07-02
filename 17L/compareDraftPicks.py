@@ -36,7 +36,7 @@ displayIwdGrade: bool = False
 displayCardFetchList: bool = False
 displayGihOhDiff: bool = False  # difference in zScore between GIH and OH WRs
 displayOhZscore: bool = True
-displayRarityAndMv: bool = True
+displayRarityAndMv: bool = False
 
 
 # main input loop to ask for user input → return list of card stats
