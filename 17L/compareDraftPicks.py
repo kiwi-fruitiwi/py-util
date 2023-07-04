@@ -389,7 +389,7 @@ with open('data/ratings.json') as file:
 	data17Ljson = json.load(file)
 
 # load card info from scryfall json
-with open('data/ltr/scryfall-ltr.json', encoding='utf-8-sig') as file:
+with open('data/ltr-manual/scryfall-ltr.json', encoding='utf-8-sig') as file:
 	scryfallJson = json.load(file)
 
 main(data17Ljson, generateNameManacostDict(scryfallJson))

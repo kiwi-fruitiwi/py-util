@@ -1,4 +1,5 @@
 # console app to get scryfall card text with fuzzy matched name from user input
+# incorporated into compareDraftPicks.py via import
 
 import json
 from fuzzywuzzy import process
@@ -62,7 +63,7 @@ def getCardNames(scryfallJson):
 
 def main():
 	# load card info from scryfall json
-	with open('data/ltr/scryfall-ltr.json', encoding='utf-8-sig') as file:
+	with open('data/ltr-manual/scryfall-ltr.json', encoding='utf-8-sig') as file:
 		sfData = json.load(file)
 
 	cardNames: List = getCardNames(sfData)
