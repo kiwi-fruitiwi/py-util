@@ -34,7 +34,7 @@ gradeBounds: List[tuple] = [
 compareOne: bool = False
 displayIwdGrade: bool = False
 displayCardFetchList: bool = False
-displayGihOhDiff: bool = False  # difference in zScore between GIH and OH WRs
+displayGihOhDiff: bool = True  # difference in zScore between GIH and OH WRs
 displayOhZscore: bool = True
 displayRarityAndMv: bool = False
 
@@ -214,7 +214,7 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 
 	ogDifHeader: str = ''
 	if displayGihOhDiff:
-		ogDifHeader = '   dif'
+		ogDifHeader = ' og Δ'  # 5 char
 
 	rarityMvHeader: str = ''
 	if displayRarityAndMv:
@@ -222,12 +222,12 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 
 
 	print(  # metric and how many characters each metric takes, plus spacing
-		f'alsa ' 	# ALSA 4 chars + 1 whitespace
 		f'   '  	# grade is 2 + 1 space
+		f'alsa ' 	# ALSA 4 chars + 1 whitespace
 		f'  gih ' 	# GIHWR: 6
 		f'    z ' 	# gihwr zscore 5 + 1
-		f' oh-z ' 	# ohwr zscore 5 + 1
-		f'   oh '	# OHWR: 6
+		# f' oh-z ' # ohwr zscore 5 + 1
+		# f'   oh '	# OHWR: 6
 		f'{ogDifHeader}'
 		f'    iwd '
 		f'{iwdGradeHeaderStr}'
@@ -349,12 +349,12 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 
 				# each row
 				print(
-					f'{alsa:4.1f} '
 					f'{gihwrGrade:2} '
+					f'{alsa:4.1f} '
 					f'{nameGihwrDict[cardName] * 100:4.1f}% '
 					f'{gihwrZScore:5.2f} '
-					f'{ohwrZscoreStr} '
-					f'{ohwrStr} '
+					# f'{ohwrZscoreStr} '
+					# f'{ohwrStr} '
 					f'{ogDifStr} '
 					f'{iwd:>6} '					
 					f'{iwdGradeStr}'
