@@ -1,5 +1,7 @@
 """
-fetch JSON data from 17L users and color filters
+fetch JSON data from 17L users and color filters:
+	output 11 json files: the default 17L data, plus all 10 color pairs
+
 example request uses this URL:
 	https://www.17lands.com/card_ratings/data?
 		expansion=LTR
@@ -35,3 +37,13 @@ colorPairs: List[str] = [
 allColors = requests.get(defaultUrl).json()
 with open('data/ltr-auto/all.json', 'w', encoding='utf-8') as json_file_handler:
 	json_file_handler.write(json.dumps(allColors, indent=4))
+
+# now we iterate through colorPairs and get a custom json for each pair
+for colorPair in colorPairs:
+	coloredURL: str = f'{defaultUrl}&colors={colorPair}'
+	colorPairJson = requests.get(coloredURL).json()
+
+	# save locally to 'WU.json', 'WG.json', etc.
+	with open(f'data/ltr-auto/{colorPair}.json', 'w', encoding='utf-8') \
+		as json_file_handler:
+		json_file_handler.write(json.dumps(colorPairJson, indent=4))
