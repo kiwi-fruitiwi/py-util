@@ -34,5 +34,5 @@ def csvToJSON(csvPath, jsonPath):
 		json_file_handler.write(json.dumps(cards, indent=4))
 
 
-csvToJSON('data/ltr-manual/card-ratings-2023-07-03-1807.csv', 'data/ratings.json')
+csvToJSON('data/ltr-manual/card-ratings-2023-07-05.csv', 'data/ratings.json')
 # csvToJSON('mom/card-ratings-2023-06-21.csv', 'data/ratings.json')
