@@ -145,7 +145,8 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 		# TODO: 17L request data doesn't seem to contain empty data
 		# 	we should find out how it represents empty data
 		gihwr: float = json17L[cardName]["GIH WR"]
-		if gihwr == '':
+		n_gih: int = json17L[cardName]["# GIH"]
+		if n_gih < 200:
 			nameGihwrDict[cardName] = None  # test for None later when printing
 		else:
 			# the data is actually in string format: e.g. "GIH WR": "67.0%",
@@ -159,7 +160,8 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 		# repeat for OH WR
 		# ohwrStr: str = json17L[cardName]["OH WR"]
 		ohwr: float = json17L[cardName]["OH WR"]
-		if ohwr == '':
+		n_oh: int = json17L[cardName]["# OH"]
+		if n_oh < 200:
 			nameOhwrDict[cardName] = None
 		else:
 			# assert ohwrStr[-1] == '%'
@@ -263,7 +265,7 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 			iwdGrade: str = ' '
 
 			# pretty sure ohwr has to exist if gihwr does. false, not Glamdring
-			if gihwrList:  # x is set to None if no GIH WR was available
+			if gihwr:  # x is set to None if no GIH WR was available
 				# calculate how many stdDevs away from the mean?
 				gihwrZScore: float = (gihwr - μ_gihwr) / σ_gihwr
 
@@ -276,14 +278,14 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 
 				# repeat for ohwr
 				ohwrZScore = None
-				if ohwrList:
+				if ohwr:
 					ohwrZScore: float = (ohwr - μ_ohwr) / σ_ohwr
 					for gradePair in gradeBounds[::-1]:
 						if ohwrZScore >= gradePair[1]:
 							ohwrGrade = gradePair[0]
 
 				iwdZScore = None
-				if iwdList:
+				if iwd:
 					iwdZScore: float = (iwd - μ_iwd) / σ_iwd
 					for gradePair in gradeBounds[::-1]:
 						if iwdZScore >= gradePair[1]:
@@ -375,8 +377,10 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 			else:
 				manacost: str = nameManacostDict[cardName]
 				print(
-					f'-                                      '
-					f'← {rarity} {manacost:5} {cardName}')
+					# f'← {rarity} {manacost:5} {cardName}'
+					f'🍌 {cardName}'
+				)
+
 
 
 # generates a dictionary mapping card names to their mana costs in format '2UUU'
