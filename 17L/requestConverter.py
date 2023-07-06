@@ -1,5 +1,10 @@
-# ☒ read 📁 data/ltr-auto/all.json
-# ☒ iterate through entries, printing each name and final count
+"""
+convert json requests from 17lands.com into a simpler json format for
+compareDraftPicks.py
+"""
+
+# read 📁 data/ltr-auto/all.json
+# iterate through entries, printing each name and final count
 # identify stats we need and what format we want:
 #   # Seen
 #   ATA
