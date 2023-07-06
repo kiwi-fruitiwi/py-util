@@ -1,4 +1,6 @@
 """
+this takes some time to run!
+
 fetch JSON data from 17L users and color filters:
 	output 11 json files: the default 17L data, plus all 10 color pairs
 
@@ -38,6 +40,9 @@ allColors = requests.get(defaultUrl).json()
 with open('data/ltr-auto/all.json', 'w', encoding='utf-8') as json_file_handler:
 	json_file_handler.write(json.dumps(allColors, indent=4))
 
+print(f'🥭 request: all colors complete!')
+
+
 # now we iterate through colorPairs and get a custom json for each pair
 for colorPair in colorPairs:
 	coloredURL: str = f'{defaultUrl}&colors={colorPair}'
@@ -47,3 +52,4 @@ for colorPair in colorPairs:
 	with open(f'data/ltr-auto/{colorPair}.json', 'w', encoding='utf-8') \
 		as json_file_handler:
 		json_file_handler.write(json.dumps(colorPairJson, indent=4))
+	print(f'🥭 request: {colorPair} complete!')

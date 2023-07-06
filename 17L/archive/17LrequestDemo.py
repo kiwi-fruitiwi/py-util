@@ -45,4 +45,26 @@ sample JSON element from 17L request:
 		"Sorcery"
 	]
 },
+
+this is what the 17L csv download converts to:
+"Orcish Bowmasters": {
+    "Name": "Orcish Bowmasters",
+    "Color": "B",
+    "Rarity": "R",
+    "# Seen": "632",
+    "ALSA": "1.57",
+    "# Picked": "484",
+    "ATA": "1.54",
+    "# GP": "2483",
+    "GP WR": "61.7%",
+    "# OH": "438",
+    "OH WR": "74.0%",
+    "# GD": "615",
+    "GD WR": "68.6%",
+    "# GIH": "1053",
+    "GIH WR": "70.8%",
+    "# GNS": "1424",
+    "GNS WR": "54.8%",
+    "IWD": "16.1pp"
+}
 '''
