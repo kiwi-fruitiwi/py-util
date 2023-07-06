@@ -37,7 +37,8 @@ with open('data/ltr-auto/all.json', 'r', encoding='utf-8') as json_file_handler:
         # iwd is a float: "drawn_improvement_win_rate": 0.02599067599067600,
         # but we want it to look like '2.6pp'
         #   "IWD": "16.1pp"
-        iwdStr: str = f'{iwd*100:.1f}pp'
+        # iwdStr: str = f'{iwd*100:.1f}pp'
+        # actually, better to process the float in compareDraftPicks.py
 
         imgUrl: str = card['url']
 
@@ -47,8 +48,10 @@ with open('data/ltr-auto/all.json', 'r', encoding='utf-8') as json_file_handler:
             'ATA': ata,     # "avg_pick": 7.561547479484173,
             'OH WR': ohwr,  # "opening_hand_win_rate": 0.4925373134328358,
             'GIH WR': gihwr,# "drawn_win_rate": 0.46788990825688076,
-            'IWD': iwdStr,  # "drawn_improvement_win_rate": 0.02599067599067600,
-            'URL': imgUrl   # "url": "https://cards.scryfall.io/border_crop/..."
+            'IWD': iwd,     # "drawn_improvement_win_rate": 0.02599067599067600,
+            'URL': imgUrl,   # "url": "https://cards.scryfall.io/border_crop/..."
+            'Color': card['color'],
+            'Rarity': card['rarity'][0].upper()  # CURM
         }
 
 
@@ -57,6 +60,12 @@ with open('data/ltr-auto/all.json', 'r', encoding='utf-8') as json_file_handler:
         print(f'\n{key} :')
         for innerKey, innerValue in value.items():
             print(f"    {innerKey}: {innerValue}")
+
+# dump new json data into a file
+with open('data/ltr-CDP/all.json', 'w',
+          encoding='utf-8') as json_file_handler:
+    json_file_handler.write(json.dumps(cardDict, indent=4))
+
 
 
 '''

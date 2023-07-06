@@ -122,9 +122,9 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 	#	},
 
 	# create GIH WR, OH WR, IWD arrays
-	gihwr: List[float] = []
-	ohwr: List[float] = []
-	iwd: List[float] = []
+	gihwrList: List[float] = []
+	ohwrList: List[float] = []
+	iwdList: List[float] = []
 
 	# (🔑 CardName, GIH WR) dictionary and OHWR, IWD counterparts
 	nameGihwrDict: Dict[str, float] = {}
@@ -133,43 +133,52 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 
 	# iterate through JSON data to determine σ and μ for data set first:
 	# 	both GIH WR and OH WR
+	#   code below was originally written to process json converted from
+	#   17L's csv export. after moving to requests, we dealt completely in
+	#   floats instead of "67.0%" or "16.2pp"
 	for cardName in json17L.keys():
 		# some cards don't have enough data and their GIH WR is empty: ''. so
 		# we can simply ignore these in the data set, e.g.
 		#   invasion of arcavios
 		#   jin-gitaxias, core augur
 		# we use None and test for that later if data is not present
-		gihwrStr: str = json17L[cardName]["GIH WR"]
-		if gihwrStr == '':
+		# TODO: 17L request data doesn't seem to contain empty data
+		# 	we should find out how it represents empty data
+		gihwr: float = json17L[cardName]["GIH WR"]
+		if gihwr == '':
 			nameGihwrDict[cardName] = None  # test for None later when printing
 		else:
 			# the data is actually in string format: e.g. "GIH WR": "67.0%",
 			# so we need to do the following to convert to decimal:
 			#   verify right-most char is '%', then cast to float with 'e-2'
-			assert gihwrStr[-1] == '%'
-			wr = float(gihwrStr.replace('%', 'e-2'))
-			gihwr.append(wr)
-			nameGihwrDict[cardName] = wr
+			#	assert gihwrStr[-1] == '%'
+			#	wr = float(gihwrStr.replace('%', 'e-2'))
+			gihwrList.append(gihwr)
+			nameGihwrDict[cardName] = gihwr
 
 		# repeat for OH WR
-		ohwrStr: str = json17L[cardName]["OH WR"]
-		if ohwrStr == '':
+		# ohwrStr: str = json17L[cardName]["OH WR"]
+		ohwr: float = json17L[cardName]["OH WR"]
+		if ohwr == '':
 			nameOhwrDict[cardName] = None
 		else:
-			assert ohwrStr[-1] == '%'
-			wr = float(ohwrStr.replace('%', 'e-2'))
-			ohwr.append(wr)
-			nameOhwrDict[cardName] = wr
+			# assert ohwrStr[-1] == '%'
+			# wr = float(ohwrStr.replace('%', 'e-2'))
+			ohwrList.append(ohwr)
+			nameOhwrDict[cardName] = ohwr
 
 		# and again for IWD; note format is "16.8pp"
-		iwdStr: str = json17L[cardName]["IWD"]
+		iwd: float = json17L[cardName]["IWD"]
+		# iwdStr: str = json17L[cardName]["IWD"]
+		# iwdStr: str = f'{iwd*100:5.1f}pp'
+		iwdStr: str = f'{iwd*100:.1f}pp'
 		if iwdStr == '':
 			nameIwdDict[cardName] = None
 		else:
-			assert iwdStr[-2:] == 'pp'
-			wr = float(iwdStr.replace('pp', ''))
-			iwd.append(wr)
-			nameIwdDict[cardName] = wr
+			# assert iwdStr[-2:] == 'pp'
+			# wr = float(iwdStr.replace('pp', ''))
+			iwdList.append(iwd)
+			nameIwdDict[cardName] = iwd
 
 	# [print(f'{e} → {nameIwdDict[e]}') for e in nameIwdDict]
 
@@ -243,9 +252,9 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 		# some cards don't have data: check if it's actually in our GIHWR dict
 		if (cardName in nameGihwrDict) and (cardName in cardNameList):
 			cardData = json17L[cardName]  # card data json object
-			gihwr: float = nameGihwrDict[cardName]  # GIH WR
-			ohwr: float = nameOhwrDict[cardName]  # OH WR
-			iwd: float = nameIwdDict[cardName]  # IWD
+			gihwrList: float = nameGihwrDict[cardName]  # GIH WR
+			ohwrList: float = nameOhwrDict[cardName]  # OH WR
+			iwdList: float = nameIwdDict[cardName]  # IWD
 			color: str = cardData["Color"]
 			rarity: str = cardData["Rarity"]
 			gihwrGrade: str = ' '  # empty space for alignment
@@ -253,9 +262,9 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 			iwdGrade: str = ' '
 
 			# pretty sure ohwr has to exist if gihwr does. false, not Glamdring
-			if gihwr:  # x is set to None if no GIH WR was available
+			if gihwrList:  # x is set to None if no GIH WR was available
 				# calculate how many stdDevs away from the mean?
-				gihwrZScore: float = (gihwr - μ_gihwr) / σ_gihwr
+				gihwrZScore: float = (gihwrList - μ_gihwr) / σ_gihwr
 
 				# iterate reversed gradeBounds list: ('A+', 2.17) ('B', 0.83)
 				# if zScore is greater than current iterated value:
@@ -266,15 +275,15 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 
 				# repeat for ohwr
 				ohwrZScore = None
-				if ohwr:
-					ohwrZScore: float = (ohwr - μ_ohwr) / σ_ohwr
+				if ohwrList:
+					ohwrZScore: float = (ohwrList - μ_ohwr) / σ_ohwr
 					for gradePair in gradeBounds[::-1]:
 						if ohwrZScore >= gradePair[1]:
 							ohwrGrade = gradePair[0]
 
 				iwdZScore = None
-				if iwd:
-					iwdZScore: float = (iwd - μ_iwd) / σ_iwd
+				if iwdList:
+					iwdZScore: float = (iwdList - μ_iwd) / σ_iwd
 					for gradePair in gradeBounds[::-1]:
 						if iwdZScore >= gradePair[1]:
 							iwdGrade = gradePair[0]
@@ -303,7 +312,7 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 					},
 				'''
 
-				iwd: str = cardData["IWD"]
+				iwdList: str = cardData["IWD"]
 				alsa: float = float(cardData["ALSA"])
 
 
@@ -311,8 +320,8 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 				ohwrStr: str = cardData["OH WR"]
 
 				if ohwrStr != '':
-					ohwr: float = float(cardData["OH WR"].replace('%', 'e-2'))
-					ohwrStr: str = f'{ohwr*100:4.1f}%'
+					#ohwrList: float = float(cardData["OH WR"].replace('%', 'e-2'))
+					ohwrStr: str = f'{ohwrList*100:4.1f}%'
 				else:
 					ohwrStr: str = f'    -'
 
@@ -346,6 +355,7 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 					# mv must be 6 because 3WUBRG costs
 					rarityMvStr = f'{rarity} {manacost:6} '
 
+				iwdStr: str = f'{nameIwdDict[cardName] * 100:.1f}pp'
 
 				# each row
 				print(
@@ -356,7 +366,7 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 					# f'{ohwrZscoreStr} '
 					# f'{ohwrStr} '
 					f'{ogDifStr} '
-					f'{iwd:>6} '					
+					f'{iwdStr:>6} '					
 					f'{iwdGradeStr}'
 					f'← '
 					f'{rarityMvStr}'
@@ -385,7 +395,7 @@ def generateNameManacostDict(sfJson):
 
 
 # load json from our 17L csv to json converter
-with open('data/ratings.json') as file:
+with open('data/ltr-CDP/all.json') as file:
 	data17Ljson = json.load(file)
 
 # load card info from scryfall json
