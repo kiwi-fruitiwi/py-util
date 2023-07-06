@@ -1,9 +1,10 @@
 import Levenshtein  # makes finding the L-distance between strings much faster
+import json
+import statistics
+
 from fuzzywuzzy import process
 from typing import List, Dict
 from scryfallCardFetch import printCardText
-import json
-import statistics
 
 # defines lower bound zScore values for letter grades like A-, D+, B, etc.
 # each letter grade is one standard deviation, with C centered around the mean μ
@@ -66,6 +67,16 @@ def main(json17L, nameManacostDict):
 			printFlag = True
 			updatedFirstElement = firstElement[1:]  # remove the '!'
 			values[0] = updatedFirstElement
+
+		# special command: colorPair with colon, e.g. 'WU: '
+		# 	this will open data from the corresponding file and save to json17L
+		# check if first element contains ':' if so, split(':')
+		# assert splitResult[0] is two characters
+		# assert it's included in colorPairs
+		#    how do we access 17LdataFetch colorPair?
+		#    load the color pair json that corresponds to it
+		# global that contains what json we're using: default, WU, UB, UR, etc.
+		# strip after in case there are multiple spaces after 'WU:'
 
 		# set up list of card names matched to our input
 		cardFetchList: List[str] = []
@@ -380,7 +391,6 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 					# f'← {rarity} {manacost:5} {cardName}'
 					f'🍌 {cardName}'
 				)
-
 
 
 # generates a dictionary mapping card names to their mana costs in format '2UUU'
