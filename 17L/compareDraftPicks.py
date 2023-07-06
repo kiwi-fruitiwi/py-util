@@ -182,6 +182,7 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 
 	# [print(f'{e} → {nameIwdDict[e]}') for e in nameIwdDict]
 
+	# TODO filter if '# OH' and '# GIH' are over 200
 	filteredGIHWRs = [x for x in nameGihwrDict.values() if x is not None]
 	filteredOHWRs = [x for x in nameOhwrDict.values() if x is not None]
 	filteredIWDs = [x for x in nameIwdDict.values() if x is not None]
@@ -252,9 +253,9 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 		# some cards don't have data: check if it's actually in our GIHWR dict
 		if (cardName in nameGihwrDict) and (cardName in cardNameList):
 			cardData = json17L[cardName]  # card data json object
-			gihwrList: float = nameGihwrDict[cardName]  # GIH WR
-			ohwrList: float = nameOhwrDict[cardName]  # OH WR
-			iwdList: float = nameIwdDict[cardName]  # IWD
+			gihwr: float = nameGihwrDict[cardName]  # GIH WR
+			ohwr: float = nameOhwrDict[cardName]  # OH WR
+			iwd: float = nameIwdDict[cardName]  # IWD
 			color: str = cardData["Color"]
 			rarity: str = cardData["Rarity"]
 			gihwrGrade: str = ' '  # empty space for alignment
@@ -264,7 +265,7 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 			# pretty sure ohwr has to exist if gihwr does. false, not Glamdring
 			if gihwrList:  # x is set to None if no GIH WR was available
 				# calculate how many stdDevs away from the mean?
-				gihwrZScore: float = (gihwrList - μ_gihwr) / σ_gihwr
+				gihwrZScore: float = (gihwr - μ_gihwr) / σ_gihwr
 
 				# iterate reversed gradeBounds list: ('A+', 2.17) ('B', 0.83)
 				# if zScore is greater than current iterated value:
@@ -276,14 +277,14 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 				# repeat for ohwr
 				ohwrZScore = None
 				if ohwrList:
-					ohwrZScore: float = (ohwrList - μ_ohwr) / σ_ohwr
+					ohwrZScore: float = (ohwr - μ_ohwr) / σ_ohwr
 					for gradePair in gradeBounds[::-1]:
 						if ohwrZScore >= gradePair[1]:
 							ohwrGrade = gradePair[0]
 
 				iwdZScore = None
 				if iwdList:
-					iwdZScore: float = (iwdList - μ_iwd) / σ_iwd
+					iwdZScore: float = (iwd - μ_iwd) / σ_iwd
 					for gradePair in gradeBounds[::-1]:
 						if iwdZScore >= gradePair[1]:
 							iwdGrade = gradePair[0]
@@ -321,7 +322,7 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 
 				if ohwrStr != '':
 					#ohwrList: float = float(cardData["OH WR"].replace('%', 'e-2'))
-					ohwrStr: str = f'{ohwrList*100:4.1f}%'
+					ohwrStr: str = f'{ohwr*100:4.1f}%'
 				else:
 					ohwrStr: str = f'    -'
 
