@@ -34,6 +34,11 @@ with open('data/ltr-auto/all.json', 'r', encoding='utf-8') as json_file_handler:
         gihwr: float = card['ever_drawn_win_rate']
         iwd: float = card['drawn_improvement_win_rate']
 
+        # iwd is a float: "drawn_improvement_win_rate": 0.02599067599067600,
+        # but we want it to look like '2.6pp'
+        #   "IWD": "16.1pp"
+        iwdStr: str = f'{iwd*100:.1f}pp'
+
         imgUrl: str = card['url']
 
         cardDict[name] = {
@@ -42,7 +47,7 @@ with open('data/ltr-auto/all.json', 'r', encoding='utf-8') as json_file_handler:
             'ATA': ata,     # "avg_pick": 7.561547479484173,
             'OH WR': ohwr,  # "opening_hand_win_rate": 0.4925373134328358,
             'GIH WR': gihwr,# "drawn_win_rate": 0.46788990825688076,
-            'IWD': iwd,     # "drawn_improvement_win_rate": 0.02599067599067600,
+            'IWD': iwdStr,  # "drawn_improvement_win_rate": 0.02599067599067600,
             'URL': imgUrl   # "url": "https://cards.scryfall.io/border_crop/..."
         }
 
