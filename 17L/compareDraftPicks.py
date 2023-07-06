@@ -5,6 +5,7 @@ import statistics
 from fuzzywuzzy import process
 from typing import List, Dict
 from scryfallCardFetch import printCardText
+from dataFetch import colorPairs as colorPairs17L
 
 # defines lower bound zScore values for letter grades like A-, D+, B, etc.
 # each letter grade is one standard deviation, with C centered around the mean μ

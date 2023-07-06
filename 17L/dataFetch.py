@@ -17,13 +17,6 @@ import requests
 import json
 from typing import List
 
-# it's possible to leave out start and end date. defaults to entire format!
-defaultUrl: str = 'https://www.17lands.com/card_ratings/data?' \
-	  'expansion=LTR' \
-	  '&format=PremierDraft'
-
-# url for request to which we append '&colors=' and one of the 10 color pairs
-colorUrl: str = defaultUrl + '&colors='
 
 colorPairs: List[str] = [
 	'WU', 'WB', 'WR', 'WG',
@@ -32,25 +25,35 @@ colorPairs: List[str] = [
 	'RG'
 ]
 
-# iterate through colorPairs, making a request for each pair
-# then dump into 📂ltr-auto as 'allColors.json' or the colorPair name
 
-# first, the 'all.json' output
-allColors = requests.get(defaultUrl).json()
-with open('data/ltr-auto/all.json', 'w', encoding='utf-8') as json_file_handler:
-	json_file_handler.write(json.dumps(allColors, indent=4))
+def main():
+	# it's possible to leave out start and end date. defaults to entire format!
+	defaultUrl: str = 'https://www.17lands.com/card_ratings/data?' \
+		  'expansion=LTR' \
+		  '&format=PremierDraft'
 
-print(f'🥭 requests complete: [all', end='')
+	# url for request to which we append '&colors=' and one of the 10 color pairs
+	colorUrl: str = defaultUrl + '&colors='
+
+	# iterate through colorPairs, making a request for each pair
+	# then dump into 📂ltr-auto as 'allColors.json' or the colorPair name
+
+	# first, the 'all.json' output
+	allColors = requests.get(defaultUrl).json()
+	with open('data/ltr-auto/all.json', 'w', encoding='utf-8') as json_file_handler:
+		json_file_handler.write(json.dumps(allColors, indent=4))
+
+	print(f'🥭 requests complete: [all', end='')
 
 
-# now we iterate through colorPairs and get a custom json for each pair
-for colorPair in colorPairs:
-	coloredURL: str = f'{defaultUrl}&colors={colorPair}'
-	colorPairJson = requests.get(coloredURL).json()
+	# now we iterate through colorPairs and get a custom json for each pair
+	for colorPair in colorPairs:
+		coloredURL: str = f'{defaultUrl}&colors={colorPair}'
+		colorPairJson = requests.get(coloredURL).json()
 
-	# save locally to 'WU.json', 'WG.json', etc.
-	with open(f'data/ltr-auto/{colorPair}.json', 'w', encoding='utf-8') \
-		as json_file_handler:
-		json_file_handler.write(json.dumps(colorPairJson, indent=4))
-	print(f', {colorPair}', end='')
-print(f']')
+		# save locally to 'WU.json', 'WG.json', etc.
+		with open(f'data/ltr-auto/{colorPair}.json', 'w', encoding='utf-8') \
+			as json_file_handler:
+			json_file_handler.write(json.dumps(colorPairJson, indent=4))
+		print(f', {colorPair}', end='')
+	print(f']')
