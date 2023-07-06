@@ -21,17 +21,34 @@ compareDraftPicks.py
 
 
 from typing import List, Dict
+from dataFetch import colorPairs  # color pair list: 'WU', 'WR', 'UG', etc.
 import json
 
-cardDict: Dict[str, object] = {}
 
-with open('data/ltr-auto/all.json', 'r', encoding='utf-8') as json_file_handler:
-    json_data = json.load(json_file_handler)
+inputJsonPath: str = f'data/ltr-auto/'
+outputJsonPath: str = f'data/ltr-CDP/'
+
+
+def displayDict(dictionary):
+    # display contents of card dictionary neatly
+    for key, value in dictionary.items():
+        print(f'\n{key} :')
+        for innerKey, innerValue in value.items():
+            print(f"    {innerKey}: {innerValue}")
+
+
+# converts 17L request json into a custom format that resembles 17L csv export
+# saves this new json to 📁 data/ltr-CDP
+def convertJson(jsonInputPath: str, jsonOutputPath: str):
+    with open(jsonInputPath, 'r', encoding='utf-8') as f:
+        json_data = json.load(f)
+
+    # initialize our resulting json file
+    cardDict: Dict[str, object] = {}
 
     # iterate through each card object and create a json object keyed to 'name'
     # note that GIH includes opening hand, whereas GD or 'ever drawn' does not
     for card in json_data:
-        # name, ALSA, ATA, GIH WR, OH WR, IWD
         name: str = card['name']
         alsa: float = card['avg_seen']
         ata: float = card['avg_pick']
@@ -40,13 +57,6 @@ with open('data/ltr-auto/all.json', 'r', encoding='utf-8') as json_file_handler:
         gihCount: int = card['ever_drawn_game_count']
         gihwr: float = card['ever_drawn_win_rate']
         iwd: float = card['drawn_improvement_win_rate']
-
-        # iwd is a float: "drawn_improvement_win_rate": 0.02599067599067600,
-        # but we want it to look like '2.6pp'
-        #   "IWD": "16.1pp"
-        # iwdStr: str = f'{iwd*100:.1f}pp'
-        # actually, better to process the float in compareDraftPicks.py
-
         imgUrl: str = card['url']
 
         cardDict[name] = {
@@ -63,19 +73,29 @@ with open('data/ltr-auto/all.json', 'r', encoding='utf-8') as json_file_handler:
             'Rarity': card['rarity'][0].upper()  # CURM
         }
 
+    # dump new json data into a file
+    with open(jsonOutputPath, 'w',
+              encoding='utf-8') as json_file_handler:
+        json_file_handler.write(json.dumps(cardDict, indent=4))
 
-    # display contents of card dictionary neatly
-    for key, value in cardDict.items():
-        print(f'\n{key} :')
-        for innerKey, innerValue in value.items():
-            print(f"    {innerKey}: {innerValue}")
+    displayDict(cardDict)
+    
 
-# dump new json data into a file
-with open('data/ltr-CDP/all.json', 'w',
-          encoding='utf-8') as json_file_handler:
-    json_file_handler.write(json.dumps(cardDict, indent=4))
+def main():
+    # convert the all-colors 17L json request first
+    allColorsInputPath = f'{inputJsonPath}all.json'
+    allColorsOutputPath = f'{outputJsonPath}all.json'
+    convertJson(allColorsInputPath, allColorsOutputPath)
+
+    # iterate through colorPairs list to convert all the other files
+    for colorPair in colorPairs:
+        pairInput: str = f'{inputJsonPath}{colorPair}.json'
+        pairOutput: str = f'{outputJsonPath}{colorPair}.json'
+        convertJson(pairInput, pairOutput)
+    pass
 
 
+main()
 
 '''
 sample JSON element from 17L request:
