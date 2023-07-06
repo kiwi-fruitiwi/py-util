@@ -40,9 +40,17 @@ displayGihOhDiff: bool = True  # difference in zScore between GIH and OH WRs
 displayOhZscore: bool = True
 displayRarityAndMv: bool = False
 
+dataSetRoot: str = 'data/ltr-CDP/'
+
 
 # main input loop to ask for user input → return list of card stats
-def main(json17L, nameManacostDict):
+def main():
+	# load card info from scryfall json
+	with open('data/ltr-manual/scryfall-ltr.json', encoding='utf-8-sig') as f:
+		scryfallJson = json.load(f)
+
+	nameManacostDict: Dict = generateNameManacostDict(scryfallJson)
+
 	global compareOne
 	global displayCardFetchList
 
@@ -67,17 +75,32 @@ def main(json17L, nameManacostDict):
 		if firstElement[0] == '!':
 			printFlag = True
 			updatedFirstElement = firstElement[1:]  # remove the '!'
-			values[0] = updatedFirstElement
+			values[0] = updatedFirstElement  # clobber to update value
 
 		# special command: colorPair with colon, e.g. 'WU: '
 		# 	this will open data from the corresponding file and save to json17L
-		# check if first element contains ':' if so, split(':')
-		# assert splitResult[0] is two characters
-		# assert it's included in colorPairs
 		#    how do we access 17LdataFetch colorPair?
 		#    load the color pair json that corresponds to it
-		# global that contains what json we're using: default, WU, UB, UR, etc.
 		# strip after in case there are multiple spaces after 'WU:'
+
+		firstElement: str = values[0]  # updated, after '!' is stripped
+
+		# check if first element contains ':' if so, split(':')
+		dataSetUri: str = f'{dataSetRoot}all.json'
+		if ':' in firstElement:
+			tokens: List[str] = firstElement.split(':')
+
+			# there should be only two tokens: colorPair: cardName
+			# and colorPair must be in [WU, WB, WR, WG, etc.]
+			assert len(tokens) == 2
+			assert tokens[0] in colorPairs17L
+
+			# set our dataset to what we want!
+			dataSetUri = f'{dataSetRoot}{tokens[0]}.json'
+
+		# load 17L data from cached json
+		with open(dataSetUri) as file:
+			json17L = json.load(file)
 
 		# set up list of card names matched to our input
 		cardFetchList: List[str] = []
@@ -96,14 +119,12 @@ def main(json17L, nameManacostDict):
 		# use cardFetchList to grab JSON data from data variable
 		if len(cardFetchList) == 1:
 			pass
-			# compareOne = True
+		# compareOne = True
 		else:
 			compareOne = False  # use newlines to reduce clutter for big tables
 			# print a list of names if we're matching more than one card
 			if displayCardFetchList:
 				[print(name) for name in cardFetchList]
-
-		# print(cardFetchList)
 		printCardData(cardFetchList, json17L, nameManacostDict)
 
 		# if there's only one card name input and it's preceded by '!'
@@ -185,7 +206,7 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 		iwd: float = json17L[cardName]["IWD"]
 		# iwdStr: str = json17L[cardName]["IWD"]
 		# iwdStr: str = f'{iwd*100:5.1f}pp'
-		iwdStr: str = f'{iwd*100:.1f}pp'
+		iwdStr: str = f'{iwd * 100:.1f}pp'
 		if iwdStr == '':
 			nameIwdDict[cardName] = None
 		else:
@@ -244,12 +265,11 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 	if displayRarityAndMv:
 		rarityMvHeader = '         '  # 8 char width and a whitespace
 
-
 	print(  # metric and how many characters each metric takes, plus spacing
-		f'   '  	# grade is 2 + 1 space
-		f'alsa ' 	# ALSA 4 chars + 1 whitespace
-		f'  gih ' 	# GIHWR: 6
-		f'    z ' 	# gihwr zscore 5 + 1
+		f'   '  # grade is 2 + 1 space
+		f'alsa '  # ALSA 4 chars + 1 whitespace
+		f'  gih '  # GIHWR: 6
+		f'    z '  # gihwr zscore 5 + 1
 		# f' oh-z ' # ohwr zscore 5 + 1
 		# f'   oh '	# OHWR: 6
 		f'{ogDifHeader}'
@@ -330,13 +350,12 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 				iwdList: str = cardData["IWD"]
 				alsa: float = float(cardData["ALSA"])
 
-
 				# if GIH WR exists, OH WR should too, so no extra check needed
 				ohwrStr: str = cardData["OH WR"]
 
 				if ohwrStr != '':
-					#ohwrList: float = float(cardData["OH WR"].replace('%', 'e-2'))
-					ohwrStr: str = f'{ohwr*100:4.1f}%'
+					# ohwrList: float = float(cardData["OH WR"].replace('%', 'e-2'))
+					ohwrStr: str = f'{ohwr * 100:4.1f}%'
 				else:
 					ohwrStr: str = f'    -'
 
@@ -381,7 +400,7 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 					# f'{ohwrZscoreStr} '
 					# f'{ohwrStr} '
 					f'{ogDifStr} '
-					f'{iwdStr:>6} '					
+					f'{iwdStr:>6} '
 					f'{iwdGradeStr}'
 					f'← '
 					f'{rarityMvStr}'
@@ -410,12 +429,4 @@ def generateNameManacostDict(sfJson):
 	return results
 
 
-# load json from our 17L csv to json converter
-with open('data/ltr-CDP/all.json') as file:
-	data17Ljson = json.load(file)
-
-# load card info from scryfall json
-with open('data/ltr-manual/scryfall-ltr.json', encoding='utf-8-sig') as file:
-	scryfallJson = json.load(file)
-
-main(data17Ljson, generateNameManacostDict(scryfallJson))
+main()
