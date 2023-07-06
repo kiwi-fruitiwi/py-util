@@ -24,26 +24,30 @@ with open('data/ltr-auto/all.json', 'r', encoding='utf-8') as json_file_handler:
     json_data = json.load(json_file_handler)
 
     # iterate through each card object and create a json object keyed to 'name'
+    # note that GIH includes opening hand, whereas GD or 'ever drawn' does not
     for card in json_data:
         # name, ALSA, ATA, GIH WR, OH WR, IWD
         name: str = card['name']
         alsa: float = card['avg_seen']
         ata: float = card['avg_pick']
         ohwr: float = card['opening_hand_win_rate']
+        gihwr: float = card['ever_drawn_win_rate']
+        iwd: float = card['drawn_improvement_win_rate']
+
+        imgUrl: str = card['url']
 
         cardDict[name] = {
             'Name': name,   # "name": "Banish from Edoras",
             'ALSA': alsa,   # "avg_seen": 5.210338680926916,
             'ATA': ata,     # "avg_pick": 7.561547479484173,
             'OH WR': ohwr,  # "opening_hand_win_rate": 0.4925373134328358,
+            'GIH WR': gihwr,# "drawn_win_rate": 0.46788990825688076,
+            'IWD': iwd,     # "drawn_improvement_win_rate": 0.02599067599067600,
+            'URL': imgUrl   # "url": "https://cards.scryfall.io/border_crop/..."
         }
 
-    # print(f'🥝 {cardDict}')
 
     # display contents of card dictionary neatly
-    for card in cardDict:
-        print(f'{card}')
-
     for key, value in cardDict.items():
         print(f'\n{key} :')
         for innerKey, innerValue in value.items():
