@@ -5,14 +5,12 @@ import statistics
 from fuzzywuzzy import process
 from typing import List, Dict
 from scryfallCardFetch import printCardText
-from dataFetch import colorPairs as colorPairs17L
+from constants import colorPairs
 
 # defines lower bound zScore values for letter grades like A-, D+, B, etc.
 # each letter grade is one standard deviation, with C centered around the mean μ
 # a list of tuples containing lower bounds for grades, e.g. S:2.5, A:1.83
 # invariant: this is sorted by zScore value
-
-# noinspection DuplicatedCode
 gradeBounds: List[tuple] = [
 	('S+', 3.0),
 	('S', 2.5),
@@ -30,6 +28,7 @@ gradeBounds: List[tuple] = [
 	('D-', -1.5),
 	('F', -10)
 ]
+
 
 # if we're only comparing one card, skip newlines so subsequent queries
 # are easier to visually compare
@@ -95,7 +94,7 @@ def main():
 			# there should be only two tokens: colorPair: cardName
 			# and colorPair must be in [WU, WB, WR, WG, etc.]
 			assert len(tokens) == 2
-			assert tokens[0].upper() in colorPairs17L
+			assert tokens[0].upper() in colorPairs
 
 			# set our dataset to what we want!
 			dataSetUri = f'{dataSetRoot}{tokens[0].upper()}.json'

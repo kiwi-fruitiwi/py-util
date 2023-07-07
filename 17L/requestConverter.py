@@ -21,7 +21,7 @@ compareDraftPicks.py
 
 
 from typing import List, Dict
-from dataFetch import colorPairs  # color pair list: 'WU', 'WR', 'UG', etc.
+from constants import colorPairs  # color pair list: 'WU', 'WR', 'UG', etc.
 import json
 
 

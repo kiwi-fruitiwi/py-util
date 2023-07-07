@@ -15,15 +15,7 @@ example request uses this URL:
 """
 import requests
 import json
-from typing import List
-
-
-colorPairs: List[str] = [
-	'WU', 'WB', 'WR', 'WG',
-	'UB', 'UR', 'UG',
-	'BR', 'BG',
-	'RG'
-]
+from constants import colorPairs
 
 
 def main():
@@ -57,3 +49,6 @@ def main():
 			json_file_handler.write(json.dumps(colorPairJson, indent=4))
 		print(f', {colorPair}', end='')
 	print(f']')
+
+
+main()
