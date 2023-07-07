@@ -146,20 +146,6 @@ def printCardData(
 	global displayIwdGrade, displayGihOhDiff, displayOhZscore, \
 		displayRarityAndMv
 
-	# load JSON converted from 17L csv export, where each entry looks like this:
-	# 	"Sunfall": {
-	#		"Name": "Sunfall",
-	#		"Color": "W",
-	#		"Rarity": "R",
-	#		"# Picked": "9950",
-	#		"ATA": "1.35",
-	#		"# OH": "9537",
-	#		"OH WR": "65.2%",
-	#		"# GIH": "23564",
-	#		"GIH WR": "67.0%",
-	#		"IWD": "14.0pp"
-	#	},
-
 	# create GIH WR, OH WR, IWD arrays
 	gihwrList: List[float] = []
 	ohwrList: List[float] = []
@@ -181,49 +167,34 @@ def printCardData(
 		#   invasion of arcavios
 		#   jin-gitaxias, core augur
 		# we use None and test for that later if data is not present
-		# TODO: 17L request data doesn't seem to contain empty data
-		# 	we should find out how it represents empty data
+
 		gihwr: float = json17L[cardName]["GIH WR"]
 		n_gih: int = json17L[cardName]["# GIH"]
+
+		# IWD only exists when there's a GIHWR, so we calculate these together
+		# note format is "16.8pp"
+		iwd: float = json17L[cardName]["IWD"]
+		iwdStr: str = f'{iwd * 100:.1f}pp'
+
 		if n_gih < 200:
 			nameGihwrDict[cardName] = None  # test for None later when printing
+			nameIwdDict[cardName] = None
 		else:
-			# the data is actually in string format: e.g. "GIH WR": "67.0%",
-			# so we need to do the following to convert to decimal:
-			#   verify right-most char is '%', then cast to float with 'e-2'
-			#	assert gihwrStr[-1] == '%'
-			#	wr = float(gihwrStr.replace('%', 'e-2'))
 			gihwrList.append(gihwr)
+			iwdList.append(iwd)
 			nameGihwrDict[cardName] = gihwr
+			nameIwdDict[cardName] = iwd
 
 		# repeat for OH WR
-		# ohwrStr: str = json17L[cardName]["OH WR"]
 		ohwr: float = json17L[cardName]["OH WR"]
 		n_oh: int = json17L[cardName]["# OH"]
 		if n_oh < 200:
 			nameOhwrDict[cardName] = None
 		else:
-			# assert ohwrStr[-1] == '%'
-			# wr = float(ohwrStr.replace('%', 'e-2'))
 			ohwrList.append(ohwr)
 			nameOhwrDict[cardName] = ohwr
 
-		# and again for IWD; note format is "16.8pp"
-		iwd: float = json17L[cardName]["IWD"]
-		# iwdStr: str = json17L[cardName]["IWD"]
-		# iwdStr: str = f'{iwd*100:5.1f}pp'
-		iwdStr: str = f'{iwd * 100:.1f}pp'
-		if iwdStr == '':
-			nameIwdDict[cardName] = None
-		else:
-			# assert iwdStr[-2:] == 'pp'
-			# wr = float(iwdStr.replace('pp', ''))
-			iwdList.append(iwd)
-			nameIwdDict[cardName] = iwd
-
 	# [print(f'{e} → {nameIwdDict[e]}') for e in nameIwdDict]
-
-	# TODO filter if '# OH' and '# GIH' are over 200
 	filteredGIHWRs = [x for x in nameGihwrDict.values() if x is not None]
 	filteredOHWRs = [x for x in nameOhwrDict.values() if x is not None]
 	filteredIWDs = [x for x in nameIwdDict.values() if x is not None]
@@ -239,8 +210,6 @@ def printCardData(
 	# sort by ohwr
 	# ohwrJson = dict(sorted(
 	# 	json17L.items(), key=lambda item: item[1]["OH WR"], reverse=True))
-
-	# print(f'🥝 {ohwrJson}')
 
 	# extra newline if we're comparing multiple cards
 	if not compareOne:
@@ -260,22 +229,15 @@ def printCardData(
 	# sort by GIH WR manually in case it's not already sorted that way in csv
 	gihwrJson = dict(sorted(json17L.items(), key=sortingKey, reverse=True))
 
-	# item: float('-inf') if item[1]["GIH WR"] is None else item[1]["GIH WR"]
+	# [ HEADER ]
+	# add 3 spaces for iwd grade, e.g. A+, C-
+	iwdGradeHeaderStr: str = '   ' if displayIwdGrade else ''
 
-	# [print(e) for e in json17L.items()]
+	# 5 characters for zScore diff
+	ogDifHeader: str = ' og Δ' if displayGihOhDiff else ''
 
-	# header
-	iwdGradeHeaderStr: str = ''  # add 3 spaces for iwd grade, e.g. A+, C-
-	if displayIwdGrade:
-		iwdGradeHeaderStr = '   '
-
-	ogDifHeader: str = ''
-	if displayGihOhDiff:
-		ogDifHeader = ' og Δ'  # 5 char
-
-	rarityMvHeader: str = ''
-	if displayRarityAndMv:
-		rarityMvHeader = '         '  # 8 char width and a whitespace
+	# 8 char width and a whitespace
+	rarityMvHeader: str = '         ' if displayRarityAndMv else ''
 
 	print(  # metric and how many characters each metric takes, plus spacing
 		f'   '  # grade is 2 + 1 space
@@ -291,13 +253,9 @@ def printCardData(
 		f'  '  # leading spaces for '← '
 		f'{dataSet} μ:{μ_gihwr:.3f}, σ:{σ_gihwr:.3f}'
 	)
-	# print(f'------------------------------------------------------------')
-
 	# now that we have the GIH WR σ and μ, display data:
 	# note the JSON will be sorted however it was when the csv was requested
 	# by default it will be by collector ID: alphabetical in wubrg order
-	# TODO json17L here needs to be gihwrJson if we want it sorted
-	#   consider sorting in display method
 	for cardName in gihwrJson.keys():
 		# some cards don't have data: check if it's actually in our GIHWR dict
 		if (cardName in nameGihwrDict) and (cardName in cardNameList):
@@ -337,30 +295,6 @@ def printCardData(
 					for gradePair in gradeBounds[::-1]:
 						if iwdZScore >= gradePair[1]:
 							iwdGrade = gradePair[0]
-
-				''' ratings.json format:
-				
-				    "Orcish Bowmasters": {
-						"Name": "Orcish Bowmasters",
-						"Color": "B",
-						"Rarity": "R",
-						"# Seen": "632",
-						"ALSA": "1.57",
-						"# Picked": "484",
-						"ATA": "1.54",
-						"# GP": "2483",
-						"GP WR": "61.7%",
-						"# OH": "438",
-						"OH WR": "74.0%",
-						"# GD": "615",
-						"GD WR": "68.6%",
-						"# GIH": "1053",
-						"GIH WR": "70.8%",
-						"# GNS": "1424",
-						"GNS WR": "54.8%",
-						"IWD": "16.1pp"
-					},
-				'''
 
 				iwdList: str = cardData["IWD"]
 				alsa: float = float(cardData["ALSA"])
