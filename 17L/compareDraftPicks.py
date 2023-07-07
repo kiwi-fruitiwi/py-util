@@ -95,10 +95,10 @@ def main():
 			# there should be only two tokens: colorPair: cardName
 			# and colorPair must be in [WU, WB, WR, WG, etc.]
 			assert len(tokens) == 2
-			assert tokens[0] in colorPairs17L
+			assert tokens[0].upper() in colorPairs17L
 
 			# set our dataset to what we want!
-			dataSetUri = f'{dataSetRoot}{tokens[0]}.json'
+			dataSetUri = f'{dataSetRoot}{tokens[0].upper()}.json'
 
 			# save what our current data set is so it's visible with the data
 			currentJsonStr = tokens[0]
@@ -124,7 +124,7 @@ def main():
 		# use cardFetchList to grab JSON data from data variable
 		if len(cardFetchList) == 1:
 			pass
-			# compareOne = True
+		# compareOne = True
 		else:
 			compareOne = False  # use newlines to reduce clutter for big tables
 			# print a list of names if we're matching more than one card
@@ -251,10 +251,16 @@ def printCardData(
 	# print(f'gihwr μ:{μ_gihwr:.3f}, σ:{σ_gihwr:.3f}')
 	# print(f'')
 
+	def sortingKey(item):
+		gih_wr = item[1]["GIH WR"]
+		if gih_wr is None:
+			return float('-inf')
+		return gih_wr
+
 	# sort by GIH WR manually in case it's not already sorted that way in csv
-	# gihwrJson = dict(sorted(
-	# 	json17L.items(), key=lambda item: item[1]["GIH WR"], reverse=True
-	# ))
+	gihwrJson = dict(sorted(json17L.items(), key=sortingKey, reverse=True))
+
+	# item: float('-inf') if item[1]["GIH WR"] is None else item[1]["GIH WR"]
 
 	# [print(e) for e in json17L.items()]
 
@@ -272,17 +278,17 @@ def printCardData(
 		rarityMvHeader = '         '  # 8 char width and a whitespace
 
 	print(  # metric and how many characters each metric takes, plus spacing
-		f'   '  		# grade is 2 + 1 space
-		f'alsa '  		# ALSA 4 chars + 1 whitespace
-		f'  gih ' 		# GIHWR: 6
-		f'    z ' 	 	# gihwr zscore 5 + 1
+		f'   '  # grade is 2 + 1 space
+		f'alsa '  # ALSA 4 chars + 1 whitespace
+		f'  gih '  # GIHWR: 6
+		f'    z '  # gihwr zscore 5 + 1
 		# f' oh-z ' 	# ohwr zscore 5 + 1
 		# f'   oh '		# OHWR: 6
 		f'{ogDifHeader}'
 		f'    iwd '
 		f'{iwdGradeHeaderStr}'
 		f'{rarityMvHeader}'
-		f'  '  			# leading spaces for '← '
+		f'  '  # leading spaces for '← '
 		f'{dataSet} μ:{μ_gihwr:.3f}, σ:{σ_gihwr:.3f}'
 	)
 	# print(f'------------------------------------------------------------')
@@ -292,7 +298,7 @@ def printCardData(
 	# by default it will be by collector ID: alphabetical in wubrg order
 	# TODO json17L here needs to be gihwrJson if we want it sorted
 	#   consider sorting in display method
-	for cardName in json17L.keys():
+	for cardName in gihwrJson.keys():
 		# some cards don't have data: check if it's actually in our GIHWR dict
 		if (cardName in nameGihwrDict) and (cardName in cardNameList):
 			cardData = json17L[cardName]  # card data json object
@@ -418,7 +424,7 @@ def printCardData(
 				manacost: str = nameManacostDict[cardName]
 				print(
 					# f'← {rarity} {manacost:5} {cardName}'
-					f'🍌 {cardName}'
+					f'NA ← {cardName}'
 				)
 
 
