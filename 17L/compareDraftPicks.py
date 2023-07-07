@@ -84,10 +84,11 @@ def main():
 		# strip after in case there are multiple spaces after 'WU:'
 
 		firstElement: str = values[0]  # updated, after '!' is stripped
-
 		# check if first element contains ':' if so, split(':')
 		# use this to determine what json file we'll be loading
 		dataSetUri: str = f'{dataSetRoot}all.json'
+		currentJsonStr: str = f'default'
+
 		if ':' in firstElement:
 			tokens: List[str] = firstElement.split(':')
 
@@ -98,6 +99,9 @@ def main():
 
 			# set our dataset to what we want!
 			dataSetUri = f'{dataSetRoot}{tokens[0]}.json'
+
+			# save what our current data set is so it's visible with the data
+			currentJsonStr = tokens[0]
 
 		# load 17L data from cached json
 		with open(dataSetUri) as file:
@@ -120,13 +124,13 @@ def main():
 		# use cardFetchList to grab JSON data from data variable
 		if len(cardFetchList) == 1:
 			pass
-		# compareOne = True
+			# compareOne = True
 		else:
 			compareOne = False  # use newlines to reduce clutter for big tables
 			# print a list of names if we're matching more than one card
 			if displayCardFetchList:
 				[print(name) for name in cardFetchList]
-		printCardData(cardFetchList, json17L, nameManacostDict)
+		printCardData(cardFetchList, json17L, nameManacostDict, currentJsonStr)
 
 		# if there's only one card name input and it's preceded by '!'
 		# print the card's spoiler text
@@ -136,7 +140,8 @@ def main():
 
 # get card data from data/ratings.json and display it for each cardName in
 # cardNameList! If the JSON is sorted by GIHWR, so will the results.
-def printCardData(cardNameList: List[str], json17L, nameManacostDict):
+def printCardData(
+		cardNameList: List[str], json17L, nameManacostDict, dataSet: str):
 	global compareOne
 	global displayIwdGrade, displayGihOhDiff, displayOhZscore, \
 		displayRarityAndMv
@@ -232,8 +237,8 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 
 	# find μ and σ of ohwr as well
 	# sort by ohwr
-	ohwrJson = dict(sorted(
-		json17L.items(), key=lambda item: item[1]["OH WR"], reverse=True))
+	# ohwrJson = dict(sorted(
+	# 	json17L.items(), key=lambda item: item[1]["OH WR"], reverse=True))
 
 	# print(f'🥝 {ohwrJson}')
 
@@ -247,9 +252,9 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 	# print(f'')
 
 	# sort by GIH WR manually in case it's not already sorted that way in csv
-	gihwrJson = dict(sorted(
-		json17L.items(), key=lambda item: item[1]["GIH WR"], reverse=True
-	))
+	# gihwrJson = dict(sorted(
+	# 	json17L.items(), key=lambda item: item[1]["GIH WR"], reverse=True
+	# ))
 
 	# [print(e) for e in json17L.items()]
 
@@ -267,24 +272,27 @@ def printCardData(cardNameList: List[str], json17L, nameManacostDict):
 		rarityMvHeader = '         '  # 8 char width and a whitespace
 
 	print(  # metric and how many characters each metric takes, plus spacing
-		f'   '  # grade is 2 + 1 space
-		f'alsa '  # ALSA 4 chars + 1 whitespace
-		f'  gih '  # GIHWR: 6
-		f'    z '  # gihwr zscore 5 + 1
-		# f' oh-z ' # ohwr zscore 5 + 1
-		# f'   oh '	# OHWR: 6
+		f'   '  		# grade is 2 + 1 space
+		f'alsa '  		# ALSA 4 chars + 1 whitespace
+		f'  gih ' 		# GIHWR: 6
+		f'    z ' 	 	# gihwr zscore 5 + 1
+		# f' oh-z ' 	# ohwr zscore 5 + 1
+		# f'   oh '		# OHWR: 6
 		f'{ogDifHeader}'
 		f'    iwd '
 		f'{iwdGradeHeaderStr}'
 		f'{rarityMvHeader}'
-		f'  μ:{μ_gihwr:.3f}, σ:{σ_gihwr:.3f}'  # leading spaces for '← '
+		f'  '  			# leading spaces for '← '
+		f'{dataSet} μ:{μ_gihwr:.3f}, σ:{σ_gihwr:.3f}'
 	)
 	# print(f'------------------------------------------------------------')
 
 	# now that we have the GIH WR σ and μ, display data:
 	# note the JSON will be sorted however it was when the csv was requested
 	# by default it will be by collector ID: alphabetical in wubrg order
-	for cardName in gihwrJson.keys():
+	# TODO json17L here needs to be gihwrJson if we want it sorted
+	#   consider sorting in display method
+	for cardName in json17L.keys():
 		# some cards don't have data: check if it's actually in our GIHWR dict
 		if (cardName in nameGihwrDict) and (cardName in cardNameList):
 			cardData = json17L[cardName]  # card data json object
