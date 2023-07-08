@@ -30,6 +30,9 @@ gradeBounds: List[tuple] = [
 ]
 
 
+MIN_SAMPLE_SIZE: int = 200
+
+
 # if we're only comparing one card, skip newlines so subsequent queries
 # are easier to visually compare
 compareOne: bool = False
@@ -43,6 +46,11 @@ dataSetRoot: str = 'data/ltr-CDP/'
 
 
 # main input loop to ask for user input → return list of card stats
+# main includes
+# 	the input logic: `!` and `colorPair: ` prefixes
+# 	performs fuzzy matching on card names
+# 	calls **printCardData** using the selected colorPair json file
+# 	(or the default all colors file)
 def main():
 	# load card info from scryfall json
 	with open('data/ltr-manual/scryfall-ltr.json', encoding='utf-8-sig') as f:
@@ -100,6 +108,8 @@ def main():
 			dataSetUri = f'{dataSetRoot}{tokens[0].upper()}.json'
 
 			# save what our current data set is so it's visible with the data
+			# note it's either the default "all colors" json or one of the
+			# colorPairs: WU WB WR WG etc.
 			currentJsonStr = tokens[0]
 
 		# load 17L data from cached json
@@ -161,21 +171,15 @@ def printCardData(
 	#   17L's csv export. after moving to requests, we dealt completely in
 	#   floats instead of "67.0%" or "16.2pp"
 	for cardName in json17L.keys():
-		# some cards don't have enough data and their GIH WR is empty: ''. so
-		# we can simply ignore these in the data set, e.g.
-		#   invasion of arcavios
-		#   jin-gitaxias, core augur
-		# we use None and test for that later if data is not present
-
+		# some cards don't have enough data; our cutoff is sample size: n=200
 		gihwr: float = json17L[cardName]["GIH WR"]
 		n_gih: int = json17L[cardName]["# GIH"]
 
 		# IWD only exists when there's a GIHWR, so we calculate these together
 		# note format is "16.8pp"
 		iwd: float = json17L[cardName]["IWD"]
-		iwdStr: str = f'{iwd * 100:.1f}pp'
 
-		if n_gih < 200:
+		if n_gih < MIN_SAMPLE_SIZE:
 			nameGihwrDict[cardName] = None  # test for None later when printing
 			nameIwdDict[cardName] = None
 		else:
@@ -187,7 +191,7 @@ def printCardData(
 		# repeat for OH WR
 		ohwr: float = json17L[cardName]["OH WR"]
 		n_oh: int = json17L[cardName]["# OH"]
-		if n_oh < 200:
+		if n_oh < MIN_SAMPLE_SIZE:
 			nameOhwrDict[cardName] = None
 		else:
 			ohwrList.append(ohwr)
@@ -204,11 +208,6 @@ def printCardData(
 	σ_ohwr: float = statistics.stdev(filteredOHWRs)
 	μ_iwd: float = statistics.mean(filteredIWDs)
 	σ_iwd: float = statistics.stdev(filteredIWDs)
-
-	# find μ and σ of ohwr as well
-	# sort by ohwr
-	# ohwrJson = dict(sorted(
-	# 	json17L.items(), key=lambda item: item[1]["OH WR"], reverse=True))
 
 	# extra newline if we're comparing multiple cards
 	if not compareOne:
@@ -228,33 +227,9 @@ def printCardData(
 	# sort by GIH WR manually in case it's not already sorted that way in csv
 	gihwrJson = dict(sorted(json17L.items(), key=sortingKey, reverse=True))
 
-	# [ HEADER ]
-	# add 3 spaces for iwd grade, e.g. A+, C-
-	iwdGradeHeaderStr: str = '   ' if displayIwdGrade else ''
+	displayHeader()
 
-	# 5 characters for zScore diff
-	ogDifHeader: str = ' og Δ' if displayGihOhDiff else ''
-
-	# 8 char width and a whitespace
-	rarityMvHeader: str = '         ' if displayRarityAndMv else ''
-
-	print(  # metric and how many characters each metric takes, plus spacing
-		f'   '  # grade is 2 + 1 space
-		f'alsa '  # ALSA 4 chars + 1 whitespace
-		f'  gih '  # GIHWR: 6
-		f'    z '  # gihwr zscore 5 + 1
-		# f' oh-z ' 	# ohwr zscore 5 + 1
-		# f'   oh '		# OHWR: 6
-		f'{ogDifHeader}'
-		f'    iwd '
-		f'{iwdGradeHeaderStr}'
-		f'{rarityMvHeader}'
-		f'  '  # leading spaces for '← '
-		f'{dataSet} μ:{μ_gihwr:.3f}, σ:{σ_gihwr:.3f}'
-	)
 	# now that we have the GIH WR σ and μ, display data:
-	# note the JSON will be sorted however it was when the csv was requested
-	# by default it will be by collector ID: alphabetical in wubrg order
 	for cardName in gihwrJson.keys():
 		# some cards don't have data: check if it's actually in our GIHWR dict
 		if (cardName in nameGihwrDict) and (cardName in cardNameList):
@@ -268,7 +243,6 @@ def printCardData(
 			ohwrGrade: str = ' '
 			iwdGrade: str = ' '
 
-			# pretty sure ohwr has to exist if gihwr does. false, not Glamdring
 			if gihwr:  # x is set to None if no GIH WR was available
 				# calculate how many stdDevs away from the mean?
 				gihwrZScore: float = (gihwr - μ_gihwr) / σ_gihwr
@@ -298,7 +272,7 @@ def printCardData(
 				iwdList: str = cardData["IWD"]
 				alsa: float = float(cardData["ALSA"])
 
-				# if GIH WR exists, OH WR should too, so no extra check needed
+				# if GIH WR exists, OH WR should too, so no extra check needed?
 				ohwrStr: str = cardData["OH WR"]
 
 				if ohwrStr != '':
@@ -332,7 +306,7 @@ def printCardData(
 					iwdGradeStr = f'{iwdGrade:2} '
 
 				rarityMvStr: str = ''
-				if rarityMvHeader:
+				if displayRarityAndMv:
 					# 8 spaces needed for rarity and mana cost, +1 space
 					# mv must be 6 because 3WUBRG costs
 					rarityMvStr = f'{rarity} {manacost:6} '
@@ -359,6 +333,34 @@ def printCardData(
 					# f'← {rarity} {manacost:5} {cardName}'
 					f'NA ← {cardName}'
 				)
+
+
+# displays the header for the data set, including set name, mean, and stdDev
+def displayHeader(dataSet: str, μ: float, σ: float):
+	# [ HEADER ]
+	# add 3 spaces for iwd grade, e.g. A+, C-
+	iwdGradeHeaderStr: str = '   ' if displayIwdGrade else ''
+
+	# 5 characters for zScore diff
+	ogDifHeader: str = ' og Δ' if displayGihOhDiff else ''
+
+	# 8 char width and a whitespace
+	rarityMvHeader: str = '         ' if displayRarityAndMv else ''
+
+	print(  # metric and how many characters each metric takes, plus spacing
+		f'   '  # grade is 2 + 1 space
+		f'alsa '  # ALSA 4 chars + 1 whitespace
+		f'  gih '  # GIHWR: 6
+		f'    z '  # gihwr zscore 5 + 1
+		# f' oh-z ' 	# ohwr zscore 5 + 1
+		# f'   oh '		# OHWR: 6
+		f'{ogDifHeader}'
+		f'    iwd '
+		f'{iwdGradeHeaderStr}'
+		f'{rarityMvHeader}'
+		f'  '  # leading spaces for '← '
+		f'{dataSet} μ:{μ:.3f}, σ:{σ:.3f}'
+	)
 
 
 # generates a dictionary mapping card names to their mana costs in format '2UUU'

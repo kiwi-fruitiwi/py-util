@@ -1,5 +1,7 @@
 # from: askpython.com/python/examples/convert-csv-to-json
 # purpose: convert 17L csv data into JSON format for 🚂17L-grades
+# 2023.07.07 not used anymore due to reading directly from 17L requests instead
+# see compareDraftPicks
 
 import csv
 import json
