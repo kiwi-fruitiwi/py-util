@@ -62,7 +62,6 @@ def main():
 	global displayCardFetchList
 
 	done: bool = False
-	printFlag: bool = False
 
 	while not done:
 		printFlag = False
@@ -80,7 +79,7 @@ def main():
 		# this is done only if there's one card name in the input
 		firstElement: str = values[0]
 		if firstElement[0] == '!':
-			printFlag = True
+			printFlag: bool = True
 			updatedFirstElement = firstElement[1:]  # remove the '!'
 			values[0] = updatedFirstElement  # clobber to update value
 
@@ -130,8 +129,15 @@ def main():
 			else:
 				print(f'🍆 best match not found for {value}')
 
-		# use cardFetchList to grab JSON data from data variable
+		# iterate through all color pairs and print the data there!
 		if len(cardFetchList) == 1:
+			for colorPair in colorPairs:
+				dataSetUri = f'{dataSetRoot}{colorPair}.json'
+				# load 17L data from cached json
+				with open(dataSetUri) as file:
+					dataSet = json.load(file)
+				printCardData(cardFetchList, dataSet, nameManacostDict, colorPair)
+
 			pass
 		# compareOne = True
 		else:
@@ -142,7 +148,8 @@ def main():
 		printCardData(cardFetchList, json17L, nameManacostDict, currentJsonStr)
 
 		# if there's only one card name input and it's preceded by '!'
-		# print the card's spoiler text
+		# → print the card's spoiler text
+		# recall that printFlag is set when user input is prefixed with '!'
 		if printFlag and len(cardFetchList) == 1:
 			printCardText(cardFetchList[0], scryfallJson)
 
@@ -323,8 +330,9 @@ def printCardData(
 			else:
 				manacost: str = nameManacostDict[cardName]
 				print(
+					f'                                 '
 					# f'← {rarity} {manacost:5} {cardName}'
-					f'NA ← {cardName}'
+					f'← {cardName}'
 				)
 
 

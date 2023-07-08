@@ -87,7 +87,8 @@ def main():
     allColorsOutputPath = f'{outputJsonPath}all.json'
     convertJson(allColorsInputPath, allColorsOutputPath)
 
-    # iterate through colorPairs list to convert all the other files
+    # iterate through colorPairs list to convert all the other 10 files
+    # WU.json, UB.json, UG.json, WR.json, etc.
     for colorPair in colorPairs:
         pairInput: str = f'{inputJsonPath}{colorPair}.json'
         pairOutput: str = f'{outputJsonPath}{colorPair}.json'
