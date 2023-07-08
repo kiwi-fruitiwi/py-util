@@ -227,7 +227,7 @@ def printCardData(
 	# sort by GIH WR manually in case it's not already sorted that way in csv
 	gihwrJson = dict(sorted(json17L.items(), key=sortingKey, reverse=True))
 
-	displayHeader()
+	displayHeader(dataSet, μ_gihwr, σ_gihwr)
 
 	# now that we have the GIH WR σ and μ, display data:
 	for cardName in gihwrJson.keys():
@@ -272,14 +272,7 @@ def printCardData(
 				iwdList: str = cardData["IWD"]
 				alsa: float = float(cardData["ALSA"])
 
-				# if GIH WR exists, OH WR should too, so no extra check needed?
-				ohwrStr: str = cardData["OH WR"]
-
-				if ohwrStr != '':
-					# ohwrList: float = float(cardData["OH WR"].replace('%', 'e-2'))
-					ohwrStr: str = f'{ohwr * 100:4.1f}%'
-				else:
-					ohwrStr: str = f'    -'
+				ohwrStr: str = f'{ohwr * 100:4.1f}%' if ohwr else f'    -'
 
 				# display difference in zscore between GIHWR and OHWR
 				ogDifStr: str = ''
