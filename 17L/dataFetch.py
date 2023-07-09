@@ -30,12 +30,12 @@ def main():
 	# iterate through colorPairs, making a request for each pair
 	# then dump into 📂ltr-auto as 'allColors.json' or the colorPair name
 
-	# first, the 'all.json' output
+	# first, the 'default.json' output
 	allColors = requests.get(defaultUrl).json()
-	with open('data/ltr-auto/all.json', 'w', encoding='utf-8') as json_file_handler:
+	with open('data/ltr-auto/default.json', 'w', encoding='utf-8') as json_file_handler:
 		json_file_handler.write(json.dumps(allColors, indent=4))
 
-	print(f'🥭 requests complete: [all', end='')
+	print(f'🥭 requests complete: [default', end='')
 
 
 	# now we iterate through colorPairs and get a custom json for each pair

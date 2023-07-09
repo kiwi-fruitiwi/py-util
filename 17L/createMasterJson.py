@@ -76,7 +76,7 @@ def createStatsJson():
 
 	# find μ, σ stats for default data set: all.json
 	calculateAndAddStatsKeyValuePairs(
-		'default', 'data/ltr-CDP/all.json', result)
+		'default', 'data/ltr-CDP/default.json', result)
 
 	# second, iterate through all other dataSets after encapsulating step 1
 	inputJsonPath: str = f'data/ltr-CDP/'

@@ -92,7 +92,7 @@ def main():
 		firstElement: str = values[0]  # updated, after '!' is stripped
 		# check if first element contains ':' if so, split(':')
 		# use this to determine what json file we'll be loading
-		dataSetUri: str = f'{dataSetRoot}all.json'
+		dataSetUri: str = f'{dataSetRoot}default.json'
 		currentJsonStr: str = f'default'
 
 		if ':' in firstElement:

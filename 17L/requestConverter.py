@@ -3,7 +3,7 @@ convert json requests from 17lands.com into a simpler json format for
 compareDraftPicks.py
 """
 
-# read 📁 data/ltr-auto/all.json
+# read 📁 data/ltr-auto/default.json
 # iterate through entries, printing each name and final count
 # identify stats we need and what format we want:
 #   # Seen
@@ -15,7 +15,8 @@ compareDraftPicks.py
 # ask GPT how to create this custom json
 # print
 # write to file
-# have compareDraftPicks read from this file instead! 📁 converted-ratings-all.json
+# have compareDraftPicks read from this file instead!
+#   📁 converted-ratings-default.json
 #   in the future, make converted-ratings-{colorPairStr}.json
 #   read those when queries are prefaced with 'WU: ' or 'UR: '
 
@@ -83,8 +84,8 @@ def convertJson(jsonInputPath: str, jsonOutputPath: str):
 
 def main():
     # convert the all-colors 17L json request first
-    allColorsInputPath = f'{inputJsonPath}all.json'
-    allColorsOutputPath = f'{outputJsonPath}all.json'
+    allColorsInputPath = f'{inputJsonPath}default.json'
+    allColorsOutputPath = f'{outputJsonPath}default.json'
     convertJson(allColorsInputPath, allColorsOutputPath)
 
     # iterate through colorPairs list to convert all the other 10 files
