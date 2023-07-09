@@ -47,7 +47,6 @@ def createMasterJson():
 	# for each cardName in the main json file, find its data in the colorPair
 	# json files and append them
 	for name, data in master.items():
-		print(f'🫐 {name}')
 		# iterate through every colorPair, adding data in key,value pairs:
 		# OH, OHWR, #GIH, GIHWR, IWD
 		for colorPair in colorPairs:
@@ -69,8 +68,12 @@ def createMasterJson():
 			cardData[f'{dataSetID} IWD'] = currentDataSetCardData['IWD']
 
 
-	for cardName, cardData in master.items():
-		[print(f'{key}: {value}') for (key, value) in cardData.items()]
+	# for cardName, cardData in master.items():
+	#	[print(f'{key}: {value}') for (key, value) in cardData.items()]
+	with open(f'data/master.json', 'w', encoding='utf-8') as jsonSaver:
+		jsonSaver.write(json.dumps(master, indent=4))
+
+	print(f'🍑 master json saved')
 
 
 def createStatsJson():
@@ -110,6 +113,10 @@ def createStatsJson():
 	# [print(f'{key}: {value}') for (key, value) in result.items()]
 
 	# lastly, save the json file for access later
+	with open(f'data/statistics.json', 'w', encoding='utf-8') as jsonSaver:
+		jsonSaver.write(json.dumps(result, indent=4))
+
+	print(f'🥭 statistics json saved')
 
 
 # calculate (μ,σ) pairs for GIHWR, OHWR, and IWD from the json file specified at
@@ -151,13 +158,13 @@ def calculateAndAddStatsKeyValuePairs(
 	μ_iwd: float = statistics.mean(iwdList)
 	σ_iwd: float = statistics.stdev(iwdList)
 
-	statsDictionary[f"{dataSetID} GIHWRμ"] = μ_gihwr
-	statsDictionary[f"{dataSetID} GIHWRσ"] = σ_gihwr
-	statsDictionary[f"{dataSetID} OHWRμ"] = μ_ohwr
-	statsDictionary[f"{dataSetID} OHWRσ"] = σ_ohwr
-	statsDictionary[f"{dataSetID} IWDμ"] = μ_iwd
-	statsDictionary[f"{dataSetID} IWDσ"] = σ_iwd
+	statsDictionary[f"{dataSetID} GIHWR mean"] = μ_gihwr
+	statsDictionary[f"{dataSetID} GIHWR stdDev"] = σ_gihwr
+	statsDictionary[f"{dataSetID} OHWR mean"] = μ_ohwr
+	statsDictionary[f"{dataSetID} OHWR stdDev"] = σ_ohwr
+	statsDictionary[f"{dataSetID} IWD mean"] = μ_iwd
+	statsDictionary[f"{dataSetID} IWD stdDev"] = σ_iwd
 
 
 createMasterJson()
-# createStatsJson()
+createStatsJson()
