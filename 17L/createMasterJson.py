@@ -1,4 +1,4 @@
-# start with all.json, created via requestConverter.py from the default 17L
+# start with default.json, created via requestConverter.py from the default 17L
 # request. this is keyed by 🔑:cardName
 #
 # add the following information from all n colorPairs:
@@ -20,34 +20,57 @@ from constants import minimumSampleSize
 
 
 def createMasterJson():
-	# load all.json. this contains default data from 17L. it's the default page!
-	# all.json is created and populated by requestConverter.py to contain all
-	# necessary data for compareDraftPicks.py
-	defaultPath: str = f'data/ltr-CDP/all.json'
-	with open(defaultPath, 'r', encoding='utf-8') as f:
-		dataSet: Dict = json.load(f)
+	# load default.json. this contains default data from 17L. it's the default
+	# page! default.json is created and populated by requestConverter.py to
+	# contain all necessary data for compareDraftPicks.py
+	defaultPath: str = f'data/ltr-CDP/default.json'
+	with open(defaultPath, 'r', encoding='utf-8') as jsonFileHandler:
+		master: Dict = json.load(jsonFileHandler)
 
-	# dataSet entries look like this:
-	# "Bill the Pony": {
-	#     "Name": "Bill the Pony",
-	#     "ALSA": 3.486085617857777,
-	#     "ATA": 4.213059170950454,
-	#     "# OH": 43,
-	#     "OH WR": 0.6046511627906976,
-	#     "# GIH": 97,
-	#     "GIH WR": 0.6288659793814433,
-	#     "IWD": 0.1502945508100147,
-	#     "URL": "https://cards.scryfall.io/border_crop/front...,
-	#     "Color": "W",
-	#     "Rarity": "U"
-	# },
+	'''
+	dataSet entries look like this:
+		"Bill the Pony": {
+		    "Name": "Bill the Pony",
+		    "ALSA": 3.486085617857777,
+		    "ATA": 4.213059170950454,
+		    "# OH": 43,
+		    "OH WR": 0.6046511627906976,
+		    "# GIH": 97,
+		    "GIH WR": 0.6288659793814433,
+		    "IWD": 0.1502945508100147,
+		    "URL": "https://cards.scryfall.io/border_crop/front...,
+		    "Color": "W",
+		    "Rarity": "U"
+	},
+	'''
+
+	# for each cardName in the main json file, find its data in the colorPair
+	# json files and append them
+	for name, data in master.items():
+		print(f'🫐 {name}')
+		# iterate through every colorPair, adding data in key,value pairs:
+		# OH, OHWR, #GIH, GIHWR, IWD
+		for colorPair in colorPairs:
+			with open(defaultPath, 'r', encoding='utf-8') as jsonFileHandler:
+				currentDataSet: Dict = json.load(jsonFileHandler)
+
+			dataSetID: str = colorPair  # e.g. 'WU', 'UG'
+
+			# append new key,value pair to master[name]'s value
+			cardData: Dict = data  # master[name] is a Dict containing one card
+			currentDataSetCardData: Dict = currentDataSet[name]
+
+			# we need: '# OH', 'OH WR', '# GIH', 'GIH WR', 'IWD'
+			# all prefixed by colorPair
+			cardData[f'{dataSetID} GIHWR'] = currentDataSetCardData['GIH WR']
+			cardData[f'{dataSetID} OHWR'] = currentDataSetCardData['OH WR']
+			cardData[f'{dataSetID} # GIH'] = currentDataSetCardData['# GIH']
+			cardData[f'{dataSetID} # OH'] = currentDataSetCardData['# OH']
+			cardData[f'{dataSetID} IWD'] = currentDataSetCardData['IWD']
 
 
-
-
-	# iterate through every other colorPair, adding these data key,value pairs:
-	#	OH, OHWR, #GIH, GIHWR, IWD
-	pass
+	for cardName, cardData in master.items():
+		[print(f'{key}: {value}') for (key, value) in cardData.items()]
 
 
 def createStatsJson():
@@ -84,7 +107,7 @@ def createStatsJson():
 		dataSetPath: str = f'{inputJsonPath}{colorPair}.json'
 		calculateAndAddStatsKeyValuePairs(colorPair, dataSetPath, result)
 
-	[print(f'{key}: {value}') for (key, value) in result.items()]
+	# [print(f'{key}: {value}') for (key, value) in result.items()]
 
 	# lastly, save the json file for access later
 
@@ -137,4 +160,4 @@ def calculateAndAddStatsKeyValuePairs(
 
 
 createMasterJson()
-createStatsJson()
+# createStatsJson()
