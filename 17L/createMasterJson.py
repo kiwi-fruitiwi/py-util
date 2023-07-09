@@ -74,9 +74,26 @@ def createStatsJson():
 	# dictionary we will save to json
 	result: Dict = {}
 
-	# first, find the μ,σ pair for the default data set
-	defaultPath: str = f'data/ltr-CDP/all.json'
-	with open(defaultPath, 'r', encoding='utf-8') as f:
+	# find μ, σ stats for default data set: all.json
+	calculateAndAddStatsKeyValuePairs(
+		'default', 'data/ltr-CDP/all.json', result)
+
+	# second, iterate through all other dataSets after encapsulating step 1
+	inputJsonPath: str = f'data/ltr-CDP/'
+	for colorPair in colorPairs:
+		dataSetPath: str = f'{inputJsonPath}{colorPair}.json'
+		calculateAndAddStatsKeyValuePairs(colorPair, dataSetPath, result)
+
+	[print(f'{key}: {value}') for (key, value) in result.items()]
+
+	# lastly, save the json file for access later
+
+
+# calculate (μ,σ) pairs for GIHWR, OHWR, and IWD from the json file specified at
+# dataSetPath. add them to input dictionary
+def calculateAndAddStatsKeyValuePairs(
+		dataSetID: str, dataSetPath: str, statsDictionary: Dict):
+	with open(dataSetPath, 'r', encoding='utf-8') as f:
 		dataSet: Dict = json.load(f)
 
 	gihwrList: List[float] = []
@@ -111,28 +128,12 @@ def createStatsJson():
 	μ_iwd: float = statistics.mean(iwdList)
 	σ_iwd: float = statistics.stdev(iwdList)
 
-	print(f'🥝GIH: μ={μ_gihwr} σ={σ_gihwr}')
-	print(f'🥝OH: μ={μ_ohwr} σ={σ_ohwr}')
-	print(f'🥝IWD: μ={μ_iwd} σ={σ_iwd}')
-
-	result["default GIHWRμ"] = μ_gihwr
-	result["default GIHWRσ"] = σ_gihwr
-	result["default OHWRμ"] = μ_ohwr
-	result["default OHWRσ"] = σ_ohwr
-	result["default IWDμ"] = μ_iwd
-	result["default IWDσ"] = σ_iwd
-
-	[print(f'{key}: {value}') for (key, value) in result.items()]
-
-
-	# second, iterate through all other dataSets after encapsulating step 1
-	inputJsonPath: str = f'data/ltr-CDP/'
-	for colorPair in colorPairs:
-		dataSetPath: str = f'{inputJsonPath}{colorPair}.json'
-		print(f'{dataSetPath}')
-
-
-	# lastly, save the json file for access later
+	statsDictionary[f"{dataSetID} GIHWRμ"] = μ_gihwr
+	statsDictionary[f"{dataSetID} GIHWRσ"] = σ_gihwr
+	statsDictionary[f"{dataSetID} OHWRμ"] = μ_ohwr
+	statsDictionary[f"{dataSetID} OHWRσ"] = σ_ohwr
+	statsDictionary[f"{dataSetID} IWDμ"] = μ_iwd
+	statsDictionary[f"{dataSetID} IWDσ"] = σ_iwd
 
 
 createMasterJson()
