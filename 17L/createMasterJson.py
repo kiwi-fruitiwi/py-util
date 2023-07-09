@@ -158,12 +158,12 @@ def calculateAndAddStatsKeyValuePairs(
 	μ_iwd: float = statistics.mean(iwdList)
 	σ_iwd: float = statistics.stdev(iwdList)
 
-	statsDictionary[f"{dataSetID} GIHWR mean"] = μ_gihwr
-	statsDictionary[f"{dataSetID} GIHWR stdDev"] = σ_gihwr
-	statsDictionary[f"{dataSetID} OHWR mean"] = μ_ohwr
-	statsDictionary[f"{dataSetID} OHWR stdDev"] = σ_ohwr
-	statsDictionary[f"{dataSetID} IWD mean"] = μ_iwd
-	statsDictionary[f"{dataSetID} IWD stdDev"] = σ_iwd
+	statsDictionary[f"{dataSetID} GIHWR_mean"] = μ_gihwr
+	statsDictionary[f"{dataSetID} GIHWR_stdDev"] = σ_gihwr
+	statsDictionary[f"{dataSetID} OHWR_mean"] = μ_ohwr
+	statsDictionary[f"{dataSetID} OHWR_stdDev"] = σ_ohwr
+	statsDictionary[f"{dataSetID} IWD_mean"] = μ_iwd
+	statsDictionary[f"{dataSetID} IWD_stdDev"] = σ_iwd
 
 
 createMasterJson()

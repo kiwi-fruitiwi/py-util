@@ -154,7 +154,7 @@ def main():
 			printCardText(cardFetchList[0], scryfallJson)
 
 
-# get card data from data/ratings.json and display it for each cardName in
+# get card data from data/master.json and display it for each cardName in
 # cardNameList! If the JSON is sorted by GIHWR, so will the results.
 def printCardData(
 		cardNameList: List[str], json17L, nameManacostDict, dataSet: str):
