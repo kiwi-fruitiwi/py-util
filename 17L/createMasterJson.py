@@ -50,7 +50,8 @@ def createMasterJson():
 		# iterate through every colorPair, adding data in key,value pairs:
 		# OH, OHWR, #GIH, GIHWR, IWD
 		for colorPair in colorPairs:
-			with open(defaultPath, 'r', encoding='utf-8') as jsonFileHandler:
+			coloredJsonPath: str = f'data/ltr-CDP/{colorPair}.json'
+			with open(coloredJsonPath, 'r', encoding='utf-8') as jsonFileHandler:
 				currentDataSet: Dict = json.load(jsonFileHandler)
 
 			dataSetID: str = colorPair  # e.g. 'WU', 'UG'
@@ -61,8 +62,8 @@ def createMasterJson():
 
 			# we need: '# OH', 'OH WR', '# GIH', 'GIH WR', 'IWD'
 			# all prefixed by colorPair
-			cardData[f'{dataSetID} GIHWR'] = currentDataSetCardData['GIH WR']
-			cardData[f'{dataSetID} OHWR'] = currentDataSetCardData['OH WR']
+			cardData[f'{dataSetID} GIH WR'] = currentDataSetCardData['GIH WR']
+			cardData[f'{dataSetID} OH WR'] = currentDataSetCardData['OH WR']
 			cardData[f'{dataSetID} # GIH'] = currentDataSetCardData['# GIH']
 			cardData[f'{dataSetID} # OH'] = currentDataSetCardData['# OH']
 			cardData[f'{dataSetID} IWD'] = currentDataSetCardData['IWD']
