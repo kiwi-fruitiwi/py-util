@@ -169,12 +169,16 @@ def calculateAndAddStatsKeyValuePairs(
 	μ_iwd: float = statistics.mean(iwdList)
 	σ_iwd: float = statistics.stdev(iwdList)
 
-	statsDictionary[f"{dataSetID} GIHWR_mean"] = μ_gihwr
-	statsDictionary[f"{dataSetID} GIHWR_stdDev"] = σ_gihwr
-	statsDictionary[f"{dataSetID} OHWR_mean"] = μ_ohwr
-	statsDictionary[f"{dataSetID} OHWR_stdDev"] = σ_ohwr
-	statsDictionary[f"{dataSetID} IWD_mean"] = μ_iwd
-	statsDictionary[f"{dataSetID} IWD_stdDev"] = σ_iwd
+	colorPairStats: Dict = {
+		"GIHWR_mean": μ_gihwr,
+		"GIHWR_stdDev": σ_gihwr,
+		"OHWR_mean": μ_ohwr,
+		"OHWR_stdDev": σ_ohwr,
+		"IWD_mean": μ_iwd,
+		"IWD_stdDev": σ_iwd
+	}
+
+	statsDictionary[dataSetID] = colorPairStats
 
 
 createMasterJson()
