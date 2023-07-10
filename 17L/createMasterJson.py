@@ -44,29 +44,39 @@ def createMasterJson():
 	},
 	'''
 
+
 	# for each cardName in the main json file, find its data in the colorPair
 	# json files and append them
 	for name, data in master.items():
 		# iterate through every colorPair, adding data in key,value pairs:
 		# OH, OHWR, #GIH, GIHWR, IWD
+
+		# create the filteredStats key with an empty dictionary we add to later
+		data['filteredStats'] = {}
+
 		for colorPair in colorPairs:
 			coloredJsonPath: str = f'data/ltr-CDP/{colorPair}.json'
 			with open(coloredJsonPath, 'r', encoding='utf-8') as jsonFileHandler:
 				currentDataSet: Dict = json.load(jsonFileHandler)
 
 			dataSetID: str = colorPair  # e.g. 'WU', 'UG'
-
-			# append new key,value pair to master[name]'s value
 			cardData: Dict = data  # master[name] is a Dict containing one card
 			currentDataSetCardData: Dict = currentDataSet[name]
 
+			# append new key,value pair to master[name]'s value
+			# create a "filteredStats" dictionary we will append later
+			# it will contain the 5 stats as values as the colorPair as a 🔑key
 			# we need: '# OH', 'OH WR', '# GIH', 'GIH WR', 'IWD'
-			# all prefixed by colorPair
-			cardData[f'{dataSetID} GIH WR'] = currentDataSetCardData['GIH WR']
-			cardData[f'{dataSetID} OH WR'] = currentDataSetCardData['OH WR']
-			cardData[f'{dataSetID} # GIH'] = currentDataSetCardData['# GIH']
-			cardData[f'{dataSetID} # OH'] = currentDataSetCardData['# OH']
-			cardData[f'{dataSetID} IWD'] = currentDataSetCardData['IWD']
+			colorPairStats: Dict = {
+				'GIH WR': currentDataSetCardData['GIH WR'],
+				'OH WR': currentDataSetCardData['OH WR'],
+				'# GIH': currentDataSetCardData['# GIH'],
+				'# OH': currentDataSetCardData['# OH'],
+				'IWD': currentDataSetCardData['IWD']
+			}
+
+			data['filteredStats'][colorPair] = colorPairStats
+
 
 
 	# for cardName, cardData in master.items():
