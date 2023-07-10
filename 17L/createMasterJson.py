@@ -54,6 +54,24 @@ def createMasterJson():
 		# create the filteredStats key with an empty dictionary we add to later
 		data['filteredStats'] = {}
 
+		# add the "default", all colors data to this dictionary
+		# remove these keys from their original loc so data is not duplicated
+		defaultStats: Dict = {
+			'GIH WR': data['GIH WR'],
+			'OH WR': data['OH WR'],
+			'# GIH': data['# GIH'],
+			'# OH': data['# OH'],
+			'IWD': data['IWD']
+		}
+
+		data['filteredStats']['default'] = defaultStats
+
+		del data['GIH WR']
+		del data['# GIH']
+		del data['OH WR']
+		del data['# OH']
+		del data['IWD']
+
 		for colorPair in colorPairs:
 			coloredJsonPath: str = f'data/ltr-CDP/{colorPair}.json'
 			with open(coloredJsonPath, 'r', encoding='utf-8') as jsonFileHandler:
@@ -162,20 +180,19 @@ def calculateAndAddStatsKeyValuePairs(
 		else:
 			ohwrList.append(card["OH WR"])
 
-	μ_gihwr: float = statistics.mean(gihwrList)
-	σ_gihwr: float = statistics.stdev(gihwrList)
-	μ_ohwr: float = statistics.mean(ohwrList)
-	σ_ohwr: float = statistics.stdev(ohwrList)
-	μ_iwd: float = statistics.mean(iwdList)
-	σ_iwd: float = statistics.stdev(iwdList)
-
 	colorPairStats: Dict = {
-		"GIHWR_mean": μ_gihwr,
-		"GIHWR_stdDev": σ_gihwr,
-		"OHWR_mean": μ_ohwr,
-		"OHWR_stdDev": σ_ohwr,
-		"IWD_mean": μ_iwd,
-		"IWD_stdDev": σ_iwd
+		'GIH WR': {
+			'mean': statistics.mean(gihwrList),
+			'stdDev': statistics.stdev(gihwrList)
+		},
+		'OH WR': {
+			'mean': statistics.mean(ohwrList),
+			'stdDev': statistics.stdev(ohwrList)
+		},
+		'IWD': {
+			'mean': statistics.mean(iwdList),
+			'stdDev': statistics.stdev(iwdList)
+		}
 	}
 
 	statsDictionary[dataSetID] = colorPairStats
