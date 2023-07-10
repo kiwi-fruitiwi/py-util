@@ -109,7 +109,7 @@ def main():
 			# save what our current data set is so it's visible with the data
 			# note it's either the default "all colors" json or one of the
 			# colorPairs: WU WB WR WG etc.
-			currentJsonStr = tokens[0]
+			currentJsonStr = tokens[0].upper()
 
 		# load specific colorPair or default 17L data from cached json
 		with open(dataSetUri) as file:
@@ -158,7 +158,7 @@ def main():
 # cardNameList! The dataSet is parameterized. If the JSON is sorted by GIHWR,
 # so will the results.
 def printCardData(
-		cardNameList: List[str], nameManacostDict, dataSet: str):
+		cardNameList: List[str], nameManacostDict, dataSetStr: str):
 	global compareOne
 	global displayIwdGrade, displayGihOhDiff, displayOhZscore, \
 		displayRarityAndMv
@@ -197,7 +197,7 @@ def printCardData(
 
 	def sortingKey(item, stat: str):
 		data: Dict = item[1]  # note that item[0] is the 🔑 cardName
-		value = data['filteredStats'][dataSet][stat]
+		value = data['filteredStats'][dataSetStr][stat]
 		if value is None:
 			return float('-inf')
 		return value
@@ -246,110 +246,114 @@ def printCardData(
 	#             "stdDev": 0.04112565649327313
 	#         }
 	#     },
-	dataSetMean: float = cardStatistics[dataSet]['GIH WR']['mean']
-	dataSetStdDev: float = cardStatistics[dataSet]['GIH WR']['stdDev']
+	gihwrMean: float = cardStatistics[dataSetStr]['GIH WR']['mean']
+	gihwrStdDev: float = cardStatistics[dataSetStr]['GIH WR']['stdDev']
+	ohwrMean: float = cardStatistics[dataSetStr]['OH WR']['mean']
+	ohwrStdDev: float = cardStatistics[dataSetStr]['OH WR']['stdDev']
 
-	displayHeader(dataSet, dataSetMean, dataSetStdDev)
+	displayHeader(dataSetStr, gihwrMean, gihwrStdDev)
 
 	# now that we have the GIH WR σ and μ, display data:
-	# for cardName, cardData in sortedData.items():
-	# 	# some cards don't have data: check if it's actually in our GIHWR dict
-	# 	# TODO check if # GIH reaches a threshold for it to be included!
-	# 	# TODO are these parens redundant?
-	# 	if (cardData['# GIH'] > minimumSampleSize) and (cardName in cardNameList):
-	# 		gihwr: float = cardData['GIH WR']
-	# 		ohwr: float = cardData['OH WR']
-	# 		iwd: float = cardData['IWD']
-	# 		color: str = cardData['Color']
-	# 		rarity: str = cardData['Rarity']
-	# 		gihwrGrade: str = ' '  # empty space for alignment
-	# 		ohwrGrade: str = ' '
-	# 		iwdGrade: str = ' '
-	#
-	# 		if gihwr:  # x is set to None if no GIH WR was available
-	# 			# calculate how many stdDevs away from the mean?
-	# 			gihwrZScore: float = (gihwr - μ_gihwr) / σ_gihwr
-	#
-	# 			# iterate reversed gradeBounds list: ('A+', 2.17) ('B', 0.83)
-	# 			# if zScore is greater than current iterated value:
-	# 			# 	replace gradeStr with key: 'A+', 'B', etc.
-	# 			for gradePair in gradeBounds[::-1]:
-	# 				if gihwrZScore >= gradePair[1]:
-	# 					gihwrGrade = gradePair[0]
-	#
-	# 			# repeat for ohwr
-	# 			ohwrZScore = None
-	# 			if ohwr:
-	# 				ohwrZScore: float = (ohwr - μ_ohwr) / σ_ohwr
-	# 				for gradePair in gradeBounds[::-1]:
-	# 					if ohwrZScore >= gradePair[1]:
-	# 						ohwrGrade = gradePair[0]
-	#
-	# 			iwdZScore = None
-	# 			if iwd:
-	# 				iwdZScore: float = (iwd - μ_iwd) / σ_iwd
-	# 				for gradePair in gradeBounds[::-1]:
-	# 					if iwdZScore >= gradePair[1]:
-	# 						iwdGrade = gradePair[0]
-	#
-	# 			iwdList: str = cardData["IWD"]
-	# 			alsa: float = float(cardData["ALSA"])
-	#
-	# 			ohwrStr: str = f'{ohwr * 100:4.1f}%' if ohwr else f'    -'
-	#
-	# 			# display difference in zscore between GIHWR and OHWR
-	# 			ogDifStr: str = ''
-	# 			if displayGihOhDiff:
-	# 				if ohwrZScore:
-	# 					ogDif: float = ohwrZScore - gihwrZScore
-	# 					ogDifStr = f'{ogDif:5.2f}'
-	# 				else:
-	# 					ogDifStr = '    -'
-	#
-	# 			# opening hand win rate z score display
-	# 			ohwrZscoreStr: str = ''
-	# 			if displayOhZscore:
-	# 				if ohwrZScore:
-	# 					ohwrZscoreStr = f'{ohwrZScore:5.2f}'
-	#
-	# 			# grab the mana cost from our collapsed scryfall dictionary:
-	# 			# format is [cardName, mana cost] where latter is formatted
-	# 			# 1UUU instead of {1}{U}{U}{U}
-	# 			manacost: str = nameManacostDict[cardName]
-	#
-	# 			iwdGradeStr: str = ''
-	# 			if displayIwdGrade:
-	# 				iwdGradeStr = f'{iwdGrade:2} '
-	#
-	# 			rarityMvStr: str = ''
-	# 			if displayRarityAndMv:
-	# 				# 8 spaces needed for rarity and mana cost, +1 space
-	# 				# mv must be 6 because 3WUBRG costs
-	# 				rarityMvStr = f'{rarity} {manacost:6} '
-	#
-	# 			iwdStr: str = f'{nameIwdDict[cardName] * 100:.1f}pp'
-	#
-	# 			# each row
-	# 			print(
-	# 				f'{gihwrGrade:2} '
-	# 				f'{alsa:4.1f} '
-	# 				f'{nameGihwrDict[cardName] * 100:4.1f}% '
-	# 				f'{gihwrZScore:5.2f} '
-	# 				# f'{ohwrZscoreStr} '
-	# 				# f'{ohwrStr} '
-	# 				f'{ogDifStr} '
-	# 				f'{iwdStr:>6} '
-	# 				f'{iwdGradeStr}'
-	# 				f'← '
-	# 				f'{rarityMvStr}'
-	# 				f'{cardName}')
-	# 		else:
-	# 			manacost: str = nameManacostDict[cardName]
-	# 			print(
-	# 				f'                                 '
-	# 				# f'← {rarity} {manacost:5} {cardName}'
-	# 				f'← {cardName}'
-	# 			)
+	for cardName, cardData in sortedData.items():
+
+		# some cards don't have data: check if it's actually in our GIHWR dict
+		# TODO check if # GIH reaches a threshold for it to be included!
+		# TODO are these parens redundant?
+		# if (cardData['# GIH'] > minimumSampleSize) and (cardName in cardNameList):
+		if cardName in cardNameList:
+
+			# this contains the 5 pieces of data specific to this colorPair
+			cardStats: Dict = cardData['filteredStats'][dataSetStr]
+			gihwr: float = cardStats['GIH WR']
+			nGih: int = cardStats['# GIH']  # number of times seen in hand
+			ohwr: float = cardStats['OH WR']
+			nOh: float = cardStats['# OH']
+			iwd: float = cardStats['IWD']
+
+			# note '🔑 color' is not in filteredStats
+			color: str = cardData['Color']
+			rarity: str = cardData['Rarity']
+
+			# initialize strings for grades, e.g. A-, C+, B, S
+			gihwrGrade: str = ' '  # empty space for alignment
+			ohwrGrade: str = ' '
+			iwdGrade: str = ' '
+
+			# only process data if sample size is significant
+			if nGih > minimumSampleSize:
+				# calculate how many stdDevs away from the mean?
+				# zscore = (x-μ) / σ
+				gihwrZScore: float = (gihwr - gihwrMean) / gihwrStdDev
+
+				# iterate reversed gradeBounds list: ('A+', 2.17) ('B', 0.83)
+				# if zScore is greater than current iterated value:
+				# 	replace gradeStr with key: 'A+', 'B', etc.
+
+				# TODO encapsulate grade-finding based on parameter: stat
+				# e.g. GIH WR, OH WR, IWD
+				for gradePair in gradeBounds[::-1]:
+					if gihwrZScore >= gradePair[1]:
+						gihwrGrade = gradePair[0]
+
+				ohwrZScore: float = (ohwr - ohwrMean) / ohwrStdDev
+
+				alsa: float = float(cardData["ALSA"])
+
+				ohwrStr: str = f'{ohwr * 100:4.1f}%' if ohwr else f'    -'
+
+				# display difference in zscore between GIHWR and OHWR
+				ogDifStr: str = ''
+				if displayGihOhDiff:
+					if ohwrZScore:
+						ogDif: float = ohwrZScore - gihwrZScore
+						ogDifStr = f'{ogDif:5.2f}'
+					else:
+						ogDifStr = '    -'
+
+				# opening hand win rate z score display
+				ohwrZscoreStr: str = ''
+				if displayOhZscore:
+					if ohwrZScore:
+						ohwrZscoreStr = f'{ohwrZScore:5.2f}'
+
+				# grab the mana cost from our collapsed scryfall dictionary:
+				# format is [cardName, mana cost] where latter is formatted
+				# 1UUU instead of {1}{U}{U}{U}
+				manacost: str = nameManacostDict[cardName]
+
+				iwdGradeStr: str = ''
+				if displayIwdGrade:
+					iwdGradeStr = f'{iwdGrade:2} '
+
+				rarityMvStr: str = ''
+				if displayRarityAndMv:
+					# 8 spaces needed for rarity and mana cost, +1 space
+					# mv must be 6 because 3WUBRG costs
+					rarityMvStr = f'{rarity} {manacost:6} '
+
+				iwdStr: str = f'{iwd * 100:.1f}pp'
+
+				# each row
+				print(
+					f'{gihwrGrade:2} '
+					f'{alsa:4.1f} '
+					f'{gihwr * 100:4.1f}% '
+					f'{gihwrZScore:5.2f} '
+					# f'{ohwrZscoreStr} '
+					# f'{ohwrStr} '
+					f'{ogDifStr} '
+					f'{iwdStr:>6} '
+					f'{iwdGradeStr}'
+					f'← '
+					f'{rarityMvStr}'
+					f'{cardName}')
+			else:
+				manacost: str = nameManacostDict[cardName]
+				print(
+					f'                                 '
+					# f'← {rarity} {manacost:5} {cardName}'
+					f'← {cardName}'
+				)
 
 
 # displays the header for the data set, including set name, mean, and stdDev
