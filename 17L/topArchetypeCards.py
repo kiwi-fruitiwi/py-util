@@ -13,20 +13,25 @@ from constants import minimumSampleSize
 
 
 # this sorting key lets us parameterize color pair and stat
-# for example, 'UG GIH WR' will sort by game-in-hand win rate in blue-green
+# for example, 'GIH WR' under 'UG' will sort by game-in-hand win rate in the
+# colors blue-green
 def sortingKey(item, colorPair: str, stat: str):
 	key: str = item[0]
 	value: Dict = item[1]
 
-	sortingValue = value[f'{colorPair} {stat}']
+	colorPairData = value['filteredStats'][colorPair]
+	sortingValue = colorPairData[stat]
 
+	# sometimes the json value is null. this is converted to None in python
+	# we want these values to be as infinitely negative as possible so they sort
+	# to the end of the list in descending order
 	if sortingValue is None:
 		# print(f'🐳 {key} is None')
 		return float('-inf')
 
 	# sample size needs to be high enough. based this solely on # GIH
 	# which is number of game-in-hand, i.e. in opening hand or drawn
-	if value[f'{colorPair} # GIH'] < minimumSampleSize:
+	if colorPairData['# GIH'] < minimumSampleSize:
 		# print(f'🦈 {key} not enough data: {value[f"{prefix} # GIH"]}')
 		return float('-inf')
 
