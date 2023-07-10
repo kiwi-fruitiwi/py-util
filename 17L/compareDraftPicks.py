@@ -187,8 +187,8 @@ def printCardData(
 	# 			"# OH": 3403,
 	# 			"IWD": 0.07841650219385726
 	# 		},
-	currentJsonPath: str = f'data/master.json'
-	with open(currentJsonPath, 'r', encoding='utf-8') as jsonFileHandler:
+	jsonPath: str = f'data/master.json'
+	with open(jsonPath, 'r', encoding='utf-8') as jsonFileHandler:
 		masterData: Dict = json.load(jsonFileHandler)
 
 	# extra newline if we're comparing multiple cards
@@ -204,34 +204,22 @@ def printCardData(
 
 	# note that to obtain stats for a colorPair, we query
 	# data['filteredStats'][dataSet], where dataSet ⊂ {default, WU, UG, WR...}
-	# sample dictionary:
-	#	"WU": {
-    # 		"GIH WR": 0.5773472122024116,
-    # 		"OH WR": 0.54628269174258,
-    # 		"# GIH": 9703,
-    # 		"# OH": 3403,
-    # 		"IWD": 0.07841650219385726
-	#	},
-
-	# TODO this requires the cardName
-	# colorPairStats: Dict = masterData['filteredStats'][dataSet]
-
 	# sort by GIH WR manually in case it's not already sorted that way in csv
-	# TODO figure out what we're sorting by: do we need dataSet: GIH WR?
+	sortingStat: str = 'GIH WR'
 	sortedData = dict(
 		sorted(
 			masterData.items(),
-			key=lambda item: sortingKey(item, 'GIH WR'),
+			key=lambda item: sortingKey(item, sortingStat),
 			reverse=True)
 	)
 
 	# open the statistics data file to query for μ, σ
-	currentJsonPath: str = f'data/statistics.json'
-	with open(currentJsonPath, 'r', encoding='utf-8') as statsFileHandler:
+	jsonPath: str = f'data/statistics.json'
+	with open(jsonPath, 'r', encoding='utf-8') as statsFileHandler:
 		cardStatistics: Dict = json.load(statsFileHandler)
 
-
 	# grab the mean and standard deviation from statistics.json:
+	#
 	#     "WU": {
 	#         "GIH WR": {
 	#             "mean": 0.5491077666469387,
@@ -253,24 +241,21 @@ def printCardData(
 
 	displayHeader(dataSetStr, gihwrMean, gihwrStdDev)
 
-	# now that we have the GIH WR σ and μ, display data:
+	# display stats of selected cards
 	for cardName, cardData in sortedData.items():
-
 		# some cards don't have data: check if it's actually in our GIHWR dict
-		# TODO check if # GIH reaches a threshold for it to be included!
-		# TODO are these parens redundant?
-		# if (cardData['# GIH'] > minimumSampleSize) and (cardName in cardNameList):
 		if cardName in cardNameList:
 
 			# this contains the 5 pieces of data specific to this colorPair
 			cardStats: Dict = cardData['filteredStats'][dataSetStr]
-			gihwr: float = cardStats['GIH WR']
-			nGih: int = cardStats['# GIH']  # number of times seen in hand
-			ohwr: float = cardStats['OH WR']
-			nOh: float = cardStats['# OH']
-			iwd: float = cardStats['IWD']
+			gihwr: float = cardStats['GIH WR']  # game in hand winrate
+			nGih: int = cardStats['# GIH']      # number of times seen in hand
+			ohwr: float = cardStats['OH WR']    # opening hand win rate
+			nOh: float = cardStats['# OH']      # times seen in opening hand
+			iwd: float = cardStats['IWD']	    # improvement when drawn
 
-			# note '🔑 color' is not in filteredStats
+			# note '🔑 color' is not in filteredStats as it applies to the
+			# entire card regardless of color archetype
 			color: str = cardData['Color']
 			rarity: str = cardData['Rarity']
 
@@ -279,7 +264,8 @@ def printCardData(
 			ohwrGrade: str = ' '
 			iwdGrade: str = ' '
 
-			# only process data if sample size is significant
+			# only process data if sample size is significant: do the number of
+			# games in hand exceed the minimum sample size?
 			if nGih > minimumSampleSize:
 				# calculate how many stdDevs away from the mean?
 				# zscore = (x-μ) / σ
@@ -290,15 +276,14 @@ def printCardData(
 				# 	replace gradeStr with key: 'A+', 'B', etc.
 
 				# TODO encapsulate grade-finding based on parameter: stat
+				#   still need to implement iwdGrade and ohwrGrade
 				# e.g. GIH WR, OH WR, IWD
 				for gradePair in gradeBounds[::-1]:
 					if gihwrZScore >= gradePair[1]:
 						gihwrGrade = gradePair[0]
 
 				ohwrZScore: float = (ohwr - ohwrMean) / ohwrStdDev
-
 				alsa: float = float(cardData["ALSA"])
-
 				ohwrStr: str = f'{ohwr * 100:4.1f}%' if ohwr else f'    -'
 
 				# display difference in zscore between GIHWR and OHWR

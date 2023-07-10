@@ -47,18 +47,19 @@ def displayTopCardsByRarity(rarity: str):
 	for colorPair in colorPairs:
 		print(f'\n🌊 colors: {colorPair}')
 
-		# sort the data by GIH WR per colorPair
+		# sort the data per colorPair
+		sortingStat: str = 'GIH WR'
 		sortedData = dict(
 			sorted(
 				master.items(),
-				key=lambda item: sortingKey(item, colorPair, 'OH WR'),
+				key=lambda item: sortingKey(item, colorPair, sortingStat),
 				reverse=True
 			)
 		)
 
 		# take the first n items of a set rarity and display them
 		# TODO print stats! → # GIH, GIH WR, OH WR, IWD, zScore, grade
-		maxCount: int = 5
+		maxCount: int = 8
 		count: int = 0
 		for key, value in sortedData.items():
 			if value.get("Rarity") == rarity:
