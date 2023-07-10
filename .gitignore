@@ -128,4 +128,4 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-/17L/data/
+/17L/data/master.json
