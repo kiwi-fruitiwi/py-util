@@ -196,7 +196,3 @@ def calculateAndAddStatsKeyValuePairs(
 	}
 
 	statsDictionary[dataSetID] = colorPairStats
-
-
-createMasterJson()
-createStatsJson()

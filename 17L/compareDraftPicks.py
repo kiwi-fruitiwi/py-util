@@ -42,7 +42,7 @@ displayGihOhDiff: bool = True  # difference in zScore between GIH and OH WRs
 displayOhZscore: bool = True
 displayRarityAndMv: bool = False
 
-dataSetRoot: str = 'data/ltr-CDP/'
+dataSetUri: str = 'data/master.json'
 
 
 # main input loop to ask for user input → return list of card stats
@@ -55,6 +55,10 @@ def main():
 	# load card info from scryfall json
 	with open('data/ltr-manual/scryfall-ltr.json', encoding='utf-8-sig') as f:
 		scryfallJson = json.load(f)
+
+	# load aggregated master data
+	with open(dataSetUri) as file:
+		masterDataSet = json.load(file)
 
 	nameManacostDict: Dict = generateNameManacostDict(scryfallJson)
 
@@ -92,8 +96,7 @@ def main():
 		firstElement: str = values[0]  # updated, after '!' is stripped
 		# check if first element contains ':' if so, split(':')
 		# use this to determine what json file we'll be loading
-		dataSetUri: str = f'{dataSetRoot}default.json'
-		currentJsonStr: str = f'default'
+		dataSetStr: str = f'default'
 
 		if ':' in firstElement:
 			tokens: List[str] = firstElement.split(':')
@@ -103,17 +106,10 @@ def main():
 			assert len(tokens) == 2
 			assert tokens[0].upper() in colorPairs
 
-			# set our dataset to what we want!
-			dataSetUri = f'{dataSetRoot}{tokens[0].upper()}.json'
-
 			# save what our current data set is so it's visible with the data
 			# note it's either the default "all colors" json or one of the
 			# colorPairs: WU WB WR WG etc.
-			currentJsonStr = tokens[0].upper()
-
-		# load specific colorPair or default 17L data from cached json
-		with open(dataSetUri) as file:
-			dataSet = json.load(file)
+			dataSetStr = tokens[0].upper()
 
 		# set up list of card names matched to our input
 		cardFetchList: List[str] = []
@@ -121,7 +117,7 @@ def main():
 		for value in values:
 			# extractOne returns a tuple like this: ('Arwen Undómiel', 90)
 			# we're just interested in the name, not the closeness
-			bestMatch = process.extractOne(value, dataSet.keys())
+			bestMatch = process.extractOne(value, masterDataSet.keys())
 
 			if bestMatch:
 				bestMatchName = bestMatch[0]
@@ -129,14 +125,26 @@ def main():
 			else:
 				print(f'🍆 best match not found for {value}')
 
-		# iterate through all color pairs and print the data there!
+		# if there's only one card, we will show how it performs overall as well
+		# as in each color pair!
 		if len(cardFetchList) == 1:
+			cardName: str = cardFetchList[0]
+
+			# if there is enough sample size, display header and rows
+			# for each applicable colorPair
+			#
+			# Moria Marauder
+			#    alsa   gih     z  og Δ    iwd
+			# B   2.5 60.4%  0.92  1.04  4.6pp ← μ:0.562, σ:0.045 WR
+			# C   2.5 58.0%  0.09  0.65  3.3pp ← μ:0.576, σ:0.045 UR
+			print(f'{cardName}')
+			print(f'{getEmptyStatHeader()}')
+
+			# determine if there is relevant colorPair data by checking '# GIH'
 			for colorPair in colorPairs:
-				dataSetUri = f'{dataSetRoot}{colorPair}.json'
-				# load 17L data from cached json
-				with open(dataSetUri) as file:
-					dataSet = json.load(file)
-				printCardData(cardFetchList, nameManacostDict, colorPair)
+				displayHeader(masterDataSet, μ, σ)
+
+				printCardData(cardFetchList, nameManacostDict, colorPair, displayHeaderFlag=False)
 
 			pass
 		# compareOne = True
@@ -145,7 +153,7 @@ def main():
 			# print a list of names if we're matching more than one card
 			if displayCardFetchList:
 				[print(name) for name in cardFetchList]
-		printCardData(cardFetchList, nameManacostDict, currentJsonStr)
+		printCardData(cardFetchList, nameManacostDict, dataSetStr)
 
 		# if there's only one card name input and it's preceded by '!'
 		# → print the card's spoiler text
@@ -158,7 +166,11 @@ def main():
 # cardNameList! The dataSet is parameterized. If the JSON is sorted by GIHWR,
 # so will the results.
 def printCardData(
-		cardNameList: List[str], nameManacostDict, dataSetStr: str):
+		cardNameList: List[str],
+		nameManacostDict,
+		dataSetStr: str,
+		displayHeaderFlag=True):
+
 	global compareOne
 	global displayIwdGrade, displayGihOhDiff, displayOhZscore, \
 		displayRarityAndMv
@@ -239,7 +251,8 @@ def printCardData(
 	ohwrMean: float = cardStatistics[dataSetStr]['OH WR']['mean']
 	ohwrStdDev: float = cardStatistics[dataSetStr]['OH WR']['stdDev']
 
-	displayHeader(dataSetStr, gihwrMean, gihwrStdDev)
+	if displayHeaderFlag:
+		displayHeader(dataSetStr, gihwrMean, gihwrStdDev)
 
 	# display stats of selected cards
 	for cardName, cardData in sortedData.items():
@@ -248,7 +261,7 @@ def printCardData(
 
 			# this contains the 5 pieces of data specific to this colorPair
 			cardStats: Dict = cardData['filteredStats'][dataSetStr]
-			gihwr: float = cardStats['GIH WR']  # game in hand winrate
+			gihwr: float = cardStats['GIH WR']  # game in hand win rate
 			nGih: int = cardStats['# GIH']      # number of times seen in hand
 			ohwr: float = cardStats['OH WR']    # opening hand win rate
 			nOh: float = cardStats['# OH']      # times seen in opening hand
@@ -341,8 +354,7 @@ def printCardData(
 				)
 
 
-# displays the header for the data set, including set name, mean, and stdDev
-def displayHeader(dataSet: str, μ: float, σ: float):
+def getEmptyStatHeader():
 	# [ HEADER ]
 	# add 3 spaces for iwd grade, e.g. A+, C-
 	iwdGradeHeaderStr: str = '   ' if displayIwdGrade else ''
@@ -353,7 +365,7 @@ def displayHeader(dataSet: str, μ: float, σ: float):
 	# 8 char width and a whitespace
 	rarityMvHeader: str = '         ' if displayRarityAndMv else ''
 
-	print(  # metric and how many characters each metric takes, plus spacing
+	result: str = (  # metric and how many characters each metric takes, plus spacing
 		f'   '  # grade is 2 + 1 space
 		f'alsa '  # ALSA 4 chars + 1 whitespace
 		f'  gih '  # GIHWR: 6
@@ -365,6 +377,15 @@ def displayHeader(dataSet: str, μ: float, σ: float):
 		f'{iwdGradeHeaderStr}'
 		f'{rarityMvHeader}'
 		f'  '  # leading spaces for '← '
+	)
+
+	return result
+
+
+# displays the header for the data set, including set name, mean, and stdDev
+def displayHeader(dataSet: str, μ: float, σ: float):
+	print(
+		f'{getEmptyStatHeader()}'
 		f'{dataSet} μ:{μ:.3f}, σ:{σ:.3f}'
 	)
 
