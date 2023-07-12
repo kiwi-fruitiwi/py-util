@@ -89,9 +89,11 @@ def createMasterJson():
 		# remove these keys from their original loc so data is not duplicated
 		defaultStats: Dict = {
 			'GIH WR': data['GIH WR'],
-			'OH WR': data['OH WR'],
 			'# GIH': data['# GIH'],
+			'OH WR': data['OH WR'],
 			'# OH': data['# OH'],
+			'GD WR': data['GD WR'],
+			'# GD': data['# GD'],
 			'IWD': data['IWD']
 
 			# add zScores for GIH WR, OH WR, and IWD
@@ -103,6 +105,8 @@ def createMasterJson():
 		del data['# GIH']
 		del data['OH WR']
 		del data['# OH']
+		del data['GD WR']
+		del data['# GD']
 		del data['IWD']
 
 		for colorPair in colorPairs:
@@ -120,13 +124,15 @@ def createMasterJson():
 			# we need: '# OH', 'OH WR', '# GIH', 'GIH WR', 'IWD'
 			colorPairStats: Dict = {
 				'GIH WR': currentDataSetCardData['GIH WR'],
-				'OH WR': currentDataSetCardData['OH WR'],
 				'# GIH': currentDataSetCardData['# GIH'],
+				'OH WR': currentDataSetCardData['OH WR'],
 				'# OH': currentDataSetCardData['# OH'],
+				'GD WR': currentDataSetCardData['GD WR'],
+				'# GD': currentDataSetCardData['# GD'],
 				'IWD': currentDataSetCardData['IWD']
 			}
 
-			data['filteredStats'][colorPair] = colorPairStats
+			data['filteredStats'][dataSetID] = colorPairStats
 
 
 
@@ -190,28 +196,35 @@ def calculateAndAddStatsKeyValuePairs(
 
 	gihwrList: List[float] = []
 	ohwrList: List[float] = []
+	gdwrList: List[float] = []
 	iwdList: List[float] = []
 
 	# calculate μ, σ, noting we don't factor in low sample size
 	for cardName in dataSet.keys():
 		card: Dict = dataSet[cardName]
 
-		gamesSeenGIH: int = card["# GIH"]
+		gamesSeenGIH: int = card['# GIH']
 		if gamesSeenGIH < minimumSampleSize:
 			# don't let this factor into calculations for mean and stdDev
 			pass
 		else:
 			# note that improvement-when-drawn, or IWD, has its sample size
 			# linked to game-in-hand
-			gihwrList.append(card["GIH WR"])
-			iwdList.append(card["IWD"])
+			gihwrList.append(card['GIH WR'])
+			iwdList.append(card['IWD'])
 
-		gamesSeenOH: int = card["# OH"]
+		gamesSeenOH: int = card['# OH']
 		if gamesSeenOH < minimumSampleSize:
 			# skip this data point
 			pass
 		else:
-			ohwrList.append(card["OH WR"])
+			ohwrList.append(card['OH WR'])
+			
+		gamesSeenGD: int = card['# GD']
+		if gamesSeenGD < minimumSampleSize:
+			pass
+		else:
+			gdwrList.append(card['GD WR'])
 
 	colorPairStats: Dict = {
 		'GIH WR': {
@@ -221,6 +234,10 @@ def calculateAndAddStatsKeyValuePairs(
 		'OH WR': {
 			'mean': statistics.mean(ohwrList),
 			'stdDev': statistics.stdev(ohwrList)
+		},
+		'GD WR': {
+			'mean': statistics.mean(gdwrList),
+			'stdDev': statistics.stdev(gdwrList)
 		},
 		'IWD': {
 			'mean': statistics.mean(iwdList),
