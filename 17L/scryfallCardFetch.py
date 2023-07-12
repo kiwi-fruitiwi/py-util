@@ -63,7 +63,7 @@ def getCardNames(scryfallJson):
 
 def main():
 	# load card info from scryfall json
-	with open('data/ltr-manual/scryfall-ltr.json', encoding='utf-8-sig') as file:
+	with open('data/scryfall.json', encoding='utf-8-sig') as file:
 		sfData = json.load(file)
 
 	cardNames: List = getCardNames(sfData)

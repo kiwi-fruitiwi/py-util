@@ -53,12 +53,84 @@ dataSetUri: str = 'data/master.json'
 # 	(or the default all colors file)
 def main():
 	# load card info from scryfall json
-	with open('data/ltr-manual/scryfall-ltr.json', encoding='utf-8-sig') as f:
+	with open('data/scryfall.json', encoding='utf-8-sig') as f:
 		scryfallJson = json.load(f)
+		'''
+		card data from scryfall, including oracle text and img links
+		'''
 
 	# load aggregated master data
 	with open(dataSetUri) as file:
-		masterDataSet = json.load(file)
+		masterJson: Dict = json.load(file)
+		'''
+		master.json, aggregated data set from 17L with 'all' and colorPair data
+		
+		"Mushroom Watchdogs": {
+        "Name": "Mushroom Watchdogs",
+        "ALSA": 6.540190935273274,
+        "ATA": 9.316888800477422,
+        "URL": "https://cards.scryfall.io/border_crop/front/d/1/d15fd66d-fa7e-411d-9014-a56caa879d93.jpg?1685475587",
+        "Color": "G",
+        "Rarity": "C",
+        "filteredStats": {
+            "all": {
+                "GIH WR": 0.5307067390663804,
+                "# GIH": 23757,
+                "OH WR": 0.5347051294673624,
+                "# OH": 10157,
+                "GD WR": 0.5277205882352941,
+                "# GD": 13600,
+                "IWD": 0.01449355618653092,
+                "z-scores": {
+                    "GIH WR": -0.6087595880909483,
+                    "OH WR": -0.26421759784763266,
+                    "GD WR": -0.9673573311007,
+                    "IWD": -0.4456916782217906
+                }
+            },
+            "WG": {
+                "GIH WR": 0.5320304968889668,
+                "# GIH": 11411,
+                "OH WR": 0.5375103050288541,
+                "# OH": 4852,
+                "GD WR": 0.5279768257356304,
+                "# GD": 6559,
+                "IWD": 0.020120355516556998,
+                "z-scores": {
+                    "GIH WR": -0.1501275360237784,
+                    "OH WR": 0.37914599272031013,
+                    "GD WR": -0.6613069872127326,
+                    "IWD": -0.3508266920392758
+                }
+            },
+		'''
+
+	# open the statistics data file to query for μ, σ
+	jsonPath: str = f'data/statistics.json'
+	with open(jsonPath, 'r', encoding='utf-8') as statsFileHandler:
+		cardStatistics: Dict = json.load(statsFileHandler)
+		'''
+		statistics data
+		
+		"WU": {
+			"GIH WR": {
+				"mean": 0.5481773664431846,
+				"stdDev": 0.0396680728733385
+			},
+			"OH WR": {
+				"mean": 0.5200756145211735,
+				"stdDev": 0.04154648783076403
+			},
+			"GD WR": {
+				"mean": 0.56087617869494,
+				"stdDev": 0.0389425738105168
+			},
+			"IWD": {
+				"mean": 0.06100664189146016,
+				"stdDev": 0.04077503221641616
+			}
+		},
+		'''
 
 	nameManacostDict: Dict = generateNameManacostDict(scryfallJson)
 
@@ -117,7 +189,7 @@ def main():
 		for value in values:
 			# extractOne returns a tuple like this: ('Arwen Undómiel', 90)
 			# we're just interested in the name, not the closeness
-			bestMatch = process.extractOne(value, masterDataSet.keys())
+			bestMatch = process.extractOne(value, masterJson.keys())
 
 			if bestMatch:
 				bestMatchName = bestMatch[0]
@@ -137,14 +209,10 @@ def main():
 			#    alsa   gih     z  og Δ    iwd
 			# B   2.5 60.4%  0.92  1.04  4.6pp ← μ:0.562, σ:0.045 WR
 			# C   2.5 58.0%  0.09  0.65  3.3pp ← μ:0.576, σ:0.045 UR
-			print(f'{cardName}')
-			print(f'{getEmptyStatHeader()}')
 
 			# determine if there is relevant colorPair data by checking '# GIH'
-			for colorPair in colorPairs:
-				# displayHeader(masterDataSet, μ, σ)
-
-				printCardData(cardFetchList, nameManacostDict, colorPair, displayHeaderFlag=False)
+			printArchetypesData(cardName, masterJson[cardName])
+			# printCardData(cardFetchList, nameManacostDict, colorPair, displayHeaderFlag=False)
 
 			pass
 		# compareOne = True
@@ -153,7 +221,7 @@ def main():
 			# print a list of names if we're matching more than one card
 			if displayCardFetchList:
 				[print(name) for name in cardFetchList]
-		printCardData(cardFetchList, nameManacostDict, dataSetStr)
+			printCardData(cardFetchList, nameManacostDict, dataSetStr)
 
 		# if there's only one card name input and it's preceded by '!'
 		# → print the card's spoiler text
@@ -161,6 +229,122 @@ def main():
 		if printFlag and len(cardFetchList) == 1:
 			printCardText(cardFetchList[0], scryfallJson)
 
+
+def getGrade(zScore: float):
+	letterGrade: str = ''
+
+	# iterate reversed gradeBounds list: ('A+', 2.17) ('B', 0.83)
+	# if zScore is greater than current iterated value:
+	# 	replace gradeStr with key: 'A+', 'B', etc.
+	for gradePair in gradeBounds[::-1]:
+		if zScore >= gradePair[1]:
+			letterGrade = gradePair[0]
+	return letterGrade
+
+
+def printArchetypesData(cardName: str, cardStats: Dict):
+	"""
+
+	:param cardName:
+	:param cardStats: json containing data for a single card
+	:return:
+	"""
+
+	# header: display columns and title above the colorPairStrs
+	print(f'💦 {cardName}')
+	print(
+		f'   ' 			# colorPair: 2 char + 1 space
+		f'|  ' 			# ' → '
+		f'   ' 			# ohwrGrade: 2 char + 1 space
+		f'    '			# OH z-score: 5 char + 1 space, e.g. '-1.50'
+		f'   OH'		# ohwr: 4 char + 1 space, e.g. 54.8
+		f' |  '			# column break
+		f'   ' 			# gdwrGrade: 2 char + 1 space
+		f'    '			# GD z-score
+		f'   GD'		# gdwr: 4 char + 1 space
+		f' |  '			# column break
+		f'   ' 			# iwdGrade: 2 char + 1 space
+		f'    '			# IWD z-score
+		f'    IWD'		# IWD: 4 char + 1 space, e.g. -15.2pp
+		f' |'
+	)
+
+	# iterate through colorPairs data to display the following stats:
+	# OH WR, OH WR z-score
+	# GD WR, GD WR z-score
+	# IWD
+	# and add the colorPairStr after
+	# ✒️ ALSA likely not necessary
+	stats: Dict = cardStats['filteredStats']
+	for colorPair in colorPairs:
+		if colorPair in stats:
+			colorStats: Dict = stats[colorPair]
+			# output the data we want for each colorPair
+			ohwr: float = colorStats['OH WR']
+			zOhwr: float = colorStats['z-scores']['OH WR']
+			ohwrGrade: str = getGrade(zOhwr)
+
+			gdwr: float = colorStats['GD WR']
+			zGdwr: float = colorStats['z-scores']['GD WR']
+			gdwrGrade: str = getGrade(zGdwr)
+
+			iwd: float = colorStats['IWD']
+			zIwd: float = colorStats['z-scores']['IWD']
+			iwdGrade: str = getGrade(zIwd)
+
+			print(
+				f'{colorPair} | '
+				f'{ohwrGrade:2} {zOhwr:>5.2f} {ohwr*100:4.1f}'
+				f' | '
+				f'{gdwrGrade:2} {zGdwr:>5.2f} {gdwr*100:4.1f}'
+				f' | '
+				f'{iwdGrade:2} {zIwd:>5.2f} {iwd*100:4.1f}pp'
+				f' |'
+			)
+	pass
+
+
+	'''
+	sample json data from master.json
+	"Mushroom Watchdogs": {
+    "Name": "Mushroom Watchdogs",
+    "ALSA": 6.540190935273274,
+    "ATA": 9.316888800477422,
+    "URL": "https://cards.scryfall.io/border_crop/...
+    "Color": "G",
+    "Rarity": "C",
+    "filteredStats": {
+		"all": {
+			"GIH WR": 0.5307067390663804,
+			"# GIH": 23757,
+			"OH WR": 0.5347051294673624,
+			"# OH": 10157,
+			"GD WR": 0.5277205882352941,
+			"# GD": 13600,
+			"IWD": 0.01449355618653092,
+			"z-scores": {
+				"GIH WR": -0.6087595880909483,
+				"OH WR": -0.26421759784763266,
+				"GD WR": -0.9673573311007,
+				"IWD": -0.4456916782217906
+			}
+		},
+		"WG": {
+			"GIH WR": 0.5320304968889668,
+			"# GIH": 11411,
+			"OH WR": 0.5375103050288541,
+			"# OH": 4852,
+			"GD WR": 0.5279768257356304,
+			"# GD": 6559,
+			"IWD": 0.020120355516556998,
+			"z-scores": {
+				"GIH WR": -0.1501275360237784,
+				"OH WR": 0.37914599272031013,
+				"GD WR": -0.6613069872127326,
+				"IWD": -0.3508266920392758
+			}
+		}, 
+	'''
 
 # get card data from data/master.json and display it for each cardName in
 # cardNameList! The dataSet is parameterized. If the JSON is sorted by GIHWR,
@@ -209,10 +393,15 @@ def printCardData(
 
 	def sortingKey(item, stat: str):
 		data: Dict = item[1]  # note that item[0] is the 🔑 cardName
-		value = data['filteredStats'][dataSetStr][stat]
-		if value is None:
+
+		# sometimes the data won't exist because sample size was too small
+		if dataSetStr not in data['filteredStats']:
 			return float('-inf')
-		return value
+		else:
+			value = data['filteredStats'][dataSetStr][stat]
+			if value is None:
+				return float('-inf')
+			return value
 
 	# note that to obtain stats for a colorPair, we query
 	# data['filteredStats'][dataSet], where dataSet ⊂ {default, WU, UG, WR...}
