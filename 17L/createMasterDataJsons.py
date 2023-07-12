@@ -20,7 +20,7 @@ from constants import minimumSampleSize
 
 
 # requires statistics.json to exist and be updated.
-# run createStatisticsJson first!
+# ⚠️ run createStatisticsJson first!
 def createMasterJson():
 	# load default.json. this contains default data from 17L. it's the default
 	# page! default.json is created and populated by requestConverter.py to
@@ -29,31 +29,51 @@ def createMasterJson():
 	with open(defaultPath, 'r', encoding='utf-8') as jsonFileHandler:
 		master: Dict = json.load(jsonFileHandler)
 
+	'''
+	dataSet entries look like this:
+		"Birthday Escape": {
+			"Name": "Birthday Escape",
+			"ALSA": 4.73890697755838,
+			"ATA": 5.9463545685786965,
+			"# OH": 30503,
+			"OH WR": 0.5754188112644658,
+			"# GD": 56190,
+			"GD WR": 0.6073322655276739,
+			"# GIH": 86693,
+			"GIH WR": 0.5961034916313889,
+			"IWD": 0.06817131686181177,
+			"URL": "https://cards.scryfall.io/border_crop/front/4/...",
+			"Color": "U",
+			"Rarity": "C"
+		},
+	'''
+
 	# open the statistics data file to query for μ, σ
 	jsonPath: str = f'data/statistics.json'
 	with open(jsonPath, 'r', encoding='utf-8') as statsFileHandler:
 		cardStatistics: Dict = json.load(statsFileHandler)
 
 	'''
-	dataSet entries look like this:
-		"Bill the Pony": {
-		    "Name": "Bill the Pony",
-		    "ALSA": 3.486085617857777,
-		    "ATA": 4.213059170950454,
-		    "# OH": 43,
-		    "OH WR": 0.6046511627906976,
-		    "# GIH": 97,
-		    "GIH WR": 0.6288659793814433,
-		    "IWD": 0.1502945508100147,
-		    "URL": "https://cards.scryfall.io/border_crop/front...,
-		    "Color": "W",
-		    "Rarity": "U"
-	},
+	statistics.json sample entry for one color pair, 'WU':
+		"WU": {
+			"GIH WR": {
+				"mean": 0.5488155671189182,
+				"stdDev": 0.040161553535718666
+			},
+			"OH WR": {
+				"mean": 0.5202702618891792,
+				"stdDev": 0.04189691189749475
+			},
+			"IWD": {
+				"mean": 0.061524972063645815,
+				"stdDev": 0.04081348580719822
+			}
+		},
 	'''
 
-
 	# for each cardName in the main json file, find its data in the colorPair
-	# json files and append them
+	# json files and append them. note we also need to remove default stats
+	# entries and stuff them into a "🔑 default" key
 	for name, data in master.items():
 		# iterate through every colorPair, adding data in key,value pairs:
 		# OH, OHWR, #GIH, GIHWR, IWD
@@ -61,29 +81,14 @@ def createMasterJson():
 		# create the filteredStats key with an empty dictionary we add to later
 		data['filteredStats'] = {}
 
-		# prepare to calculate z-scores for 'GIH WR', 'OH WR', and 'IWD'
+		# prepare to calculate z-scores for 'GIH WR', 'OH WR', 'GD WR' and 'IWD'
 		# z-score is calculated (x-μ)/σ where x is the data point
-		# sample format for statistics.json:
-		# "WU": {
-		#         "GIH WR": {
-		#             "mean": 0.5488155671189182,
-		#             "stdDev": 0.040161553535718666
-		#         },
-		#         "OH WR": {
-		#             "mean": 0.5202702618891792,
-		#             "stdDev": 0.04189691189749475
-		#         },
-		#         "IWD": {
-		#             "mean": 0.061524972063645815,
-		#             "stdDev": 0.04081348580719822
-		#         }
-		#     },
+
 		cardGihwr: float = data['GIH WR']
 		defaultGihwrMean: float = cardStatistics['default']['GIH WR']['mean']
 		defaultGihwrStdDev: float = cardStatistics['default']['GIH WR']['stdDev']
 		defaultGihwrZscore: float = \
 			(cardGihwr-defaultGihwrMean) / defaultGihwrStdDev
-
 
 		# add the "default", all colors data to this dictionary
 		# remove these keys from their original loc so data is not duplicated
@@ -96,7 +101,8 @@ def createMasterJson():
 			'# GD': data['# GD'],
 			'IWD': data['IWD']
 
-			# add zScores for GIH WR, OH WR, and IWD
+			# add zScores for GIH WR, OH WR, GD WR, and IWD
+
 		}
 
 		data['filteredStats']['default'] = defaultStats
@@ -142,6 +148,20 @@ def createMasterJson():
 		jsonSaver.write(json.dumps(master, indent=4))
 
 	print(f'🍑 master json saved')
+
+
+def getZscore(statValue: float, dataSetStr: str, statKey: str, statisticsJson: Dict) -> float:
+	"""
+	returns the z-score
+	:param statValue: our data value, e.g. GIH WR for a card
+	:param dataSetStr: 'default', 'WU', 'UG', etc.
+	:param statKey: 'GIH WR'
+	:param statisticsJson: the json file created by createStatsJson
+	:return:
+	"""
+	mean: float = statisticsJson[dataSetStr][statKey]['mean']
+	stdDev: float = statisticsJson[dataSetStr][statKey]['stdDev']
+	return (statValue - mean) / stdDev
 
 
 def createStatsJson():

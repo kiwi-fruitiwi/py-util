@@ -16,7 +16,7 @@ compareDraftPicks.py
 # print
 # write to file
 # have compareDraftPicks read from this file instead!
-#   📁 converted-ratings-default.json
+#   📁 converted-ratings-all.json
 #   in the future, make converted-ratings-{colorPairStr}.json
 #   read those when queries are prefaced with 'WU: ' or 'UR: '
 
@@ -26,8 +26,8 @@ from constants import colorPairs  # color pair list: 'WU', 'WR', 'UG', etc.
 import json
 
 
-inputJsonPath: str = f'data/ltr-auto/'
-outputJsonPath: str = f'data/ltr-CDP/'
+inputJsonPath: str = f'data/ltr-requests/'
+outputJsonPath: str = f'data/ltr-converted/'
 
 
 def displayDict(dictionary):
@@ -39,7 +39,7 @@ def displayDict(dictionary):
 
 
 # converts 17L request json into a custom format that resembles 17L csv export
-# saves this new json to 📁 data/ltr-CDP
+# saves this new json to 📁 data/ltr-converted
 def convertJson(jsonInputPath: str, jsonOutputPath: str):
     with open(jsonInputPath, 'r', encoding='utf-8') as f:
         json_data = json.load(f)
@@ -88,8 +88,8 @@ def convertJson(jsonInputPath: str, jsonOutputPath: str):
 
 def main():
     # convert the all-colors 17L json request first
-    allColorsInputPath = f'{inputJsonPath}default.json'
-    allColorsOutputPath = f'{outputJsonPath}default.json'
+    allColorsInputPath = f'{inputJsonPath}all.json'
+    allColorsOutputPath = f'{outputJsonPath}all.json'
     convertJson(allColorsInputPath, allColorsOutputPath)
 
     # iterate through colorPairs list to convert all the other 10 files
