@@ -142,7 +142,7 @@ def main():
 
 			# determine if there is relevant colorPair data by checking '# GIH'
 			for colorPair in colorPairs:
-				displayHeader(masterDataSet, μ, σ)
+				# displayHeader(masterDataSet, μ, σ)
 
 				printCardData(cardFetchList, nameManacostDict, colorPair, displayHeaderFlag=False)
 

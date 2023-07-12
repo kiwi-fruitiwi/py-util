@@ -55,20 +55,24 @@ def convertJson(jsonInputPath: str, jsonOutputPath: str):
         ata: float = card['avg_pick']
         ohCount: int = card['opening_hand_game_count']
         ohwr: float = card['opening_hand_win_rate']
+        gdCount: int = card['drawn_game_count']
+        gdwr: float = card['drawn_win_rate']
         gihCount: int = card['ever_drawn_game_count']
         gihwr: float = card['ever_drawn_win_rate']
         iwd: float = card['drawn_improvement_win_rate']
         imgUrl: str = card['url']
 
         cardDict[name] = {
-            'Name': name,   # "name": "Banish from Edoras",
-            'ALSA': alsa,   # "avg_seen": 5.210338680926916,
-            'ATA': ata,     # "avg_pick": 7.561547479484173,
-            '# OH': ohCount,
-            'OH WR': ohwr,  # "opening_hand_win_rate": 0.4925373134328358,
+            'Name': name,    # "name": "Banish from Edoras",
+            'ALSA': alsa,    # "avg_seen": 5.210338680926916,
+            'ATA': ata,      # "avg_pick": 7.561547479484173,
+            '# OH': ohCount, # "opening_hand_game_count": 2203,
+            'OH WR': ohwr,   # "opening_hand_win_rate": 0.4925373134328358,
+            '# GD': gdCount, # "drawn_win_rate": 0.5757946210268948,
+            'GD WR': gdwr,   # "drawn_game_count": 3272,
             '# GIH': gihCount,
-            'GIH WR': gihwr,# "drawn_win_rate": 0.46788990825688076,
-            'IWD': iwd,     # "drawn_improvement_win_rate": 0.02599067599067600,
+            'GIH WR': gihwr, # "drawn_win_rate": 0.46788990825688076,
+            'IWD': iwd,      # "drawn_improvement_win_rate": 0.02599067599067600,
             'URL': imgUrl,   # "url": "https://cards.scryfall.io/border_crop/..."
             'Color': card['color'],
             'Rarity': card['rarity'][0].upper()  # CURM

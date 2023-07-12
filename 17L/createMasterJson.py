@@ -19,6 +19,8 @@ from constants import colorPairs  # WU, UG, WR, etc.
 from constants import minimumSampleSize
 
 
+# requires statistics.json to exist and be updated.
+# run createStatisticsJson first!
 def createMasterJson():
 	# load default.json. this contains default data from 17L. it's the default
 	# page! default.json is created and populated by requestConverter.py to
@@ -26,6 +28,11 @@ def createMasterJson():
 	defaultPath: str = f'data/ltr-CDP/default.json'
 	with open(defaultPath, 'r', encoding='utf-8') as jsonFileHandler:
 		master: Dict = json.load(jsonFileHandler)
+
+	# open the statistics data file to query for μ, σ
+	jsonPath: str = f'data/statistics.json'
+	with open(jsonPath, 'r', encoding='utf-8') as statsFileHandler:
+		cardStatistics: Dict = json.load(statsFileHandler)
 
 	'''
 	dataSet entries look like this:
@@ -54,6 +61,30 @@ def createMasterJson():
 		# create the filteredStats key with an empty dictionary we add to later
 		data['filteredStats'] = {}
 
+		# prepare to calculate z-scores for 'GIH WR', 'OH WR', and 'IWD'
+		# z-score is calculated (x-μ)/σ where x is the data point
+		# sample format for statistics.json:
+		# "WU": {
+		#         "GIH WR": {
+		#             "mean": 0.5488155671189182,
+		#             "stdDev": 0.040161553535718666
+		#         },
+		#         "OH WR": {
+		#             "mean": 0.5202702618891792,
+		#             "stdDev": 0.04189691189749475
+		#         },
+		#         "IWD": {
+		#             "mean": 0.061524972063645815,
+		#             "stdDev": 0.04081348580719822
+		#         }
+		#     },
+		cardGihwr: float = data['GIH WR']
+		defaultGihwrMean: float = cardStatistics['default']['GIH WR']['mean']
+		defaultGihwrStdDev: float = cardStatistics['default']['GIH WR']['stdDev']
+		defaultGihwrZscore: float = \
+			(cardGihwr-defaultGihwrMean) / defaultGihwrStdDev
+
+
 		# add the "default", all colors data to this dictionary
 		# remove these keys from their original loc so data is not duplicated
 		defaultStats: Dict = {
@@ -62,6 +93,8 @@ def createMasterJson():
 			'# GIH': data['# GIH'],
 			'# OH': data['# OH'],
 			'IWD': data['IWD']
+
+			# add zScores for GIH WR, OH WR, and IWD
 		}
 
 		data['filteredStats']['default'] = defaultStats
@@ -196,3 +229,7 @@ def calculateAndAddStatsKeyValuePairs(
 	}
 
 	statsDictionary[dataSetID] = colorPairStats
+
+
+createStatsJson()
+createMasterJson()

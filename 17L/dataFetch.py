@@ -16,7 +16,7 @@
 import requests
 import json
 from constants import colorPairs
-from createMasterJson import createMasterJson, createStatsJson
+# from createMasterJson import createMasterJson, createStatsJson
 
 
 def main():
@@ -50,5 +50,3 @@ def main():
 
 
 main()
-createMasterJson()
-createStatsJson()
