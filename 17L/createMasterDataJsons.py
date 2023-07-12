@@ -16,16 +16,16 @@ from typing import Dict, List
 from constants import colorPairs  # WU, UG, WR, etc.
 
 # stats with low sample size not counted in μ,σ
-from constants import minimumSampleSize
+from constants import minimumSampleSize, minOffColorSampleSize
 
 
 # requires statistics.json to exist and be updated.
 # ⚠️ run createStatisticsJson first!
 def createMasterJson():
-	# load default.json. this contains default data from 17L. it's the default
-	# page! default.json is created and populated by requestConverter.py to
+	# load all.json. this contains default data from 17L. it's the default
+	# page! all.json is created and populated by requestConverter.py to
 	# contain all necessary data for compareDraftPicks.py
-	defaultPath: str = f'data/ltr-CDP/default.json'
+	defaultPath: str = f'data/ltr-converted/all.json'
 	with open(defaultPath, 'r', encoding='utf-8') as jsonFileHandler:
 		master: Dict = json.load(jsonFileHandler)
 
@@ -48,106 +48,121 @@ def createMasterJson():
 		},
 	'''
 
+	# for each cardName in the main json file, find its data in the colorPair
+	# json files and append them. note we also need to remove default stats
+	# entries and stuff them into a "🔑 all" key to represent 'all colors'
+	for name, masterCardData in master.items():
+		# stats we want z-scores for
+		stats: List[str] = ['GIH WR', 'OH WR', 'GD WR', 'IWD']
+
+		# create the filteredStats key with an empty dictionary we add to later
+		masterCardData['filteredStats'] = {}
+		zScores: Dict = createZscoreDict(masterCardData, stats, 'all')
+
+		# add the 'all colors' data to this dictionary
+		allStats: Dict = {
+			'GIH WR': masterCardData['GIH WR'],
+			'# GIH': masterCardData['# GIH'],
+			'OH WR': masterCardData['OH WR'],
+			'# OH': masterCardData['# OH'],
+			'GD WR': masterCardData['GD WR'],
+			'# GD': masterCardData['# GD'],
+			'IWD': masterCardData['IWD'],
+
+			# add zScores for GIH WR, OH WR, GD WR, and IWD
+			'z-scores': zScores
+		}
+
+		masterCardData['filteredStats']['all'] = allStats
+
+		# remove these keys from their original loc so data is not duplicated
+		del masterCardData['GIH WR']
+		del masterCardData['# GIH']
+		del masterCardData['OH WR']
+		del masterCardData['# OH']
+		del masterCardData['GD WR']
+		del masterCardData['# GD']
+		del masterCardData['IWD']
+
+		# iterate through every colorPair, adding data in key,value pairs:
+		# OH, OHWR, #GIH, GIHWR, #GD, GDWR, IWD, z-scores
+		for colorPair in colorPairs:
+			coloredJsonPath: str = f'data/ltr-converted/{colorPair}.json'
+			with open(coloredJsonPath, 'r', encoding='utf-8') as jsonFileHandler:
+				coloredDataJson: Dict = json.load(jsonFileHandler)
+
+			dataSetID: str = colorPair  # e.g. 'WU', 'UG'
+			dataSetCardData: Dict = coloredDataJson[name]
+			zScores: Dict = createZscoreDict(dataSetCardData, stats, dataSetID)
+
+			# don't add colorStats data at all if '# GIH' doesn't meet sample
+			# size requirement
+			if dataSetCardData['# GIH'] < minOffColorSampleSize:
+				pass
+			else:
+				colorPairStats: Dict = {
+					'GIH WR': dataSetCardData['GIH WR'],
+					'# GIH': dataSetCardData['# GIH'],
+					'OH WR': dataSetCardData['OH WR'],
+					'# OH': dataSetCardData['# OH'],
+					'GD WR': dataSetCardData['GD WR'],
+					'# GD': dataSetCardData['# GD'],
+					'IWD': dataSetCardData['IWD'],
+					'z-scores': zScores
+				}
+
+				masterCardData['filteredStats'][dataSetID] = colorPairStats
+
+	# save the final master.json file
+	with open(f'data/master.json', 'w', encoding='utf-8') as jsonSaver:
+		jsonSaver.write(json.dumps(master, indent=4))
+
+	print(f'🍑 master json saved')
+
+
+def createZscoreDict(cardData: Dict, stats: List[str], dataSetID: str) -> Dict:
+	"""
+	create a dictionary with z-score values of the given input list
+	:param cardData: one entry in master.json, keyed by cardName
+	:param stats: a list of strings with stats we want z-scores for, e.g. OHWR
+	:param dataSetID: 'all', 'WU', 'UG', etc. also known as colorPair str
+	:return:
+	"""
 	# open the statistics data file to query for μ, σ
 	jsonPath: str = f'data/statistics.json'
 	with open(jsonPath, 'r', encoding='utf-8') as statsFileHandler:
 		cardStatistics: Dict = json.load(statsFileHandler)
 
+	# 	statistics.json sample entry for one color pair, 'WU':
 	'''
-	statistics.json sample entry for one color pair, 'WU':
-		"WU": {
-			"GIH WR": {
-				"mean": 0.5488155671189182,
-				"stdDev": 0.040161553535718666
-			},
-			"OH WR": {
-				"mean": 0.5202702618891792,
-				"stdDev": 0.04189691189749475
-			},
-			"IWD": {
-				"mean": 0.061524972063645815,
-				"stdDev": 0.04081348580719822
-			}
+	"WU": {
+		"GIH WR": {
+			"mean": 0.5488155671189182,
+			"stdDev": 0.040161553535718666
 		},
-	'''
-
-	# for each cardName in the main json file, find its data in the colorPair
-	# json files and append them. note we also need to remove default stats
-	# entries and stuff them into a "🔑 default" key
-	for name, data in master.items():
-		# iterate through every colorPair, adding data in key,value pairs:
-		# OH, OHWR, #GIH, GIHWR, IWD
-
-		# create the filteredStats key with an empty dictionary we add to later
-		data['filteredStats'] = {}
-
-		# prepare to calculate z-scores for 'GIH WR', 'OH WR', 'GD WR' and 'IWD'
-		# z-score is calculated (x-μ)/σ where x is the data point
-
-		cardGihwr: float = data['GIH WR']
-		defaultGihwrMean: float = cardStatistics['default']['GIH WR']['mean']
-		defaultGihwrStdDev: float = cardStatistics['default']['GIH WR']['stdDev']
-		defaultGihwrZscore: float = \
-			(cardGihwr-defaultGihwrMean) / defaultGihwrStdDev
-
-		# add the "default", all colors data to this dictionary
-		# remove these keys from their original loc so data is not duplicated
-		defaultStats: Dict = {
-			'GIH WR': data['GIH WR'],
-			'# GIH': data['# GIH'],
-			'OH WR': data['OH WR'],
-			'# OH': data['# OH'],
-			'GD WR': data['GD WR'],
-			'# GD': data['# GD'],
-			'IWD': data['IWD']
-
-			# add zScores for GIH WR, OH WR, GD WR, and IWD
-
+		"OH WR": {
+			"mean": 0.5202702618891792,
+			"stdDev": 0.04189691189749475
+		},
+		"IWD": {
+			"mean": 0.061524972063645815,
+			"stdDev": 0.04081348580719822
 		}
+	},
+	'''
+	# initialize the z-score dictionary we want to return
+	zScoreResults: Dict = {}
 
-		data['filteredStats']['default'] = defaultStats
+	# iterate through a list of stats we want z-scores for, e.g. 'all', 'WU'
+	for stat in stats:
+		zScore: float = getZscore(
+			cardData[stat],
+			dataSetID,
+			stat,
+			cardStatistics)
 
-		del data['GIH WR']
-		del data['# GIH']
-		del data['OH WR']
-		del data['# OH']
-		del data['GD WR']
-		del data['# GD']
-		del data['IWD']
-
-		for colorPair in colorPairs:
-			coloredJsonPath: str = f'data/ltr-CDP/{colorPair}.json'
-			with open(coloredJsonPath, 'r', encoding='utf-8') as jsonFileHandler:
-				currentDataSet: Dict = json.load(jsonFileHandler)
-
-			dataSetID: str = colorPair  # e.g. 'WU', 'UG'
-			cardData: Dict = data  # master[name] is a Dict containing one card
-			currentDataSetCardData: Dict = currentDataSet[name]
-
-			# append new key,value pair to master[name]'s value
-			# create a "filteredStats" dictionary we will append later
-			# it will contain the 5 stats as values as the colorPair as a 🔑key
-			# we need: '# OH', 'OH WR', '# GIH', 'GIH WR', 'IWD'
-			colorPairStats: Dict = {
-				'GIH WR': currentDataSetCardData['GIH WR'],
-				'# GIH': currentDataSetCardData['# GIH'],
-				'OH WR': currentDataSetCardData['OH WR'],
-				'# OH': currentDataSetCardData['# OH'],
-				'GD WR': currentDataSetCardData['GD WR'],
-				'# GD': currentDataSetCardData['# GD'],
-				'IWD': currentDataSetCardData['IWD']
-			}
-
-			data['filteredStats'][dataSetID] = colorPairStats
-
-
-
-	# for cardName, cardData in master.items():
-	#	[print(f'{key}: {value}') for (key, value) in cardData.items()]
-	with open(f'data/master.json', 'w', encoding='utf-8') as jsonSaver:
-		jsonSaver.write(json.dumps(master, indent=4))
-
-	print(f'🍑 master json saved')
+		zScoreResults[stat] = zScore
+	return zScoreResults
 
 
 def getZscore(statValue: float, dataSetStr: str, statKey: str, statisticsJson: Dict) -> float:
@@ -161,6 +176,9 @@ def getZscore(statValue: float, dataSetStr: str, statKey: str, statisticsJson: D
 	"""
 	mean: float = statisticsJson[dataSetStr][statKey]['mean']
 	stdDev: float = statisticsJson[dataSetStr][statKey]['stdDev']
+
+	if statValue is None:
+		return None
 	return (statValue - mean) / stdDev
 
 
@@ -187,15 +205,14 @@ def createStatsJson():
 	"""
 	# dictionary we will save to json
 	result: Dict = {}
+	dataRoot: str = 'data/ltr-converted/'
 
 	# find μ, σ stats for default data set: all.json
-	calculateAndAddStatsKeyValuePairs(
-		'default', 'data/ltr-CDP/default.json', result)
+	calculateAndAddStatsKeyValuePairs('all', f'{dataRoot}all.json', result)
 
 	# second, iterate through all other dataSets after encapsulating step 1
-	inputJsonPath: str = f'data/ltr-CDP/'
 	for colorPair in colorPairs:
-		dataSetPath: str = f'{inputJsonPath}{colorPair}.json'
+		dataSetPath: str = f'{dataRoot}{colorPair}.json'
 		calculateAndAddStatsKeyValuePairs(colorPair, dataSetPath, result)
 
 	# [print(f'{key}: {value}') for (key, value) in result.items()]
