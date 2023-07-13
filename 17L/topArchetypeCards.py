@@ -44,7 +44,7 @@ def sortingKey(item, colorPair: str, stat: str):
 
 
 # displays top cards of each colorPair by rarity: 'C', 'U', 'R', 'M'
-def displayTopCardsByRarity(rarity: str):
+def displayTopCardsByRarity(rarityList: List[str]):
 	currentJsonPath: str = f'data/master.json'
 	with open(currentJsonPath, 'r', encoding='utf-8') as jsonFileHandler:
 		master: Dict = json.load(jsonFileHandler)
@@ -53,7 +53,7 @@ def displayTopCardsByRarity(rarity: str):
 		print(f'\n🌊 colors: {colorPair}')
 
 		# sort the data per colorPair
-		sortingStat: str = 'GIH WR'
+		sortingStat: str = 'OH WR'
 		sortedData = dict(
 			sorted(
 				master.items(),
@@ -64,10 +64,10 @@ def displayTopCardsByRarity(rarity: str):
 
 		# take the first n items of a set rarity and display them
 		# TODO print stats! → # GIH, GIH WR, OH WR, IWD, zScore, grade
-		maxCount: int = 8
+		maxCount: int = 12
 		count: int = 0
 		for key, value in sortedData.items():
-			if value.get("Rarity") == rarity:
+			if value.get("Rarity") in rarityList:
 				nGih: int = value['filteredStats'][colorPair]['# GIH']
 				print(f'{nGih:>5} {key}')
 				count += 1
@@ -76,4 +76,4 @@ def displayTopCardsByRarity(rarity: str):
 					break
 
 
-displayTopCardsByRarity('C')
+displayTopCardsByRarity(['C', 'U'])

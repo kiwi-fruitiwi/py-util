@@ -30,18 +30,7 @@ gradeBounds: List[tuple] = [
 ]
 
 
-MIN_SAMPLE_SIZE: int = 200
-
-
-# if we're only comparing one card, skip newlines so subsequent queries
-# are easier to visually compare
-compareOne: bool = False
-displayIwdGrade: bool = False
 displayCardFetchList: bool = False
-displayGihOhDiff: bool = True  # difference in zScore between GIH and OH WRs
-displayOhZscore: bool = True
-displayRarityAndMv: bool = False
-
 dataSetUri: str = 'data/master.json'
 
 
@@ -133,41 +122,40 @@ def main():
 		'''
 
 	nameManacostDict: Dict = generateNameManacostDict(scryfallJson)
-
-	global compareOne
 	global displayCardFetchList
-
 	done: bool = False
 
 	while not done:
 		printFlag = False
-		if not compareOne:
-			print('')
-		userInput: str = input('Enter cards: ')
+		userInput: str = input('\nEnter cards: ')
 
 		# split the input string into a list using ',' as delimiter
-		names: List[str] = userInput.split(',')
+		inputCardNames: List[str] = userInput.split(',')
 
 		# trim leading and trailing whitespace
-		values: List[str] = [name.strip() for name in names]
+		strippedCardNames: List[str] = [name.strip() for name in inputCardNames]
+
 
 		# special command: print card text if first char is '!'
-		# this is done only if there's one card name in the input
-		firstElement: str = values[0]
+		# we ignore all but the first token in the input string this way
+		firstElement: str = strippedCardNames[0]
 		if firstElement[0] == '!':
-			printFlag: bool = True
-			updatedFirstElement = firstElement[1:].strip()  # remove the '!'
-			values[0] = updatedFirstElement  # clobber to update value
+			cardName: str = firstElement[1:].strip()  # remove '!' and spaces
+			bestMatch = process.extractOne(cardName, masterJson.keys())
 
-		firstElement: str = values[0]  # updated, after '!' is stripped
-		# check if first element contains ':' if so, split(':')
-		# use this to determine what json file we'll be loading
+			# process always returns a list even if its length is 1
+			printCardText(bestMatch[0], scryfallJson)
+
+			# stop here! no need to print data if we're just checking oracleText
+			continue
+
+
+		# dataset we'll be loading from json. default is 'all'
 		dataSetID: str = f'all'
 
 		# special command: colorPair with colon, e.g. 'WU: '
-		# 	this will open data from the corresponding file and save to json17L
-		#    how do we access 17LdataFetch colorPair?
-		#    load the color pair json that corresponds to it
+		# check if first element contains ':'. use this to determine what
+		# 	this will open data from the corresponding file and cache it
 		# strip after in case there are multiple spaces after 'WU:'
 		if ':' in firstElement:
 			tokens: List[str] = firstElement.split(':')
@@ -177,33 +165,29 @@ def main():
 			assert len(tokens) == 2
 			assert tokens[0].upper() in colorPairs
 
-			# save what our current data set is so it's visible with the data
-			# note it's either the default "all colors" json or one of the
-			# colorPairs: WU WB WR WG etc.
-			dataSetID = tokens[0].upper()
-			values[0] = values[0].strip()
+			# save what our current data set is so it's visible in the output
+			dataSetID = tokens[0].upper().strip()
+			strippedCardNames[0] = tokens[1].strip()
 
 		# set up list of card names matched to our input
 		cardFetchList: List[str] = []
 
-		for value in values:
+		for name in strippedCardNames:
 			# extractOne returns a tuple like this: ('Arwen Undómiel', 90)
 			# we're just interested in the name, not the closeness
-			bestMatch = process.extractOne(value, masterJson.keys())
+			bestMatch = process.extractOne(name, masterJson.keys())
 
 			if bestMatch:
-				bestMatchName = bestMatch[0]
+				bestMatchName = bestMatch[0]  # process always returns a List
 				cardFetchList.append(bestMatchName)
 			else:
-				print(f'🍆 best match not found for {value}')
+				print(f'🍆 best match not found for {name}')
 
-		# if there's only one card, we will show how it performs overall as well
-		# as in each color pair!
+		# if there's only one card, we will show an archetype analysis!
 		if len(cardFetchList) == 1:
 			cardName: str = cardFetchList[0]
 			printArchetypesData(cardName, masterJson[cardName])
 		else:
-			compareOne = False  # use newlines to reduce clutter for big tables
 			# print a list of names if we're matching more than one card
 			if displayCardFetchList:
 				[print(name) for name in cardFetchList]
@@ -463,238 +447,6 @@ def printCardComparison(
 					f'{iwd*100:4.1f}pp'
 					f' ← {cardName}'
 				)
-
-
-# get card data from data/master.json and display it for each cardName in
-# cardNameList! The dataSet is parameterized.
-def printCardData(
-		cardNameList: List[str],
-		nameManacostDict,
-		dataSetStr: str,
-		displayHeaderFlag=True):
-
-	global compareOne
-	global displayIwdGrade, displayGihOhDiff, displayOhZscore, \
-		displayRarityAndMv
-
-	# open master.json to query for data
-	# sample master.json
-	# "Birthday Escape": {
-	# 	"Name": "Birthday Escape",
-	# 	"ALSA": 4.787610685652746,
-	# 	"ATA": 6.028844661098519,
-	# 	"URL": "https://cards.scryfall.io/border_crop/front/4/2/42db2313-b13d-4292-bef2-bf86f989d32f.jpg?1686169032",
-	# 	"Color": "U",
-	# 	"Rarity": "C",
-	# 	"filteredStats": {
-	# 		"default": {
-	# 			"GIH WR": 0.5960239727329169,
-	# 			"OH WR": 0.5751692517104273,
-	# 			"# GIH": 78923,
-	# 			"# OH": 27917,
-	# 			"IWD": 0.06738294709189119
-	# 		},
-	# 		"WU": {
-	# 			"GIH WR": 0.5773472122024116,
-	# 			"OH WR": 0.54628269174258,
-	# 			"# GIH": 9703,
-	# 			"# OH": 3403,
-	# 			"IWD": 0.07841650219385726
-	# 		},
-	jsonPath: str = f'data/master.json'
-	with open(jsonPath, 'r', encoding='utf-8') as jsonFileHandler:
-		masterData: Dict = json.load(jsonFileHandler)
-
-	# extra newline if we're comparing multiple cards
-	if not compareOne:
-		print('')
-
-	def sortingKey(item, stat: str):
-		data: Dict = item[1]  # note that item[0] is the 🔑 cardName
-
-		# sometimes the data won't exist because sample size was too small
-		if dataSetStr not in data['filteredStats']:
-			return float('-inf')
-		else:
-			value = data['filteredStats'][dataSetStr][stat]
-			if value is None:
-				return float('-inf')
-			return value
-
-	# note that to obtain stats for a colorPair, we query
-	# data['filteredStats'][dataSet], where dataSet ⊂ {default, WU, UG, WR...}
-	# sort by GIH WR manually in case it's not already sorted that way in csv
-	sortingStat: str = 'GIH WR'
-	sortedData = dict(
-		sorted(
-			masterData.items(),
-			key=lambda item: sortingKey(item, sortingStat),
-			reverse=True)
-	)
-
-	# open the statistics data file to query for μ, σ
-	jsonPath: str = f'data/statistics.json'
-	with open(jsonPath, 'r', encoding='utf-8') as statsFileHandler:
-		cardStatistics: Dict = json.load(statsFileHandler)
-
-	# grab the mean and standard deviation from statistics.json:
-	#
-	#     "WU": {
-	#         "GIH WR": {
-	#             "mean": 0.5491077666469387,
-	#             "stdDev": 0.040215101426471105
-	#         },
-	#         "OH WR": {
-	#             "mean": 0.5209195619740031,
-	#             "stdDev": 0.042789373519670264
-	#         },
-	#         "IWD": {
-	#             "mean": 0.061158040767395096,
-	#             "stdDev": 0.04112565649327313
-	#         }
-	#     },
-	gihwrMean: float = cardStatistics[dataSetStr]['GIH WR']['mean']
-	gihwrStdDev: float = cardStatistics[dataSetStr]['GIH WR']['stdDev']
-	ohwrMean: float = cardStatistics[dataSetStr]['OH WR']['mean']
-	ohwrStdDev: float = cardStatistics[dataSetStr]['OH WR']['stdDev']
-
-	if displayHeaderFlag:
-		displayHeader(dataSetStr, gihwrMean, gihwrStdDev)
-
-	# display stats of selected cards
-	for cardName, cardData in sortedData.items():
-		# some cards don't have data: check if it's actually in our GIHWR dict
-		if cardName in cardNameList:
-
-			# this contains the 5 pieces of data specific to this colorPair
-			cardStats: Dict = cardData['filteredStats'][dataSetStr]
-			gihwr: float = cardStats['GIH WR']  # game in hand win rate
-			nGih: int = cardStats['# GIH']      # number of times seen in hand
-			ohwr: float = cardStats['OH WR']    # opening hand win rate
-			nOh: float = cardStats['# OH']      # times seen in opening hand
-			iwd: float = cardStats['IWD']	    # improvement when drawn
-
-			# note '🔑 color' is not in filteredStats as it applies to the
-			# entire card regardless of color archetype
-			color: str = cardData['Color']
-			rarity: str = cardData['Rarity']
-
-			# initialize strings for grades, e.g. A-, C+, B, S
-			gihwrGrade: str = ' '  # empty space for alignment
-			ohwrGrade: str = ' '
-			iwdGrade: str = ' '
-
-			# only process data if sample size is significant: do the number of
-			# games in hand exceed the minimum sample size?
-			if nGih > minimumSampleSize:
-				# calculate how many stdDevs away from the mean?
-				# zscore = (x-μ) / σ
-				gihwrZScore: float = (gihwr - gihwrMean) / gihwrStdDev
-
-				# iterate reversed gradeBounds list: ('A+', 2.17) ('B', 0.83)
-				# if zScore is greater than current iterated value:
-				# 	replace gradeStr with key: 'A+', 'B', etc.
-
-				# TODO encapsulate grade-finding based on parameter: stat
-				#   still need to implement iwdGrade and ohwrGrade
-				# e.g. GIH WR, OH WR, IWD
-				for gradePair in gradeBounds[::-1]:
-					if gihwrZScore >= gradePair[1]:
-						gihwrGrade = gradePair[0]
-
-				ohwrZScore: float = (ohwr - ohwrMean) / ohwrStdDev
-				alsa: float = float(cardData["ALSA"])
-				ohwrStr: str = f'{ohwr * 100:4.1f}%' if ohwr else f'    -'
-
-				# display difference in zscore between GIHWR and OHWR
-				ogDifStr: str = ''
-				if displayGihOhDiff:
-					if ohwrZScore:
-						ogDif: float = ohwrZScore - gihwrZScore
-						ogDifStr = f'{ogDif:5.2f}'
-					else:
-						ogDifStr = '    -'
-
-				# opening hand win rate z score display
-				ohwrZscoreStr: str = ''
-				if displayOhZscore:
-					if ohwrZScore:
-						ohwrZscoreStr = f'{ohwrZScore:5.2f}'
-
-				# grab the mana cost from our collapsed scryfall dictionary:
-				# format is [cardName, mana cost] where latter is formatted
-				# 1UUU instead of {1}{U}{U}{U}
-				manacost: str = nameManacostDict[cardName]
-
-				iwdGradeStr: str = ''
-				if displayIwdGrade:
-					iwdGradeStr = f'{iwdGrade:2} '
-
-				rarityMvStr: str = ''
-				if displayRarityAndMv:
-					# 8 spaces needed for rarity and mana cost, +1 space
-					# mv must be 6 because 3WUBRG costs
-					rarityMvStr = f'{rarity} {manacost:6} '
-
-				iwdStr: str = f'{iwd * 100:.1f}pp'
-
-				# each row
-				print(
-					f'{gihwrGrade:2} '
-					f'{alsa:4.1f} '
-					f'{gihwr * 100:4.1f}% '
-					f'{gihwrZScore:5.2f} '
-					# f'{ohwrZscoreStr} '
-					# f'{ohwrStr} '
-					f'{ogDifStr} '
-					f'{iwdStr:>6} '
-					f'{iwdGradeStr}'
-					f'← '
-					f'{rarityMvStr}'
-					f'{cardName}')
-			else:
-				manacost: str = nameManacostDict[cardName]
-				print(
-					f'                                 '
-					# f'← {rarity} {manacost:5} {cardName}'
-					f'← {cardName}'
-				)
-
-
-def getEmptyStatHeader():
-	# [ HEADER ]
-	# add 3 spaces for iwd grade, e.g. A+, C-
-	iwdGradeHeaderStr: str = '   ' if displayIwdGrade else ''
-
-	# 5 characters for zScore diff
-	ogDifHeader: str = ' og Δ' if displayGihOhDiff else ''
-
-	# 8 char width and a whitespace
-	rarityMvHeader: str = '         ' if displayRarityAndMv else ''
-
-	result: str = (  # metric and how many characters each metric takes, plus spacing
-		f'   '  # grade is 2 + 1 space
-		f'alsa '  # ALSA 4 chars + 1 whitespace
-		f'  gih '  # GIHWR: 6
-		f'    z '  # gihwr zscore 5 + 1
-		# f' oh-z ' 	# ohwr zscore 5 + 1
-		# f'   oh '		# OHWR: 6
-		f'{ogDifHeader}'
-		f'    iwd '
-		f'{iwdGradeHeaderStr}'
-		f'{rarityMvHeader}'
-		f'  '  # leading spaces for '← '
-	)
-
-	return result
-
-
-# displays the header for the data set, including set name, mean, and stdDev
-def displayHeader(dataSet: str, μ: float, σ: float):
-	print(
-		f'{getEmptyStatHeader()}'
-		f'{dataSet} μ:{μ:.3f}, σ:{σ:.3f}'
-	)
 
 
 # generates a dictionary mapping card names to their mana costs in format '2UUU'
