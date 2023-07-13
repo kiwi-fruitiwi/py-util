@@ -23,7 +23,10 @@ def main():
 	# it's possible to leave out start and end date. defaults to entire format!
 	allColorsUrl: str = 'https://www.17lands.com/card_ratings/data?' \
 		  'expansion=LTR' \
-		  '&format=PremierDraft'
+		  '&format=PremierDraft' \
+		  '&user_group=top'
+
+	print(f'🫐 processing {allColorsUrl}')
 
 	# iterate through colorPairs, making a request for each pair
 	# then dump into 📂ltr-requests as 'all.json' or the colorPair name

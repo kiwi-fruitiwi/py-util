@@ -83,7 +83,8 @@ def convertJson(jsonInputPath: str, jsonOutputPath: str):
               encoding='utf-8') as json_file_handler:
         json_file_handler.write(json.dumps(cardDict, indent=4))
 
-    displayDict(cardDict)
+    # displayDict(cardDict)
+    print(f'🌊 {jsonInputPath} converted!')
     
 
 def main():

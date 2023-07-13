@@ -156,20 +156,19 @@ def main():
 		firstElement: str = values[0]
 		if firstElement[0] == '!':
 			printFlag: bool = True
-			updatedFirstElement = firstElement[1:]  # remove the '!'
+			updatedFirstElement = firstElement[1:].strip()  # remove the '!'
 			values[0] = updatedFirstElement  # clobber to update value
+
+		firstElement: str = values[0]  # updated, after '!' is stripped
+		# check if first element contains ':' if so, split(':')
+		# use this to determine what json file we'll be loading
+		dataSetID: str = f'all'
 
 		# special command: colorPair with colon, e.g. 'WU: '
 		# 	this will open data from the corresponding file and save to json17L
 		#    how do we access 17LdataFetch colorPair?
 		#    load the color pair json that corresponds to it
 		# strip after in case there are multiple spaces after 'WU:'
-
-		firstElement: str = values[0]  # updated, after '!' is stripped
-		# check if first element contains ':' if so, split(':')
-		# use this to determine what json file we'll be loading
-		dataSetStr: str = f'default'
-
 		if ':' in firstElement:
 			tokens: List[str] = firstElement.split(':')
 
@@ -181,7 +180,8 @@ def main():
 			# save what our current data set is so it's visible with the data
 			# note it's either the default "all colors" json or one of the
 			# colorPairs: WU WB WR WG etc.
-			dataSetStr = tokens[0].upper()
+			dataSetID = tokens[0].upper()
+			values[0] = values[0].strip()
 
 		# set up list of card names matched to our input
 		cardFetchList: List[str] = []
@@ -201,27 +201,20 @@ def main():
 		# as in each color pair!
 		if len(cardFetchList) == 1:
 			cardName: str = cardFetchList[0]
-
-			# if there is enough sample size, display header and rows
-			# for each applicable colorPair
-			#
-			# Moria Marauder
-			#    alsa   gih     z  og Δ    iwd
-			# B   2.5 60.4%  0.92  1.04  4.6pp ← μ:0.562, σ:0.045 WR
-			# C   2.5 58.0%  0.09  0.65  3.3pp ← μ:0.576, σ:0.045 UR
-
-			# determine if there is relevant colorPair data by checking '# GIH'
 			printArchetypesData(cardName, masterJson[cardName])
-			# printCardData(cardFetchList, nameManacostDict, colorPair, displayHeaderFlag=False)
-
-			pass
-		# compareOne = True
 		else:
 			compareOne = False  # use newlines to reduce clutter for big tables
 			# print a list of names if we're matching more than one card
 			if displayCardFetchList:
 				[print(name) for name in cardFetchList]
-			printCardData(cardFetchList, nameManacostDict, dataSetStr)
+			printCardComparison(
+				masterJson,
+				cardStatistics,
+				cardFetchList,
+				nameManacostDict,
+				dataSetID
+			)
+			# printCardData(cardFetchList, nameManacostDict, dataSetStr)
 
 		# if there's only one card name input and it's preceded by '!'
 		# → print the card's spoiler text
@@ -251,8 +244,10 @@ def printArchetypesData(cardName: str, cardStats: Dict):
 	"""
 
 	# header: display columns and title above the colorPairStrs
-	print(f'💦 {cardName}')
+	print(f'💦 {cardName} → ALSA {cardStats["ALSA"]:.1f}')
 	print(
+		f'     n '		# # GIH: sample size
+		f'| '			# outer column
 		f'   ' 			# colorPair: 2 char + 1 space
 		f'|  ' 			# ' → '
 		f'   ' 			# ohwrGrade: 2 char + 1 space
@@ -266,14 +261,13 @@ def printArchetypesData(cardName: str, cardStats: Dict):
 		f'   ' 			# iwdGrade: 2 char + 1 space
 		f'    '			# IWD z-score
 		f'    IWD'		# IWD: 4 char + 1 space, e.g. -15.2pp
-		f' |'
 	)
 
 	# iterate through colorPairs data to display the following stats:
 	# OH WR, OH WR z-score
 	# GD WR, GD WR z-score
 	# IWD
-	# and add the colorPairStr after
+	# include the colorPairStr
 	# ✒️ ALSA likely not necessary
 	stats: Dict = cardStats['filteredStats']
 	for colorPair in colorPairs:
@@ -293,13 +287,14 @@ def printArchetypesData(cardName: str, cardStats: Dict):
 			iwdGrade: str = getGrade(zIwd)
 
 			print(
+				f'{colorStats["# GIH"]:6} '
+				f'| '
 				f'{colorPair} | '
 				f'{ohwrGrade:2} {zOhwr:>5.2f} {ohwr*100:4.1f}'
 				f' | '
 				f'{gdwrGrade:2} {zGdwr:>5.2f} {gdwr*100:4.1f}'
 				f' | '
 				f'{iwdGrade:2} {zIwd:>5.2f} {iwd*100:4.1f}pp'
-				f' |'
 			)
 	pass
 
@@ -346,9 +341,132 @@ def printArchetypesData(cardName: str, cardStats: Dict):
 		}, 
 	'''
 
+
+def printCardComparison(
+		masterData: Dict,			# masterJson[cardName]
+		statsData: Dict,			# statisticsJson[dsID]
+		cardNameList: List[str],	# fuzzy input matching results
+		nameManacostDict,
+		dataSetID: str,				# 'all', 'WU', 'UG', 'RG'
+	):
+
+	# sorts master.json data according to one stat, e.g. 'GD WR', 'OH WR'
+	def statSortKey(item, stat: str):
+		data: Dict = item[1]  # note that item[0] is the 🔑 cardName
+
+		# sometimes the data won't exist because sample size was too small
+		if dataSetID not in data['filteredStats']:
+			return float('-inf')
+		else:
+			value = data['filteredStats'][dataSetID][stat]
+			if value is None:
+				return float('-inf')
+			return value
+
+	# to obtain stats for a colorPair, we query data['filteredStats'][dataSet],
+	# where dataSet ⊂ {default, WU, UG, WR...}.
+	sortingStat: str = 'OH WR'
+	sortedData = dict(
+		sorted(
+			masterData.items(),
+			key=lambda item: statSortKey(item, sortingStat),
+			reverse=True)
+	)
+
+	# sample master.json item:
+	'''
+	"Glamdring": {
+        "Name": "Glamdring",
+        "ALSA": 2.1737089201877935,
+        "ATA": 2.4025974025974026,
+        "URL": "https://cards.scryfall.io/border_crop/...
+        "Color": "",
+        "Rarity": "M",
+        "filteredStats": {
+            "all": {
+                "GIH WR": 0.6238532110091743,
+                "# GIH": 327,
+                "OH WR": 0.6060606060606061,
+                "# OH": 99,
+                "GD WR": 0.631578947368421,
+                "# GD": 228,
+                "IWD": 0.07212907307813987,
+                "z-scores": {
+                    "GIH WR": 0.4240168966164874,
+                    "OH WR": 0.17294603764905228,
+                    "GD WR": 0.39138079897644223,
+                    "IWD": 1.0218922920345261
+                }
+            },
+	'''
+	# get μ, σ pair to display in header
+	gdwrMean: float = statsData[dataSetID]['GD WR']['mean']
+	gdwrStdDev: float = statsData[dataSetID]['GD WR']['stdDev']
+	ohwrMean: float = statsData[dataSetID]['OH WR']['mean']
+	ohwrStdDev: float = statsData[dataSetID]['OH WR']['stdDev']
+
+	# header: display columns and title above the colorPairStrs
+	# generally, spaces come after the column
+	print(
+		f'     n ' 	# GIH: sample size
+		f'alsa '
+		
+		f'| '  
+		f'   '    	# ohwrGrade: 2 char + 1 space
+		f'      '   # OH z-score: 5 char + 1 space, e.g. '-1.50'
+		f'  OH ' 	# ohwr: 4 char + 1 space, e.g. 54.8
+		
+		f'| '  	
+		f'   '  	# gdwrGrade: 2 char + 1 space
+		f'      '  	# GD z-score
+		f'  GD '  	# gdwr: 4 char + 1 space
+		
+		f'| '  		
+		f'   IWD'   # IWD: 4 char + 1 space, e.g. -15.2pp
+		f'   '		# ' ← ' in rows	
+		f'{dataSetID} μ={ohwrMean*100:4.1f}, σ={ohwrStdDev*100:3.1f}'
+	)
+
+
+	# display stats of selected cards from fuzzy input matching
+	for cardName, cardData in sortedData.items():
+		if cardName in cardNameList:
+			if dataSetID not in cardData['filteredStats']:
+				print(f'🥝 not enough data for {cardName} in {dataSetID}')
+			else:
+				# print the comparison row
+				cardStats: Dict = cardData['filteredStats'][dataSetID]
+				gdwr: float = cardStats['GD WR']  	# game drawn win rate
+				nGd: int = cardStats['# GD']      	# number of games draw
+				zGdwr: float = cardStats['z-scores']['GD WR']
+				gdwrGrade: str = getGrade(zGdwr)
+				ohwr: float = cardStats['OH WR']    # opening hand win rate
+				nOh: float = cardStats['# OH']      # times seen in opening hand
+				zOhwr: float = cardStats['z-scores']['OH WR']
+				ohwrGrade: str = getGrade(zOhwr)
+				iwd: float = cardStats['IWD']	    # improvement when drawn
+				alsa: float = cardData['ALSA']		# average last seen at
+
+				# grab the mana cost from our collapsed scryfall dictionary:
+				# format is [cardName, mana cost] where latter is formatted
+				# 1UUU instead of {1}{U}{U}{U}
+				manacost: str = nameManacostDict[cardName]
+
+				print(
+					f'{cardStats["# GIH"]:6} '
+					f'{alsa:4.1f} '
+					f'| '
+					f'{ohwrGrade:2} {zOhwr:>5.2f} {ohwr*100:4.1f} '
+					f'| '
+					f'{gdwrGrade:2} {zGdwr:>5.2f} {gdwr*100:4.1f} '
+					f'| '
+					f'{iwd*100:4.1f}pp'
+					f' ← {cardName}'
+				)
+
+
 # get card data from data/master.json and display it for each cardName in
-# cardNameList! The dataSet is parameterized. If the JSON is sorted by GIHWR,
-# so will the results.
+# cardNameList! The dataSet is parameterized.
 def printCardData(
 		cardNameList: List[str],
 		nameManacostDict,

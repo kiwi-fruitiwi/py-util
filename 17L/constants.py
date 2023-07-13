@@ -1,7 +1,7 @@
 from typing import List
 
-minimumSampleSize: int = 500
-minOffColorSampleSize: int = 100
+minimumSampleSize: int = 100
+minOffColorSampleSize: int = 50
 
 colorPairs: List[str] = [
 	'WU', 'WB', 'WR', 'WG',

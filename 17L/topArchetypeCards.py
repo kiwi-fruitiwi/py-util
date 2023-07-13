@@ -19,8 +19,13 @@ def sortingKey(item, colorPair: str, stat: str):
 	key: str = item[0]
 	value: Dict = item[1]
 
-	colorPairData = value['filteredStats'][colorPair]
-	sortingValue = colorPairData[stat]
+	# not all colorPairs exist under 'filteredStats' due to low sample size
+	# low sample size colorPair data is simply excluded to save space
+	if colorPair in value['filteredStats']:
+		colorPairData = value['filteredStats'][colorPair]
+		sortingValue = colorPairData[stat]
+	else:
+		return float('-inf')
 
 	# sometimes the json value is null. this is converted to None in python
 	# we want these values to be as infinitely negative as possible so they sort
@@ -63,7 +68,8 @@ def displayTopCardsByRarity(rarity: str):
 		count: int = 0
 		for key, value in sortedData.items():
 			if value.get("Rarity") == rarity:
-				print(key)
+				nGih: int = value['filteredStats'][colorPair]['# GIH']
+				print(f'{nGih:>5} {key}')
 				count += 1
 
 				if count >= maxCount:

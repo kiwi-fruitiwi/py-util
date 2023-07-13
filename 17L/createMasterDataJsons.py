@@ -263,6 +263,9 @@ def calculateAndAddStatsKeyValuePairs(
 		else:
 			gdwrList.append(card['GD WR'])
 
+	# TODO sometimes this will raise statisticsError if one of the 4 lists is
+	# 	empty. the workaround is to increase the minimum sample size constant
+	# 	but this should really check for emptiness.
 	colorPairStats: Dict = {
 		'GIH WR': {
 			'mean': statistics.mean(gihwrList),
