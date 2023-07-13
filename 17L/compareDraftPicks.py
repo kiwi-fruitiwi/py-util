@@ -5,8 +5,7 @@ from fuzzywuzzy import process
 from typing import List, Dict
 from scryfallCardFetch import printCardText
 from constants import colorPairs
-from cardDisplay import \
-	printCardComparison, printArchetypesData, generateNameManacostDict
+from cardDisplay import printCardComparison, printArchetypesData
 
 
 displayCardFetchList: bool = False
@@ -100,7 +99,6 @@ def main():
 		},
 		'''
 
-	nameManacostDict: Dict = generateNameManacostDict(scryfallJson)
 	global displayCardFetchList
 	done: bool = False
 
@@ -170,14 +168,7 @@ def main():
 			# print a list of names if we're matching more than one card
 			if displayCardFetchList:
 				[print(name) for name in cardFetchList]
-			printCardComparison(
-				masterJson,
-				cardStatistics,
-				cardFetchList,
-				nameManacostDict,
-				dataSetID
-			)
-			# printCardData(cardFetchList, nameManacostDict, dataSetStr)
+			printCardComparison(cardFetchList, dataSetID)
 
 		# if there's only one card name input and it's preceded by '!'
 		# → print the card's spoiler text

@@ -1,3 +1,5 @@
+import json
+
 from typing import List, Dict
 from constants import colorPairs
 
@@ -143,12 +145,30 @@ def printArchetypesData(cardName: str, cardStats: Dict):
 
 
 def printCardComparison(
-		masterData: Dict,  # masterJson[cardName]
-		statsData: Dict,  # statisticsJson[dsID]
 		cardNameList: List[str],  # fuzzy input matching results
-		nameManacostDict,
 		dataSetID: str,  # 'all', 'WU', 'UG', 'RG'
 ):
+
+
+	# load card info from scryfall json
+	with open('data/scryfall.json', encoding='utf-8-sig') as f:
+		scryfallJson = json.load(f)
+		'''
+		card data from scryfall, including oracle text and img links
+		'''
+
+	# load aggregated master data
+	dataSetUri: str = 'data/master.json'
+	with open(dataSetUri) as file:
+		masterData: Dict = json.load(file)
+
+	# open the statistics data file to query for μ, σ
+	jsonPath: str = f'data/statistics.json'
+	with open(jsonPath, 'r', encoding='utf-8') as statsFileHandler:
+		statsData: Dict = json.load(statsFileHandler)
+
+	nameManacostDict: Dict = generateNameManacostDict(scryfallJson)
+
 	# sorts master.json data according to one stat, e.g. 'GD WR', 'OH WR'
 	def statSortKey(item, stat: str):
 		data: Dict = item[1]  # note that item[0] is the 🔑 cardName
