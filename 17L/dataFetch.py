@@ -23,8 +23,8 @@ def main():
 	# it's possible to leave out start and end date. defaults to entire format!
 	allColorsUrl: str = 'https://www.17lands.com/card_ratings/data?' \
 		  'expansion=LTR' \
-		  '&format=PremierDraft' \
-		  '&user_group=top'
+		  '&format=PremierDraft'# \
+		  #'&user_group=top'
 
 	print(f'🫐 processing {allColorsUrl}')
 
