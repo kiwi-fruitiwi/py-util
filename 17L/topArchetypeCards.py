@@ -11,8 +11,7 @@ from typing import Dict, List
 from constants import colorPairs  # WU, UG, WR, etc.
 from constants import minimumSampleSize
 
-from cardDisplay import \
-	printCardComparison, printArchetypesData, generateNameManacostDict
+from cardDisplay import printCardComparison
 
 
 # this sorting key lets us parameterize color pair and stat
@@ -73,7 +72,7 @@ def displayTopCardsByRarity(rarityList: List[str]):
 		for key, value in sortedData.items():
 			if value.get("Rarity") in rarityList:
 				nGih: int = value['filteredStats'][colorPair]['# GIH']
-				if nGih > 400:
+				if nGih > minimumSampleSize:
 					cardFetchList.append(key)
 				count += 1
 

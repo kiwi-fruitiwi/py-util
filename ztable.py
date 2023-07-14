@@ -30,6 +30,7 @@ value: float = 99/300
 print(quad(normalProbabilityDensity, value, np.PINF))
 print(quad(normalProbabilityDensity, np.NINF, value))
 
+graphNormalDistribution()
 
 # print(quad(normalProbabilityDensity, 0.85, np.PINF))
 
