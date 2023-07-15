@@ -147,10 +147,11 @@ def printArchetypesData(cardName: str, cardStats: Dict):
 def printCardComparison(
 		cardNameList: List[str],  	# fuzzy input matching results
 		dataSetID: str,  			# 'all', 'WU', 'UG', 'RG'
-		masterJsonPath: str,		# 'data/all-players.json'
-		statsJsonPath: str			# 'data/all-players-stats.json'
+		caliber: str, 				# descriptor for 'all' vs 'top' player data
 ):
 
+	masterJsonPath: str = f'data/{caliber}Master.json' 	# 'data/allMaster.json'
+	statsJsonPath: str = f'data/{caliber}Stats.json' 	# 'data/allStats.json'
 
 	# load card info from scryfall json
 	with open('data/scryfall.json', encoding='utf-8-sig') as f:

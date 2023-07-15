@@ -10,8 +10,6 @@ from constants import caliberRequestUrls  # import just for 🔑 names
 
 
 displayCardFetchList: bool = False
-caliber: str = caliberRequestUrls[0]  # 'all-players' vs 'top-players'
-dataSetPath: str = 'data/all-players.json'
 
 
 # main input loop to ask for user input → return list of card stats
@@ -28,12 +26,9 @@ def main():
 		card data from scryfall, including oracle text and img links
 		'''
 
-	# load aggregated master data
-	with open(dataSetPath) as file:
-		masterJson: Dict = json.load(file)
-
 	global displayCardFetchList
 	done: bool = False
+	masterJson: Dict = {}  # load this later based on special command
 
 	while not done:
 		printFlag = False
@@ -45,6 +40,14 @@ def main():
 		# trim leading and trailing whitespace
 		strippedCardNames: List[str] = [name.strip() for name in inputCardNames]
 
+
+		# special command: load top data set if first char is '~'
+		firstElement: str = strippedCardNames[0]
+		caliber = list(caliberRequestUrls.keys())[0]  # all players
+		dataSetPath: str = f'data/{caliber}Master.json'
+		# load all players data
+		with open(dataSetPath) as file:
+			masterJson: Dict = json.load(file)
 
 		# special command: print card text if first char is '!'
 		# we ignore all but the first token in the input string this way
@@ -59,6 +62,12 @@ def main():
 			# stop here! no need to print data if we're just checking oracleText
 			continue
 
+		if firstElement[0] == '~':
+			# load top players data
+			caliber = list(caliberRequestUrls.keys())[1]  # top players
+			dataSetPath: str = f'data/{caliber}Master.json'
+			with open(dataSetPath) as file:
+				masterJson: Dict = json.load(file)
 
 		# dataset we'll be loading from json. default is 'all'
 		dataSetID: str = f'all'
@@ -96,12 +105,19 @@ def main():
 		# if there's only one card, we will show an archetype analysis!
 		if len(cardFetchList) == 1:
 			cardName: str = cardFetchList[0]
+			print(f'{caliber} → ', end='')
 			printArchetypesData(cardName, masterJson[cardName])
 		else:
 			# print a list of names if we're matching more than one card
 			if displayCardFetchList:
 				[print(name) for name in cardFetchList]
-			printCardComparison(cardFetchList, dataSetID)
+
+			print(f'{caliber} → ', end='')
+			printCardComparison(
+				cardFetchList,
+				dataSetID,
+				caliber
+			)
 
 		# if there's only one card name input and it's preceded by '!'
 		# → print the card's spoiler text
