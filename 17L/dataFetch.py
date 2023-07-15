@@ -16,40 +16,52 @@
 import requests
 import json
 from constants import colorPairs
-# from createMasterJson import createMasterJson, createStatsJson
+from typing import Dict
 
 
+# it's possible to leave out start and end date. defaults to entire format!
+baseRequestURL: str = \
+	"https://www.17lands.com/card_ratings/data" \
+	"?expansion=LTR" \
+	"&format=PremierDraft"
+
+dataSetURLs: Dict = {
+	"all-players": f'{baseRequestURL}',
+	"top-players": f'{baseRequestURL}&user_group=top'
+}
+
+
+# get requested json data from 17lands.com for all data sets
 def main():
-	# it's possible to leave out start and end date. defaults to entire format!
-	allColorsUrl: str = 'https://www.17lands.com/card_ratings/data?' \
-		  'expansion=LTR' \
-		  '&format=PremierDraft'# \
-		  #'&user_group=top'
+	for dataSetName, dataSetURL in dataSetURLs.items():
+		print(f'🫐 processing {dataSetName} → {dataSetURL}')
 
-	print(f'🫐 processing {allColorsUrl}')
+		# iterate through colorPairs, making a request for each pair
+		# then dump into 📂ltr-requests as 'all.json' or the colorPair name
 
-	# iterate through colorPairs, making a request for each pair
-	# then dump into 📂ltr-requests as 'all.json' or the colorPair name
+		# first, the 'all.json' output
+		allColors = requests.get(dataSetURL).json()
+		with open(
+				f'data/ltr-requests/{dataSetName}/all.json',
+				'w',
+				encoding='utf-8') as json_file_handler:
+			json_file_handler.write(json.dumps(allColors, indent=4))
 
-	# first, the 'all.json' output
-	allColors = requests.get(allColorsUrl).json()
-	with open('data/ltr-requests/all.json', 'w', encoding='utf-8') as json_file_handler:
-		json_file_handler.write(json.dumps(allColors, indent=4))
-
-	print(f'🍓 requests complete: [all', end='')
+		print(f'🍓 requests complete: [all', end='')
 
 
-	# now we iterate through colorPairs and get a custom json for each pair
-	for colorPair in colorPairs:
-		coloredURL: str = f'{allColorsUrl}&colors={colorPair}'
-		colorPairJson = requests.get(coloredURL).json()
+		# now we iterate through colorPairs and get a custom json for each pair
+		for colorPair in colorPairs:
+			coloredURL: str = f'{dataSetURL}&colors={colorPair}'
+			colorPairJson = requests.get(coloredURL).json()
 
-		# save locally to 'WU.json', 'WG.json', etc.
-		with open(f'data/ltr-requests/{colorPair}.json', 'w', encoding='utf-8') \
-			as json_file_handler:
-			json_file_handler.write(json.dumps(colorPairJson, indent=4))
-		print(f', {colorPair}', end='')
-	print(f']')
+			# save locally to 'WU.json', 'WG.json', etc.
+			with open(
+					f'data/ltr-requests/{dataSetName}/{colorPair}.json',
+					'w', encoding='utf-8') as json_file_handler:
+				json_file_handler.write(json.dumps(colorPairJson, indent=4))
+			print(f', {colorPair}', end='')
+		print(f']')
 
 
 main()
