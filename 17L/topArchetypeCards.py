@@ -9,7 +9,7 @@
 import json
 from typing import Dict, List
 from constants import colorPairs  # WU, UG, WR, etc.
-from constants import minimumSampleSize
+from constants import minimumSampleSize, caliberRequestUrls
 
 from cardDisplay import printCardComparison
 
@@ -47,7 +47,10 @@ def sortingKey(item, colorPair: str, stat: str):
 
 # displays top cards of each colorPair by rarity: 'C', 'U', 'R', 'M'
 def displayTopCardsByRarity(rarityList: List[str]):
-	currentJsonPath: str = f'data/master.json'
+	caliber: str = list(caliberRequestUrls.keys())[1]  # top
+
+	print(f'{caliber} →')
+	currentJsonPath: str = f'data/{caliber}Master.json'
 	with open(currentJsonPath, 'r', encoding='utf-8') as jsonFileHandler:
 		master: Dict = json.load(jsonFileHandler)
 
@@ -71,15 +74,16 @@ def displayTopCardsByRarity(rarityList: List[str]):
 		cardFetchList: List[str] = []
 		for key, value in sortedData.items():
 			if value.get("Rarity") in rarityList:
-				nGih: int = value['filteredStats'][colorPair]['# GIH']
-				if nGih > minimumSampleSize:
-					cardFetchList.append(key)
-				count += 1
+				if colorPair in value['filteredStats']:
+					nGih: int = value['filteredStats'][colorPair]['# GIH']
+					if nGih > minimumSampleSize:
+						cardFetchList.append(key)
+					count += 1
 
-				if count >= maxCount:
-					break
+					if count >= maxCount:
+						break
 
-		printCardComparison(cardFetchList, colorPair)
+		printCardComparison(cardFetchList, colorPair, caliber)
 
 
 displayTopCardsByRarity(['C', 'U', 'R', 'M'])
