@@ -153,12 +153,6 @@ def printCardComparison(
 	masterJsonPath: str = f'data/{caliber}Master.json' 	# 'data/allMaster.json'
 	statsJsonPath: str = f'data/{caliber}Stats.json' 	# 'data/allStats.json'
 
-	# load card info from scryfall json
-	with open('data/scryfall.json', encoding='utf-8-sig') as f:
-		scryfallJson = json.load(f)
-		'''
-		card data from scryfall, including oracle text and img links
-		'''
 
 	# load aggregated master data
 	with open(masterJsonPath) as file:
@@ -232,8 +226,6 @@ def printCardComparison(
 		},
 		'''
 
-	nameManacostDict: Dict = generateNameManacostDict(scryfallJson)
-
 	# sorts master.json data according to one stat, e.g. 'GD WR', 'OH WR'
 	def statSortKey(item, stat: str):
 		data: Dict = item[1]  # note that item[0] is the 🔑 cardName
@@ -292,6 +284,7 @@ def printCardComparison(
 	# header: display columns and title above the colorPairStrs
 	# generally, spaces come after the column
 	print(
+		f'\n'
 		f'     n '  # GIH: sample size
 		f'alsa '
 
@@ -332,11 +325,6 @@ def printCardComparison(
 				alsa: float = cardData['ALSA']  # average last seen at
 				rarity: str = cardData["Rarity"]
 
-				# grab the mana cost from our collapsed scryfall dictionary:
-				# format is [cardName, mana cost] where latter is formatted
-				# 1UUU instead of {1}{U}{U}{U}
-				manacost: str = nameManacostDict[cardName]
-
 				print(
 					f'{cardStats["# GIH"]:6} '
 					f'{alsa:4.1f} '
@@ -349,19 +337,3 @@ def printCardComparison(
 					f'{rarity} '
 					f'← {cardName}'
 				)
-
-
-# generates a dictionary mapping card names to their mana costs in format '2UUU'
-def generateNameManacostDict(sfJson):
-	# iterate through scryfallData. for each object:
-	#   strip {} from castingCost in format "{4}{G}{W}"
-	#   execute results[name] = strippedCastingCost
-	# return results
-	results: Dict[str, str] = {}
-	for card in sfJson:
-		# strip {}, converting {2}{W}{R} to 2WR
-		manaCost: str = card['mana_cost'].replace("{", "").replace("}", "")
-		name: str = card['name']
-		results[name] = manaCost
-
-	return results

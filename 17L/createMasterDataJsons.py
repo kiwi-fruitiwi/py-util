@@ -23,9 +23,36 @@ from constants import minimumSampleSize, minOffColorSampleSize
 dataSetBasePath: str = 'data/ltr-converted/'
 
 
+# generates a dictionary mapping card names to their mana costs in format '2UUU'
+# this makes things easier because scryfall json is not keyed by name.
+def generateNameManacostDict(sfJson):
+	# iterate through scryfallData. for each object:
+	#   strip {} from castingCost in format "{4}{G}{W}"
+	#   execute results[name] = strippedCastingCost
+	# return results
+	results: Dict[str, str] = {}
+	for card in sfJson:
+		# strip {}, converting {2}{W}{R} to 2WR
+		manaCost: str = card['mana_cost'].replace("{", "").replace("}", "")
+		name: str = card['name']
+		results[name] = manaCost
+
+	return results
+
+
 # requires statistics.json to exist and be updated.
+# needs scryfall.json to exist ← scryfall data for the entire set
 # ⚠️ run createStatisticsJson first!
 def createMasterJson(caliber: str):
+	# load card info from scryfall json
+	with open('data/scryfall.json', encoding='utf-8-sig') as f:
+		scryfallJson = json.load(f)
+		'''
+		card data from scryfall, including oracle text and img links
+		'''
+
+	nameManacostDict: Dict = generateNameManacostDict(scryfallJson)
+
 	# load all.json. this contains default data from 17L. it's the default
 	# page! all.json is created and populated by requestConverter.py to
 	# contain all necessary data for compareDraftPicks.py
@@ -88,6 +115,11 @@ def createMasterJson(caliber: str):
 		del masterCardData['# GD']
 		del masterCardData['IWD']
 
+		# grab the mana cost from our collapsed scryfall dictionary:
+		# format is [cardName, mana cost] where latter is formatted
+		# 1UUU instead of {1}{U}{U}{U}
+		masterCardData['manaCost'] = nameManacostDict[name]
+
 		# iterate through every colorPair, adding data in key,value pairs:
 		# OH, OHWR, #GIH, GIHWR, #GD, GDWR, IWD, z-scores
 		for colorPair in colorPairs:
@@ -121,7 +153,7 @@ def createMasterJson(caliber: str):
 	with open(f'data/{caliber}Master.json', 'w', encoding='utf-8') as jsonSaver:
 		jsonSaver.write(json.dumps(master, indent=4))
 
-	print(f'🍑 master json saved')
+	print(f'🍑 master json saved → {caliber}')
 
 
 def createZscoreDict(cardData: Dict, stats: List[str], dataSetID: str, caliber: str) -> Dict:
