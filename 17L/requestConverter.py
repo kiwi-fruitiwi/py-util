@@ -23,7 +23,7 @@ compareDraftPicks.py
 
 from typing import List, Dict
 from constants import colorPairs  # color pair list: 'WU', 'WR', 'UG', etc.
-from constants import dataSetURLs # top-players and all-players keys
+from constants import caliberRequestUrls # top-players and all-players keys
 import json
 
 
@@ -80,7 +80,8 @@ def main():
     inputJsonPath: str = f'data/ltr-requests/'
     outputJsonPath: str = f'data/ltr-converted/'
 
-    for dataSetName, dataSetURL in dataSetURLs.items():
+    # data set names are 'all-players' and 'top-players'
+    for dataSetName in caliberRequestUrls.keys():
         # convert the all-colors 17L json request first
         allColorsInputPath = f'{inputJsonPath}{dataSetName}/all.json'
         allColorsOutputPath = f'{outputJsonPath}{dataSetName}/all.json'

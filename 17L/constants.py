@@ -16,9 +16,9 @@ baseRequestURL: str = \
 	"?expansion=LTR" \
 	"&format=PremierDraft"
 
-dataSetURLs: Dict = {
-	"all-players": f'{baseRequestURL}',
-	"top-players": f'{baseRequestURL}&user_group=top'
+caliberRequestUrls: Dict = {
+	"all": f'{baseRequestURL}',
+	"top": f'{baseRequestURL}&user_group=top'
 }
 
 

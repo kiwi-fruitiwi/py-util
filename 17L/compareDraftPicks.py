@@ -6,10 +6,12 @@ from typing import List, Dict
 from scryfallCardFetch import printCardText
 from constants import colorPairs
 from cardDisplay import printCardComparison, printArchetypesData
+from constants import caliberRequestUrls  # import just for 🔑 names
 
 
 displayCardFetchList: bool = False
-dataSetUri: str = 'data/master.json'
+caliber: str = caliberRequestUrls[0]  # 'all-players' vs 'top-players'
+dataSetPath: str = 'data/all-players.json'
 
 
 # main input loop to ask for user input → return list of card stats
@@ -27,7 +29,7 @@ def main():
 		'''
 
 	# load aggregated master data
-	with open(dataSetUri) as file:
+	with open(dataSetPath) as file:
 		masterJson: Dict = json.load(file)
 
 	global displayCardFetchList

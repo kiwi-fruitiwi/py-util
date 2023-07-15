@@ -14,19 +14,23 @@ import json
 import statistics
 from typing import Dict, List
 from constants import colorPairs  # WU, UG, WR, etc.
+from constants import caliberRequestUrls # top-players and all-players keys
 
 # stats with low sample size not counted in μ,σ
 from constants import minimumSampleSize, minOffColorSampleSize
 
 
+dataSetBasePath: str = 'data/ltr-converted/'
+
+
 # requires statistics.json to exist and be updated.
 # ⚠️ run createStatisticsJson first!
-def createMasterJson():
+def createMasterJson(caliber: str):
 	# load all.json. this contains default data from 17L. it's the default
 	# page! all.json is created and populated by requestConverter.py to
 	# contain all necessary data for compareDraftPicks.py
-	defaultPath: str = f'data/ltr-converted/all.json'
-	with open(defaultPath, 'r', encoding='utf-8') as jsonFileHandler:
+	dataSetPath: str = f'{dataSetBasePath}{caliber}/all.json'
+	with open(dataSetPath, 'r', encoding='utf-8') as jsonFileHandler:
 		master: Dict = json.load(jsonFileHandler)
 
 	'''
@@ -57,7 +61,7 @@ def createMasterJson():
 
 		# create the filteredStats key with an empty dictionary we add to later
 		masterCardData['filteredStats'] = {}
-		zScores: Dict = createZscoreDict(masterCardData, stats, 'all')
+		zScores: Dict = createZscoreDict(masterCardData, stats, 'all', caliber)
 
 		# add the 'all colors' data to this dictionary
 		allStats: Dict = {
@@ -87,13 +91,13 @@ def createMasterJson():
 		# iterate through every colorPair, adding data in key,value pairs:
 		# OH, OHWR, #GIH, GIHWR, #GD, GDWR, IWD, z-scores
 		for colorPair in colorPairs:
-			coloredJsonPath: str = f'data/ltr-converted/{colorPair}.json'
+			coloredJsonPath: str = f'{dataSetBasePath}{caliber}/{colorPair}.json'
 			with open(coloredJsonPath, 'r', encoding='utf-8') as jsonFileHandler:
 				coloredDataJson: Dict = json.load(jsonFileHandler)
 
 			dataSetID: str = colorPair  # e.g. 'WU', 'UG'
 			dataSetCardData: Dict = coloredDataJson[name]
-			zScores: Dict = createZscoreDict(dataSetCardData, stats, dataSetID)
+			zScores: Dict = createZscoreDict(dataSetCardData, stats, dataSetID, caliber)
 
 			# don't add colorStats data at all if '# GIH' doesn't meet sample
 			# size requirement
@@ -114,13 +118,13 @@ def createMasterJson():
 				masterCardData['filteredStats'][dataSetID] = colorPairStats
 
 	# save the final master.json file
-	with open(f'data/master.json', 'w', encoding='utf-8') as jsonSaver:
+	with open(f'data/{caliber}Master.json', 'w', encoding='utf-8') as jsonSaver:
 		jsonSaver.write(json.dumps(master, indent=4))
 
 	print(f'🍑 master json saved')
 
 
-def createZscoreDict(cardData: Dict, stats: List[str], dataSetID: str) -> Dict:
+def createZscoreDict(cardData: Dict, stats: List[str], dataSetID: str, caliber: str) -> Dict:
 	"""
 	create a dictionary with z-score values of the given input list
 	:param cardData: one entry in master.json, keyed by cardName
@@ -129,7 +133,7 @@ def createZscoreDict(cardData: Dict, stats: List[str], dataSetID: str) -> Dict:
 	:return:
 	"""
 	# open the statistics data file to query for μ, σ
-	jsonPath: str = f'data/statistics.json'
+	jsonPath: str = f'data/{caliber}Stats.json'
 	with open(jsonPath, 'r', encoding='utf-8') as statsFileHandler:
 		cardStatistics: Dict = json.load(statsFileHandler)
 
@@ -182,7 +186,7 @@ def getZscore(statValue: float, dataSetStr: str, statKey: str, statisticsJson: D
 	return (statValue - mean) / stdDev
 
 
-def createStatsJson():
+def createStatsJson(caliber: str):
 	"""
 	open 📁data/ltr-CDP/all.json to calculate (μ,σ) for the default data set
 		note we want to ignore data with sample size n<200
@@ -205,23 +209,22 @@ def createStatsJson():
 	"""
 	# dictionary we will save to json
 	result: Dict = {}
-	dataRoot: str = 'data/ltr-converted/'
 
 	# find μ, σ stats for default data set: all.json
-	calculateAndAddStatsKeyValuePairs('all', f'{dataRoot}all.json', result)
+	calculateAndAddStatsKeyValuePairs('all', f'{dataSetBasePath}{caliber}/all.json', result)
 
 	# second, iterate through all other dataSets after encapsulating step 1
 	for colorPair in colorPairs:
-		dataSetPath: str = f'{dataRoot}{colorPair}.json'
+		dataSetPath: str = f'{dataSetBasePath}{caliber}/{colorPair}.json'
 		calculateAndAddStatsKeyValuePairs(colorPair, dataSetPath, result)
 
 	# [print(f'{key}: {value}') for (key, value) in result.items()]
 
 	# lastly, save the json file for access later
-	with open(f'data/statistics.json', 'w', encoding='utf-8') as jsonSaver:
+	with open(f'data/{caliber}Stats.json', 'w', encoding='utf-8') as jsonSaver:
 		jsonSaver.write(json.dumps(result, indent=4))
 
-	print(f'🥭 statistics json saved')
+	print(f'🥭 statistics json saved → {caliber}')
 
 
 # calculate (μ,σ) pairs for GIHWR, OHWR, and IWD from the json file specified at
@@ -288,5 +291,11 @@ def calculateAndAddStatsKeyValuePairs(
 	statsDictionary[dataSetID] = colorPairStats
 
 
-createStatsJson()
-createMasterJson()
+def main():
+	# all-players vs top-players
+	for caliberName in caliberRequestUrls.keys():
+		createStatsJson(caliberName)
+		createMasterJson(caliberName)
+
+
+main()

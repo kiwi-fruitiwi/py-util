@@ -145,8 +145,10 @@ def printArchetypesData(cardName: str, cardStats: Dict):
 
 
 def printCardComparison(
-		cardNameList: List[str],  # fuzzy input matching results
-		dataSetID: str,  # 'all', 'WU', 'UG', 'RG'
+		cardNameList: List[str],  	# fuzzy input matching results
+		dataSetID: str,  			# 'all', 'WU', 'UG', 'RG'
+		masterJsonPath: str,		# 'data/all-players.json'
+		statsJsonPath: str			# 'data/all-players-stats.json'
 ):
 
 
@@ -158,8 +160,7 @@ def printCardComparison(
 		'''
 
 	# load aggregated master data
-	dataSetUri: str = 'data/master.json'
-	with open(dataSetUri) as file:
+	with open(masterJsonPath) as file:
 		masterData: Dict = json.load(file)
 		'''
 		master.json, aggregated data set from 17L with 'all' and colorPair data
@@ -205,8 +206,7 @@ def printCardComparison(
 		'''
 
 	# open the statistics data file to query for μ, σ
-	jsonPath: str = f'data/statistics.json'
-	with open(jsonPath, 'r', encoding='utf-8') as statsFileHandler:
+	with open(statsJsonPath, 'r', encoding='utf-8') as statsFileHandler:
 		statsData: Dict = json.load(statsFileHandler)
 		'''
 		statistics data
