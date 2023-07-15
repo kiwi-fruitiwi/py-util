@@ -15,20 +15,7 @@
 
 import requests
 import json
-from constants import colorPairs
-from typing import Dict
-
-
-# it's possible to leave out start and end date. defaults to entire format!
-baseRequestURL: str = \
-	"https://www.17lands.com/card_ratings/data" \
-	"?expansion=LTR" \
-	"&format=PremierDraft"
-
-dataSetURLs: Dict = {
-	"all-players": f'{baseRequestURL}',
-	"top-players": f'{baseRequestURL}&user_group=top'
-}
+from constants import colorPairs, dataSetURLs, baseRequestURL
 
 
 # get requested json data from 17lands.com for all data sets

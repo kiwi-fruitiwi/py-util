@@ -23,19 +23,8 @@ compareDraftPicks.py
 
 from typing import List, Dict
 from constants import colorPairs  # color pair list: 'WU', 'WR', 'UG', etc.
+from constants import dataSetURLs # top-players and all-players keys
 import json
-
-
-inputJsonPath: str = f'data/ltr-requests/'
-outputJsonPath: str = f'data/ltr-converted/'
-
-
-def displayDict(dictionary):
-    # display contents of card dictionary neatly
-    for key, value in dictionary.items():
-        print(f'\n{key} :')
-        for innerKey, innerValue in value.items():
-            print(f"    {innerKey}: {innerValue}")
 
 
 # converts 17L request json into a custom format that resembles 17L csv export
@@ -88,18 +77,21 @@ def convertJson(jsonInputPath: str, jsonOutputPath: str):
     
 
 def main():
-    # convert the all-colors 17L json request first
-    allColorsInputPath = f'{inputJsonPath}all.json'
-    allColorsOutputPath = f'{outputJsonPath}all.json'
-    convertJson(allColorsInputPath, allColorsOutputPath)
+    inputJsonPath: str = f'data/ltr-requests/'
+    outputJsonPath: str = f'data/ltr-converted/'
 
-    # iterate through colorPairs list to convert all the other 10 files
-    # WU.json, UB.json, UG.json, WR.json, etc.
-    for colorPair in colorPairs:
-        pairInput: str = f'{inputJsonPath}{colorPair}.json'
-        pairOutput: str = f'{outputJsonPath}{colorPair}.json'
-        convertJson(pairInput, pairOutput)
-    pass
+    for dataSetName, dataSetURL in dataSetURLs.items():
+        # convert the all-colors 17L json request first
+        allColorsInputPath = f'{inputJsonPath}{dataSetName}/all.json'
+        allColorsOutputPath = f'{outputJsonPath}{dataSetName}/all.json'
+        convertJson(allColorsInputPath, allColorsOutputPath)
+
+        # iterate through colorPairs list to convert all the other 10 files
+        # WU.json, UB.json, UG.json, WR.json, etc.
+        for colorPair in colorPairs:
+            pairInput: str = f'{inputJsonPath}{dataSetName}/{colorPair}.json'
+            pairOutput: str = f'{outputJsonPath}{dataSetName}/{colorPair}.json'
+            convertJson(pairInput, pairOutput)
 
 
 main()
