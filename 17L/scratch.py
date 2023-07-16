@@ -47,4 +47,43 @@ def computeAvgAlsa():
 	# eventually sort this and see!
 
 
-computeAvgAlsa()
+def ansiExperiments():
+	# it appears that ANSI sequences always start with \033
+	# colors always are in this order:
+	# 	black red green yellow blue magenta cyan white
+	# bright foreground colors: [30m → [37m
+	# standard foreground colors: [90m → [97m
+	# dim foreground colors: [2;30m → [2;37m
+	# background colors: [40m → [47m
+
+	RESET = '\033[0m'  # Reset to default text color
+	PURPLE = '\033[95m'
+	CYAN = '\033[96m'
+	DARKCYAN = '\033[36m'
+	BLUE = '\033[94m'
+	BLUE_2 = '\033[34m'
+	GREEN = '\033[92m'
+	YELLOW = '\033[93m'
+	RED = '\033[91m'
+	BOLD = '\033[1m'
+	UNDERLINE = '\033[4m'
+	ITALIC = '\033[3m'
+
+	BRIGHT_WHITE = '\033[37m'
+	STANDARD_WHITE = '\033[97m'
+	DIM_WHITE = '\033[2;37m'
+
+	print(
+		f'This is {BOLD}bolded{RESET} {UNDERLINE}underlined{RESET} '
+		f'{ITALIC}italicized{RESET} {BLUE}blue{RESET} {BLUE_2}blue_2{RESET} text'
+	)
+
+	print(
+		f'{BRIGHT_WHITE}bright{RESET} '
+		f'{STANDARD_WHITE}standard{RESET} '
+		f'{DIM_WHITE}dim{RESET} '
+	)
+
+
+ansiExperiments()
+# computeAvgAlsa()

@@ -126,4 +126,5 @@ def main():
 			printCardText(cardFetchList[0], scryfallJson)
 
 
+
 main()
