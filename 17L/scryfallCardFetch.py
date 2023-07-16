@@ -4,11 +4,12 @@
 import json
 from fuzzywuzzy import process
 from typing import List, Dict
+from constants import ANSI
 
 
 def printCardText(cardName: str, scryfallJson):
 	# iterate through scryfall data to find the matching unique card name
-	# then print out the text!
+	# then print out the text! note scryfall data is not keyed by card name!
 	for element in scryfallJson:
 		# for now, ignore multiple face cards like invasions and MDFCs
 		# if element['card_faces']:
@@ -28,7 +29,7 @@ def printCardText(cardName: str, scryfallJson):
 			oracleText: str = element['oracle_text']
 
 			print(f'')
-			print(f'{name} {manaCost}')
+			print(f'{ANSI.WHITE.value}{name}{ANSI.RESET.value} {manaCost}')
 			print(f'{typeLine}')
 			print(f'{oracleText}')
 
@@ -40,7 +41,7 @@ def printCardText(cardName: str, scryfallJson):
 
 			if 'flavor_text' in element:
 				flavorText: str = element['flavor_text']
-				print(f'{flavorText}')
+				print(f'{ANSI.DIM_WHITE.value}{flavorText}{ANSI.RESET.value}')
 
 
 def getCardNames(scryfallJson):
