@@ -66,6 +66,9 @@ def main():
 			# load top players data
 			caliber = list(caliberRequestMap.keys())[1]  # top players
 			dataSetPath: str = f'data/{caliber}Master.json'
+
+			# remove special command flag but preserve first token
+			firstElement = firstElement[1:].strip()
 			with open(dataSetPath) as file:
 				masterJson: Dict = json.load(file)
 

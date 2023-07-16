@@ -2,6 +2,7 @@ import json
 
 from typing import List, Dict
 from constants import colorPairs
+from constants import ANSI
 
 # defines lower bound zScore values for letter grades like A-, D+, B, etc.
 # each letter grade is one standard deviation, with C centered around the mean μ
@@ -302,7 +303,9 @@ def printCardComparison(
 		f'   IWD'  # IWD: 4 char + 1 space, e.g. -15.2pp
 		f' R'
 		f'   '  # ' ← ' in rows	
-		f'{dataSetID} μ={ohwrMean * 100:4.1f}, σ={ohwrStdDev * 100:3.1f}'
+		f'{ANSI.WHITE.value}{dataSetID}{ANSI.RESET.value} '
+		f'{ANSI.DIM_WHITE.value}μ={ANSI.RESET.value}{ohwrMean * 100:4.1f}, '
+		f'{ANSI.DIM_WHITE.value}σ={ANSI.RESET.value}{ohwrStdDev * 100:3.1f}'
 	)
 
 	# display stats of selected cards from fuzzy input matching
@@ -329,11 +332,11 @@ def printCardComparison(
 					f'{cardStats["# GIH"]:6} '
 					f'{alsa:4.1f} '
 					f'| '
-					f'{ohwrGrade:2} {zOhwr:>5.2f} {ohwr * 100:4.1f} '
+					f'{ANSI.WHITE.value}{ohwrGrade:2}{ANSI.RESET.value} {zOhwr:>5.2f} {ohwr * 100:4.1f} '
 					f'| '
-					f'{gdwrGrade:2} {zGdwr:>5.2f} {gdwr * 100:4.1f} '
+					f'{ANSI.WHITE.value}{gdwrGrade:2}{ANSI.RESET.value} {zGdwr:>5.2f} {gdwr * 100:4.1f} '
 					f'| '
-					f'{iwd * 100:4.1f}pp '
+					f'{iwd * 100:4.1f}{ANSI.DIM_WHITE.value}pp{ANSI.RESET.value} '
 					f'{rarity} '
-					f'← {cardName}'
+					f'← {ANSI.BLUE.value}{cardName}{ANSI.RESET.value}'
 				)
