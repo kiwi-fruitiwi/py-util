@@ -15,12 +15,12 @@
 
 import requests
 import json
-from constants import colorPairs, caliberRequestUrls, baseRequestURL
+from constants import colorPairs, caliberRequestMap
 
 
 # get requested json data from 17lands.com for all data sets
 def main():
-	for dataSetName, dataSetURL in caliberRequestUrls.items():
+	for dataSetName, dataSetURL in caliberRequestMap.items():
 		print(f'🫐 processing {dataSetName} → {dataSetURL}')
 
 		# iterate through colorPairs, making a request for each pair

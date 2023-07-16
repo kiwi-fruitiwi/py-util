@@ -14,7 +14,7 @@ import json
 import statistics
 from typing import Dict, List
 from constants import colorPairs  # WU, UG, WR, etc.
-from constants import caliberRequestUrls # top-players and all-players keys
+from constants import caliberRequestMap # top-players and all-players keys
 
 # stats with low sample size not counted in μ,σ
 from constants import minimumSampleSize, minOffColorSampleSize
@@ -325,9 +325,9 @@ def calculateAndAddStatsKeyValuePairs(
 
 def main():
 	# all-players vs top-players
-	for caliberName in caliberRequestUrls.keys():
-		createStatsJson(caliberName)
-		createMasterJson(caliberName)
+	for caliber in caliberRequestMap.keys():
+		createStatsJson(caliber)
+		createMasterJson(caliber)
 
 
 main()

@@ -9,7 +9,7 @@
 import json
 from typing import Dict, List
 from constants import colorPairs  # WU, UG, WR, etc.
-from constants import minimumSampleSize, caliberRequestUrls
+from constants import minimumSampleSize, caliberRequestMap
 
 from cardDisplay import printCardComparison
 
@@ -47,7 +47,7 @@ def sortingKey(item, colorPair: str, stat: str):
 
 # displays top cards of each colorPair by rarity: 'C', 'U', 'R', 'M'
 def displayTopCardsByRarity(rarityList: List[str]):
-	caliber: str = list(caliberRequestUrls.keys())[1]  # top
+	caliber: str = list(caliberRequestMap.keys())[1]  # top
 
 	print(f'{caliber} →')
 	currentJsonPath: str = f'data/{caliber}Master.json'

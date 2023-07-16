@@ -6,7 +6,7 @@ from typing import List, Dict
 from scryfallCardFetch import printCardText
 from constants import colorPairs
 from cardDisplay import printCardComparison, printArchetypesData
-from constants import caliberRequestUrls  # import just for 🔑 names
+from constants import caliberRequestMap  # import just for 🔑 names
 
 
 displayCardFetchList: bool = False
@@ -43,7 +43,7 @@ def main():
 
 		# special command: load top data set if first char is '~'
 		firstElement: str = strippedCardNames[0]
-		caliber = list(caliberRequestUrls.keys())[0]  # all players
+		caliber = list(caliberRequestMap.keys())[0]  # all players
 		dataSetPath: str = f'data/{caliber}Master.json'
 		# load all players data
 		with open(dataSetPath) as file:
@@ -64,7 +64,7 @@ def main():
 
 		if firstElement[0] == '~':
 			# load top players data
-			caliber = list(caliberRequestUrls.keys())[1]  # top players
+			caliber = list(caliberRequestMap.keys())[1]  # top players
 			dataSetPath: str = f'data/{caliber}Master.json'
 			with open(dataSetPath) as file:
 				masterJson: Dict = json.load(file)
