@@ -39,7 +39,7 @@ def getGrade(zScore: float):
 	return letterGrade
 
 
-def printArchetypesData(cardName: str, cardStats: Dict):
+def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
 	"""
 
 	:param cardName:
@@ -47,21 +47,28 @@ def printArchetypesData(cardName: str, cardStats: Dict):
 	:return:
 	"""
 
+	columnMark: str = f'{ANSI.BLACK.value}|{ANSI.RESET.value}'
+
 	# header: display columns and title above the colorPairStrs
-	print(f'💦 {cardName} → ALSA {cardStats["ALSA"]:.1f}')
+	print(
+		f'{ANSI.DIM_WHITE.value}[DATASET] {ANSI.RESET.value}'
+		f'{caliber} '
+		f'{ANSI.DIM_WHITE.value}players{ANSI.RESET.value}'
+	)
+	print(f'{ANSI.BLUE.value}{cardName}{ANSI.RESET.value} → ALSA {cardStats["ALSA"]:.1f}')
 	print(
 		f'     n '  # # GIH: sample size
-		f'| '  # outer column
+		f'{columnMark} '  # outer column
 		f'   '  # colorPair: 2 char + 1 space
-		f'|  '  # ' → '
+		f'{columnMark}  '  # ' → '
 		f'   '  # ohwrGrade: 2 char + 1 space
 		f'    '  # OH z-score: 5 char + 1 space, e.g. '-1.50'
 		f'   OH'  # ohwr: 4 char + 1 space, e.g. 54.8
-		f' |  '  # column break
+		f' {columnMark}  '  # column break
 		f'   '  # gdwrGrade: 2 char + 1 space
 		f'    '  # GD z-score
 		f'   GD'  # gdwr: 4 char + 1 space
-		f' |  '  # column break
+		f' {columnMark}  '  # column break
 		f'   '  # iwdGrade: 2 char + 1 space
 		f'    '  # IWD z-score
 		f'    IWD'  # IWD: 4 char + 1 space, e.g. -15.2pp
@@ -91,14 +98,23 @@ def printArchetypesData(cardName: str, cardStats: Dict):
 			iwdGrade: str = getGrade(zIwd)
 
 			print(
-				f'{colorStats["# GIH"]:6} '
-				f'| '
-				f'{colorPair} | '
-				f'{ohwrGrade:2} {zOhwr:>5.2f} {ohwr * 100:4.1f}'
-				f' | '
-				f'{gdwrGrade:2} {zGdwr:>5.2f} {gdwr * 100:4.1f}'
-				f' | '
-				f'{iwdGrade:2} {zIwd:>5.2f} {iwd * 100:4.1f}pp'
+				f'{ANSI.DIM_WHITE.value}{colorStats["# GIH"]:6}{ANSI.RESET.value} '
+				f'{columnMark} '
+				
+				f'{colorPair} {columnMark} '
+				f'{ohwrGrade:2} '
+				f'{ANSI.DIM_WHITE.value}{zOhwr:>5.2f}{ANSI.RESET.value} '
+				f'{ohwr * 100:4.1f}'
+				f' {columnMark} '
+				
+				f'{gdwrGrade:2} '
+				f'{ANSI.DIM_WHITE.value}{zGdwr:>5.2f}{ANSI.RESET.value} '
+				f'{gdwr * 100:4.1f}'
+				f' {columnMark} '
+				
+				f'{iwdGrade:2} '
+				f'{ANSI.DIM_WHITE.value}{zIwd:>5.2f}{ANSI.RESET.value} '
+				f'{iwd * 100:4.1f}{ANSI.DIM_WHITE.value}pp{ANSI.RESET.value}'
 			)
 	pass
 
@@ -250,56 +266,33 @@ def printCardComparison(
 			reverse=True)
 	)
 
-	# sample master.json item:
-	'''
-	"Glamdring": {
-        "Name": "Glamdring",
-        "ALSA": 2.1737089201877935,
-        "ATA": 2.4025974025974026,
-        "URL": "https://cards.scryfall.io/border_crop/...
-        "Color": "",
-        "Rarity": "M",
-        "filteredStats": {
-            "all": {
-                "GIH WR": 0.6238532110091743,
-                "# GIH": 327,
-                "OH WR": 0.6060606060606061,
-                "# OH": 99,
-                "GD WR": 0.631578947368421,
-                "# GD": 228,
-                "IWD": 0.07212907307813987,
-                "z-scores": {
-                    "GIH WR": 0.4240168966164874,
-                    "OH WR": 0.17294603764905228,
-                    "GD WR": 0.39138079897644223,
-                    "IWD": 1.0218922920345261
-                }
-            },
-	'''
 	# get μ, σ pair to display in header
-	gdwrMean: float = statsData[dataSetID]['GD WR']['mean']
-	gdwrStdDev: float = statsData[dataSetID]['GD WR']['stdDev']
 	ohwrMean: float = statsData[dataSetID]['OH WR']['mean']
 	ohwrStdDev: float = statsData[dataSetID]['OH WR']['stdDev']
+
+	columnMark: str = f'{ANSI.BLACK.value}|{ANSI.RESET.value}'
 
 	# header: display columns and title above the colorPairStrs
 	# generally, spaces come after the column
 	print(
+		f'{ANSI.DIM_WHITE.value}[DATASET]: {ANSI.RESET.value}'
+		f'{caliber} '
+		f'{ANSI.DIM_WHITE.value}players{ANSI.RESET.value}'
 		f'\n'
 		f'     n '  # GIH: sample size
 		f'alsa '
 
-		f'| '
+		f'{columnMark} '
 		f'   '  # ohwrGrade: 2 char + 1 space
 		f'      '  # OH z-score: 5 char + 1 space, e.g. '-1.50'
 		f'  OH '  # ohwr: 4 char + 1 space, e.g. 54.8
 
-		f'| '
+		f'{columnMark} '
 		f'   '  # gdwrGrade: 2 char + 1 space
 		f'      '  # GD z-score
 		f'  GD '  # gdwr: 4 char + 1 space
 
-		f'| '
+		f'{columnMark} '
 		f'   IWD'  # IWD: 4 char + 1 space, e.g. -15.2pp
 		f' R'
 		f'   '  # ' ← ' in rows	
@@ -329,13 +322,20 @@ def printCardComparison(
 				rarity: str = cardData["Rarity"]
 
 				print(
-					f'{cardStats["# GIH"]:6} '
+					f'{ANSI.DIM_WHITE.value}{cardStats["# GIH"]:6}{ANSI.RESET.value} '
 					f'{alsa:4.1f} '
-					f'| '
-					f'{ANSI.WHITE.value}{ohwrGrade:2}{ANSI.RESET.value} {zOhwr:>5.2f} {ohwr * 100:4.1f} '
-					f'| '
-					f'{ANSI.WHITE.value}{gdwrGrade:2}{ANSI.RESET.value} {zGdwr:>5.2f} {gdwr * 100:4.1f} '
-					f'| '
+					f'{columnMark} '
+					
+					f'{ohwrGrade:2} '
+					f'{ANSI.DIM_WHITE.value}{zOhwr:>5.2f}{ANSI.RESET.value} '
+					f'{ohwr * 100:4.1f} '
+					f'{columnMark} '
+					
+					f'{gdwrGrade:2} '
+					f'{ANSI.DIM_WHITE.value}{zGdwr:>5.2f}{ANSI.RESET.value} '
+					f'{gdwr * 100:4.1f} '
+					f'{columnMark} '
+					
 					f'{iwd * 100:4.1f}{ANSI.DIM_WHITE.value}pp{ANSI.RESET.value} '
 					f'{rarity} '
 					f'← {ANSI.BLUE.value}{cardName}{ANSI.RESET.value}'

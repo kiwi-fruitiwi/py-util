@@ -7,6 +7,7 @@ from scryfallCardFetch import printCardText
 from constants import colorPairs
 from cardDisplay import printCardComparison, printArchetypesData
 from constants import caliberRequestMap  # import just for 🔑 names
+from constants import ANSI
 
 
 displayCardFetchList: bool = False
@@ -108,14 +109,12 @@ def main():
 		# if there's only one card, we will show an archetype analysis!
 		if len(cardFetchList) == 1:
 			cardName: str = cardFetchList[0]
-			print(f'{caliber} → ', end='')
-			printArchetypesData(cardName, masterJson[cardName])
+			printArchetypesData(cardName, masterJson[cardName], caliber)
 		else:
 			# print a list of names if we're matching more than one card
 			if displayCardFetchList:
 				[print(name) for name in cardFetchList]
 
-			print(f'{caliber} → ', end='')
 			printCardComparison(
 				cardFetchList,
 				dataSetID,
