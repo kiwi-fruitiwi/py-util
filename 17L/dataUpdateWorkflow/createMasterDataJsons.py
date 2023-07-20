@@ -45,7 +45,7 @@ def generateNameManacostDict(sfJson):
 # ⚠️ run createStatisticsJson first!
 def createMasterJson(caliber: str):
 	# load card info from scryfall json
-	with open('data/scryfall.json', encoding='utf-8-sig') as f:
+	with open('../data/scryfall.json', encoding='utf-8-sig') as f:
 		scryfallJson = json.load(f)
 		'''
 		card data from scryfall, including oracle text and img links
