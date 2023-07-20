@@ -44,6 +44,7 @@ def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
 
 	:param cardName:
 	:param cardStats: json containing data for a single card
+	:param caliber: 'top', 'all' for allPlayers vs topPlayers dataSet
 	:return:
 	"""
 

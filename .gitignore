@@ -128,4 +128,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-/17L/data/
+/17L/data/ltr-converted/
+/17L/data/ltr-requests/
