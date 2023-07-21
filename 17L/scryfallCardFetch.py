@@ -3,7 +3,7 @@
 
 import json
 from fuzzywuzzy import process
-from typing import List, Dict
+from typing import List
 from constants import ANSI
 
 

@@ -1,8 +1,7 @@
-# fetch JSON data from 17L users and color filters:
+# 🪶 fetch JSON data from 17L users and color filters:
 # 	output 11 json files: the default 17L data, plus all 10 color pairs
 #
 # this takes some time to run!
-#
 #
 # example request uses this URL:
 # 	https://www.17lands.com/card_ratings/data?
@@ -13,9 +12,9 @@
 # 		&colors=WU
 # 		&user_group=top
 
-import requests
 import json
-from constants import colorPairs, caliberRequestMap
+import requests
+from constants import caliberRequestMap, colorPairs
 
 
 # get requested json data from 17lands.com for all data sets

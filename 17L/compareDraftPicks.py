@@ -1,13 +1,14 @@
-import Levenshtein  # makes finding the L-distance between strings much faster
 import json
 
 from fuzzywuzzy import process
 from typing import List, Dict
 from scryfallCardFetch import printCardText
+
+# import just for 🔑 names
+from constants import caliberRequestMap
 from constants import colorPairs
+
 from cardDisplay import printCardComparison, printArchetypesData
-from constants import caliberRequestMap  # import just for 🔑 names
-from constants import ANSI
 
 
 displayCardFetchList: bool = False
@@ -37,7 +38,6 @@ def main():
 		printFlag = False
 		userInput: str = input('\nEnter cards: ')
 
-		# TODO consider the opposite function: no input re-queries with 'all'
 		# special command: only '~' performs a re-query of the last query but
 		# for dataSetID = 'top'
 
@@ -49,6 +49,16 @@ def main():
 			# check for double '~'
 			if userInput[0] != '~':
 				userInput = f'~{userInput}'
+
+		# TODO consider the opposite function: no input re-queries with 'all'
+		# also avoids null input error
+		if userInput == '':
+			userInput = previousUserInput
+
+			# set the revised userInput to not include the top players flag if
+			# it does contain it
+			if userInput[0] == '~':
+				userInput = userInput[1:]
 
 		# split the input string into a list using ',' as delimiter
 		inputCardNames: List[str] = userInput.split(',')

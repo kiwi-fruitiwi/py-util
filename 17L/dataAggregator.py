@@ -1,24 +1,20 @@
-# start with default.json, created via requestConverter.py from the default 17L
-# request. this is keyed by 🔑:cardName
+# 🐊 creates {caliber}Master and {caliber}Stats.json files
+# Master.json files are aggregated from converted 17L requests to include all
+# color pairs.
 #
-# add the following information from all n colorPairs:
-# 	'# OH'
-# 	'OH WR'
-# 	'# GIH'
-# 	'GIH WR'
-# 	'IWD'
-# -suffixed with the colorPair string, e.g. 'WU', 'UG', 'WR'
-# then this will be 'master.json' under 📁 data/
+# Stats.json files contain μ,σ for major stats like GIH WR, GD WR, OH WR.
+#
+# TODO consider combining these into a single file
+
 
 import json
 import statistics
 from typing import Dict, List
 from constants import colorPairs  # WU, UG, WR, etc.
-from constants import caliberRequestMap # top-players and all-players keys
+from constants import caliberRequestMap  # top-players and all-players keys
 
 # stats with low sample size not counted in μ,σ
 from constants import minimumSampleSize, minOffColorSampleSize
-
 
 dataSetBasePath: str = 'data/ltr-converted/'
 
@@ -45,7 +41,7 @@ def generateNameManacostDict(sfJson):
 # ⚠️ run createStatisticsJson first!
 def createMasterJson(caliber: str):
 	# load card info from scryfall json
-	with open('../data/scryfall.json', encoding='utf-8-sig') as f:
+	with open('data/scryfall.json', encoding='utf-8-sig') as f:
 		scryfallJson = json.load(f)
 		'''
 		card data from scryfall, including oracle text and img links
@@ -54,7 +50,7 @@ def createMasterJson(caliber: str):
 	nameManacostDict: Dict = generateNameManacostDict(scryfallJson)
 
 	# load all.json. this contains default data from 17L. it's the default
-	# page! all.json is created and populated by requestConverter.py to
+	# page! all.json is created and populated by dataConverter.py to
 	# contain all necessary data for compareDraftPicks.py
 	dataSetPath: str = f'{dataSetBasePath}{caliber}/all.json'
 	with open(dataSetPath, 'r', encoding='utf-8') as jsonFileHandler:
@@ -124,12 +120,14 @@ def createMasterJson(caliber: str):
 		# OH, OHWR, #GIH, GIHWR, #GD, GDWR, IWD, z-scores
 		for colorPair in colorPairs:
 			coloredJsonPath: str = f'{dataSetBasePath}{caliber}/{colorPair}.json'
-			with open(coloredJsonPath, 'r', encoding='utf-8') as jsonFileHandler:
+			with open(coloredJsonPath, 'r',
+					  encoding='utf-8') as jsonFileHandler:
 				coloredDataJson: Dict = json.load(jsonFileHandler)
 
 			dataSetID: str = colorPair  # e.g. 'WU', 'UG'
 			dataSetCardData: Dict = coloredDataJson[name]
-			zScores: Dict = createZscoreDict(dataSetCardData, stats, dataSetID, caliber)
+			zScores: Dict = createZscoreDict(dataSetCardData, stats, dataSetID,
+											 caliber)
 
 			# don't add colorStats data at all if '# GIH' doesn't meet sample
 			# size requirement
@@ -156,7 +154,8 @@ def createMasterJson(caliber: str):
 	print(f'🍑 master json saved → {caliber}')
 
 
-def createZscoreDict(cardData: Dict, stats: List[str], dataSetID: str, caliber: str) -> Dict:
+def createZscoreDict(cardData: Dict, stats: List[str], dataSetID: str,
+					 caliber: str) -> Dict:
 	"""
 	create a dictionary with z-score values of the given input list
 	:param cardData: one entry in master.json, keyed by cardName
@@ -201,7 +200,8 @@ def createZscoreDict(cardData: Dict, stats: List[str], dataSetID: str, caliber: 
 	return zScoreResults
 
 
-def getZscore(statValue: float, dataSetStr: str, statKey: str, statisticsJson: Dict) -> float:
+def getZscore(statValue: float, dataSetStr: str, statKey: str,
+			  statisticsJson: Dict) -> float:
 	"""
 	returns the z-score
 	:param statValue: our data value, e.g. GIH WR for a card
@@ -243,7 +243,9 @@ def createStatsJson(caliber: str):
 	result: Dict = {}
 
 	# find μ, σ stats for default data set: all.json
-	calculateAndAddStatsKeyValuePairs('all', f'{dataSetBasePath}{caliber}/all.json', result)
+	calculateAndAddStatsKeyValuePairs('all',
+									  f'{dataSetBasePath}{caliber}/all.json',
+									  result)
 
 	# second, iterate through all other dataSets after encapsulating step 1
 	for colorPair in colorPairs:
@@ -291,7 +293,7 @@ def calculateAndAddStatsKeyValuePairs(
 			pass
 		else:
 			ohwrList.append(card['OH WR'])
-			
+
 		gamesSeenGD: int = card['# GD']
 		if gamesSeenGD < minimumSampleSize:
 			pass

@@ -1,27 +1,9 @@
-"""
-convert json requests from 17lands.com into a simpler json format for
-compareDraftPicks.py
-"""
-
-# read 📁 data/ltr-auto/default.json
-# iterate through entries, printing each name and final count
-# identify stats we need and what format we want:
-#   # Seen
-#   ATA
-#   GP WR
-#   OH WR
-#   GIH WR
-#   IWD
-# ask GPT how to create this custom json
-# print
-# write to file
-# have compareDraftPicks read from this file instead!
-#   📁 converted-ratings-all.json
-#   in the future, make converted-ratings-{colorPairStr}.json
-#   read those when queries are prefaced with 'WU: ' or 'UR: '
+# ⚗️ convert json requests from 17lands.com into a simpler json format keyed by
+# cardName for compareDraftPicks.py. Default requests from 17L are lists of
+# cards, not keyed by anything.
 
 
-from typing import List, Dict
+from typing import Dict
 from constants import colorPairs  # color pair list: 'WU', 'WR', 'UG', etc.
 from constants import caliberRequestMap # top-players and all-players keys
 import json
