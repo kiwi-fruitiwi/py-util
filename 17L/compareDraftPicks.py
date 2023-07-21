@@ -20,6 +20,8 @@ displayCardFetchList: bool = False
 # 	calls **printCardData** using the selected colorPair json file
 # 	(or the default all colors file)
 def main():
+	previousUserInput: str = ''
+
 	# load card info from scryfall json
 	with open('data/scryfall.json', encoding='utf-8-sig') as f:
 		scryfallJson = json.load(f)
@@ -34,6 +36,19 @@ def main():
 	while not done:
 		printFlag = False
 		userInput: str = input('\nEnter cards: ')
+
+		# TODO consider the opposite function: no input re-queries with 'all'
+		# special command: only '~' performs a re-query of the last query but
+		# for dataSetID = 'top'
+
+		# check userInput for just `~`, which means we want to requery with the
+		# last input, but for top players
+		if userInput == '~':
+			userInput = previousUserInput
+
+			# check for double '~'
+			if userInput[0] != '~':
+				userInput = f'~{userInput}'
 
 		# split the input string into a list using ',' as delimiter
 		inputCardNames: List[str] = userInput.split(',')
@@ -92,6 +107,7 @@ def main():
 			dataSetID = tokens[0].upper().strip()
 			strippedCardNames[0] = tokens[1].strip()
 
+
 		# set up list of card names matched to our input
 		cardFetchList: List[str] = []
 
@@ -126,6 +142,9 @@ def main():
 		# recall that printFlag is set when user input is prefixed with '!'
 		if printFlag and len(cardFetchList) == 1:
 			printCardText(cardFetchList[0], scryfallJson)
+
+		# save our old userInput
+		previousUserInput = userInput
 
 
 
