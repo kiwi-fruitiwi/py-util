@@ -154,13 +154,14 @@ def createMasterJson(caliber: str):
 	print(f'🍑 master json saved → {caliber}')
 
 
-def createZscoreDict(cardData: Dict, stats: List[str], dataSetID: str,
-					 caliber: str) -> Dict:
+def createZscoreDict(
+		cardData: Dict, stats: List[str], dataSetID: str, caliber: str) -> Dict:
 	"""
 	create a dictionary with z-score values of the given input list
 	:param cardData: one entry in master.json, keyed by cardName
 	:param stats: a list of strings with stats we want z-scores for, e.g. OHWR
 	:param dataSetID: 'all', 'WU', 'UG', etc. also known as colorPair str
+	:param caliber: 'all' or 'top' players data
 	:return:
 	"""
 	# open the statistics data file to query for μ, σ
@@ -173,15 +174,15 @@ def createZscoreDict(cardData: Dict, stats: List[str], dataSetID: str,
 	"WU": {
 		"GIH WR": {
 			"mean": 0.5488155671189182,
-			"stdDev": 0.040161553535718666
+			"stdev": 0.040161553535718666
 		},
 		"OH WR": {
 			"mean": 0.5202702618891792,
-			"stdDev": 0.04189691189749475
+			"stdev": 0.04189691189749475
 		},
 		"IWD": {
 			"mean": 0.061524972063645815,
-			"stdDev": 0.04081348580719822
+			"stdev": 0.04081348580719822
 		}
 	},
 	'''
@@ -200,8 +201,9 @@ def createZscoreDict(cardData: Dict, stats: List[str], dataSetID: str,
 	return zScoreResults
 
 
-def getZscore(statValue: float, dataSetStr: str, statKey: str,
-			  statisticsJson: Dict) -> float:
+def getZscore(
+		statValue: float, dataSetStr: str, statKey: str,
+		statisticsJson: Dict) -> float:
 	"""
 	returns the z-score
 	:param statValue: our data value, e.g. GIH WR for a card
@@ -211,11 +213,11 @@ def getZscore(statValue: float, dataSetStr: str, statKey: str,
 	:return:
 	"""
 	mean: float = statisticsJson[dataSetStr][statKey]['mean']
-	stdDev: float = statisticsJson[dataSetStr][statKey]['stdDev']
+	stdev: float = statisticsJson[dataSetStr][statKey]['stdev']
 
 	if statValue is None:
 		return None
-	return (statValue - mean) / stdDev
+	return (statValue - mean) / stdev
 
 
 def createStatsJson(caliber: str):
@@ -279,7 +281,7 @@ def calculateAndAddStatsKeyValuePairs(
 
 		gamesSeenGIH: int = card['# GIH']
 		if gamesSeenGIH < minimumSampleSize:
-			# don't let this factor into calculations for mean and stdDev
+			# don't let this factor into calculations for mean and stdev
 			pass
 		else:
 			# note that improvement-when-drawn, or IWD, has its sample size
@@ -306,19 +308,19 @@ def calculateAndAddStatsKeyValuePairs(
 	colorPairStats: Dict = {
 		'GIH WR': {
 			'mean': statistics.mean(gihwrList),
-			'stdDev': statistics.stdev(gihwrList)
+			'stdev': statistics.stdev(gihwrList)
 		},
 		'OH WR': {
 			'mean': statistics.mean(ohwrList),
-			'stdDev': statistics.stdev(ohwrList)
+			'stdev': statistics.stdev(ohwrList)
 		},
 		'GD WR': {
 			'mean': statistics.mean(gdwrList),
-			'stdDev': statistics.stdev(gdwrList)
+			'stdev': statistics.stdev(gdwrList)
 		},
 		'IWD': {
 			'mean': statistics.mean(iwdList),
-			'stdDev': statistics.stdev(iwdList)
+			'stdev': statistics.stdev(iwdList)
 		}
 	}
 

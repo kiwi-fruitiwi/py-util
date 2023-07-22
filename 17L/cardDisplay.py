@@ -227,19 +227,19 @@ def printCardComparison(
 		"WU": {
 			"GIH WR": {
 				"mean": 0.5481773664431846,
-				"stdDev": 0.0396680728733385
+				"stdev": 0.0396680728733385
 			},
 			"OH WR": {
 				"mean": 0.5200756145211735,
-				"stdDev": 0.04154648783076403
+				"stdev": 0.04154648783076403
 			},
 			"GD WR": {
 				"mean": 0.56087617869494,
-				"stdDev": 0.0389425738105168
+				"stdev": 0.0389425738105168
 			},
 			"IWD": {
 				"mean": 0.06100664189146016,
-				"stdDev": 0.04077503221641616
+				"stdev": 0.04077503221641616
 			}
 		},
 		'''
@@ -269,7 +269,7 @@ def printCardComparison(
 
 	# get μ, σ pair to display in header
 	ohwrMean: float = statsData[dataSetID]['OH WR']['mean']
-	ohwrStdDev: float = statsData[dataSetID]['OH WR']['stdDev']
+	ohwrStdev: float = statsData[dataSetID]['OH WR']['stdev']
 
 	columnMark: str = f'{ANSI.BLACK.value}|{ANSI.RESET.value}'
 
@@ -299,7 +299,7 @@ def printCardComparison(
 		f'   '  # ' ← ' in rows	
 		f'{ANSI.WHITE.value}{dataSetID}{ANSI.RESET.value} '
 		f'{ANSI.DIM_WHITE.value}μ={ANSI.RESET.value}{ohwrMean * 100:4.1f}, '
-		f'{ANSI.DIM_WHITE.value}σ={ANSI.RESET.value}{ohwrStdDev * 100:3.1f}'
+		f'{ANSI.DIM_WHITE.value}σ={ANSI.RESET.value}{ohwrStdev * 100:3.1f}'
 	)
 
 	# display stats of selected cards from fuzzy input matching
