@@ -28,6 +28,9 @@ gradeBounds: List[tuple] = [
 
 
 def getGrade(zScore: float):
+	if zScore is None:
+		return ''
+
 	letterGrade: str = ''
 
 	# iterate reversed gradeBounds list: ('A+', 2.17) ('B', 0.83)
@@ -160,6 +163,12 @@ def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
 			}
 		}, 
 	'''
+
+
+# retrieves the value, but returns
+def getValue(dictionary: Dict, key: str):
+	pass
+
 
 
 def printCardComparison(

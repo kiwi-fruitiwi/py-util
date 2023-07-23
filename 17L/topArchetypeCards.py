@@ -9,7 +9,7 @@
 import json
 from typing import Dict, List
 from constants import colorPairs  # WU, UG, WR, etc.
-from constants import minimumSampleSize, caliberRequestMap
+from constants import minGihSampleSize, caliberRequestMap
 
 from cardDisplay import printCardComparison
 
@@ -38,7 +38,7 @@ def sortingKey(item, colorPair: str, stat: str):
 
 	# sample size needs to be high enough. based this solely on # GIH
 	# which is number of game-in-hand, i.e. in opening hand or drawn
-	if colorPairData['# GIH'] < minimumSampleSize:
+	if colorPairData['# GIH'] < minGihSampleSize:
 		# print(f'🦈 {key} not enough data: {value[f"{prefix} # GIH"]}')
 		return float('-inf')
 
@@ -76,7 +76,7 @@ def displayTopCardsByRarity(rarityList: List[str]):
 			if value.get("Rarity") in rarityList:
 				if colorPair in value['filteredStats']:
 					nGih: int = value['filteredStats'][colorPair]['# GIH']
-					if nGih > minimumSampleSize:
+					if nGih > minGihSampleSize:
 						cardFetchList.append(key)
 					count += 1
 

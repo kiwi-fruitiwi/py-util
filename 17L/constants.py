@@ -1,8 +1,19 @@
 from typing import List, Dict
 from enum import Enum
 
-minimumSampleSize: int = 250
-minOffColorSampleSize: int = 100
+
+# sample size threshold for being included in mean and stdev calculations
+# generally if # GIH is 50000, # OH floats around 20000. # GD is 30000
+# this makes sense because GIH is OH+GD
+minGihSampleSize: int = 200
+minOhSampleSize: int = int(minGihSampleSize * 2 / 5)
+minGdSampleSize: int = int(minGihSampleSize * 3 / 5)
+
+# used only in dataAggregator.createMasterJson to check {colorPair} #GIH reaches
+# a threshold before adding it to *Master.json files. otherwise those files will
+# be littered with colorPair data with tiny sample sizes that are irrelevant
+# anyway
+minJsonInclusionSampleSize: int = 50
 
 colorPairs: List[str] = [
 	'WU', 'WB', 'WR', 'WG',
@@ -15,7 +26,8 @@ colorPairs: List[str] = [
 baseRequestURL: str = \
 	"https://www.17lands.com/card_ratings/data" \
 	"?expansion=LTR" \
-	"&format=PremierDraft"
+	"&format=PremierDraft" \
+	"&start_date=2023-07-14" # recent data only
 
 # a map between player caliber set, e.g. 'all', 'top', 'bottom', 'middle', and
 # their 17lands json request URLs

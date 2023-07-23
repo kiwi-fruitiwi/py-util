@@ -14,7 +14,9 @@ from constants import colorPairs  # WU, UG, WR, etc.
 from constants import caliberRequestMap  # top-players and all-players keys
 
 # stats with low sample size not counted in μ,σ
-from constants import minimumSampleSize, minOffColorSampleSize
+from constants import \
+	minGihSampleSize, minOhSampleSize, minGdSampleSize, \
+	minJsonInclusionSampleSize
 
 dataSetBasePath: str = 'data/ltr-converted/'
 
@@ -120,18 +122,18 @@ def createMasterJson(caliber: str):
 		# OH, OHWR, #GIH, GIHWR, #GD, GDWR, IWD, z-scores
 		for colorPair in colorPairs:
 			coloredJsonPath: str = f'{dataSetBasePath}{caliber}/{colorPair}.json'
-			with open(coloredJsonPath, 'r',
-					  encoding='utf-8') as jsonFileHandler:
+			with open(
+				coloredJsonPath, 'r', encoding='utf-8') as jsonFileHandler:
 				coloredDataJson: Dict = json.load(jsonFileHandler)
 
 			dataSetID: str = colorPair  # e.g. 'WU', 'UG'
 			dataSetCardData: Dict = coloredDataJson[name]
-			zScores: Dict = createZscoreDict(dataSetCardData, stats, dataSetID,
-											 caliber)
+			zScores: Dict = createZscoreDict(
+				dataSetCardData, stats, dataSetID, caliber)
 
 			# don't add colorStats data at all if '# GIH' doesn't meet sample
 			# size requirement
-			if dataSetCardData['# GIH'] < minOffColorSampleSize:
+			if dataSetCardData['# GIH'] < minJsonInclusionSampleSize:
 				pass
 			else:
 				colorPairStats: Dict = {
@@ -215,7 +217,9 @@ def getZscore(
 	mean: float = statisticsJson[dataSetStr][statKey]['mean']
 	stdev: float = statisticsJson[dataSetStr][statKey]['stdev']
 
-	if statValue is None:
+	if statValue is None or mean is None:
+		# if the mean is None, the stdev is also None because it indicates the
+		# stats list was empty
 		return None
 	return (statValue - mean) / stdev
 
@@ -245,9 +249,10 @@ def createStatsJson(caliber: str):
 	result: Dict = {}
 
 	# find μ, σ stats for default data set: all.json
-	calculateAndAddStatsKeyValuePairs('all',
-									  f'{dataSetBasePath}{caliber}/all.json',
-									  result)
+	calculateAndAddStatsKeyValuePairs(
+		'all',
+		f'{dataSetBasePath}{caliber}/all.json',
+		result)
 
 	# second, iterate through all other dataSets after encapsulating step 1
 	for colorPair in colorPairs:
@@ -266,65 +271,95 @@ def createStatsJson(caliber: str):
 # calculate (μ,σ) pairs for GIHWR, OHWR, and IWD from the json file specified at
 # dataSetPath. add them to input dictionary
 def calculateAndAddStatsKeyValuePairs(
-		dataSetID: str, dataSetPath: str, statsDictionary: Dict):
+		dataSetID: str, dataSetPath: str, inputStatsDictionary: Dict):
 	with open(dataSetPath, 'r', encoding='utf-8') as f:
 		dataSet: Dict = json.load(f)
 
-	gihwrList: List[float] = []
-	ohwrList: List[float] = []
-	gdwrList: List[float] = []
-	iwdList: List[float] = []
+	# use cardName→float map instead of list of floats for error reporting in
+	# calculateStats
+	gihwrMap: Dict[str, float] = {}
+	ohwrMap: Dict[str, float] = {}
+	gdwrMap: Dict[str, float] = {}
+	iwdMap: Dict[str, float] = {}
 
 	# calculate μ, σ, noting we don't factor in low sample size
 	for cardName in dataSet.keys():
 		card: Dict = dataSet[cardName]
 
 		gamesSeenGIH: int = card['# GIH']
-		if gamesSeenGIH < minimumSampleSize:
+		if gamesSeenGIH < minGihSampleSize:
 			# don't let this factor into calculations for mean and stdev
 			pass
 		else:
 			# note that improvement-when-drawn, or IWD, has its sample size
 			# linked to game-in-hand
-			gihwrList.append(card['GIH WR'])
-			iwdList.append(card['IWD'])
+			gihwrMap[cardName] = card['GIH WR']
+			iwdMap[cardName] = card['IWD']
 
 		gamesSeenOH: int = card['# OH']
-		if gamesSeenOH < minimumSampleSize:
+		if gamesSeenOH < minOhSampleSize:
 			# skip this data point
 			pass
 		else:
-			ohwrList.append(card['OH WR'])
+			ohwrMap[cardName] = card['OH WR']
 
 		gamesSeenGD: int = card['# GD']
-		if gamesSeenGD < minimumSampleSize:
+		if gamesSeenGD < minGdSampleSize:
 			pass
 		else:
-			gdwrList.append(card['GD WR'])
+			gdwrMap[cardName] = card['GD WR']
 
-	# TODO sometimes this will raise statisticsError if one of the 4 lists is
-	# 	empty. the workaround is to increase the minimum sample size constant
-	# 	but this should really check for emptiness.
 	colorPairStats: Dict = {
-		'GIH WR': {
-			'mean': statistics.mean(gihwrList),
-			'stdev': statistics.stdev(gihwrList)
-		},
-		'OH WR': {
-			'mean': statistics.mean(ohwrList),
-			'stdev': statistics.stdev(ohwrList)
-		},
-		'GD WR': {
-			'mean': statistics.mean(gdwrList),
-			'stdev': statistics.stdev(gdwrList)
-		},
-		'IWD': {
-			'mean': statistics.mean(iwdList),
-			'stdev': statistics.stdev(iwdList)
-		}
+		'GIH WR': calculateStats(gihwrMap, "# GIH", dataSetID, dataSetPath),
+		'OH WR': calculateStats(ohwrMap, "# OH", dataSetID, dataSetPath),
+		'GD WR': calculateStats(gdwrMap, "# GD", dataSetID, dataSetPath),
+		'IWD': calculateStats(iwdMap, "# GIH", dataSetID, dataSetPath),
 	}
 
-	statsDictionary[dataSetID] = colorPairStats
+	# mutate the input dictionary to add the stats for this color pair
+	inputStatsDictionary[dataSetID] = colorPairStats
+
+
+def calculateStats(
+		lst: Dict[str, float], stat: str, dataSetID: str, dataSetPath: str):
+	"""
+	calculate mean and standard deviation for a list. raise error if a list is
+	too small for the stdev and mean calculations.
+	:param lst: list of float values to calculate μ and σ for
+	:param stat: "# GIH", "# OH", "# GD" which all determine if data is counted
+		for stats GIH WR, OH WR, GD WR, and IWD
+	:param dataSetID: colorPair
+	:param dataSetPath: full dataSet path, including 'all' or 'top' caliber info
+	:return:
+	"""
+	match stat:
+		case '# GIH':
+			statRequirement: int = minGihSampleSize
+		case '# OH':
+			statRequirement: int = minOhSampleSize
+		case '# GD':
+			statRequirement: int = minGdSampleSize
+		case _:
+			raise ValueError(f'stat str invalid: {stat}')
+
+
+	# statistics.stdev requires at least 2 points, mean requires 1
+	if len(lst) < 3:
+		# add another print statement to calculateAndAddStatsKeyValuePairs to
+		# find the source of this empty list
+		raise ValueError(
+			f'🪶 {lst}\n\n'
+			f'"{stat}" for {dataSetID}: {dataSetPath} '
+			f'only {len(lst)} cards in this archetype meet '
+			f'sample size requirements for {stat}: {statRequirement}. '
+			f'Consider increasing the time frame of the query or lowering this '
+			f'number. Note that lowering too much makes the data useless.'
+		)
+	else:
+		return {
+			'mean': statistics.mean(lst.values()),
+			'stdev': statistics.stdev(lst.values())
+		}
 
 
 def main():
