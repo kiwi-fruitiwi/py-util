@@ -153,7 +153,7 @@ def createMasterJson(caliber: str):
 	with open(f'data/{caliber}Master.json', 'w', encoding='utf-8') as jsonSaver:
 		jsonSaver.write(json.dumps(master, indent=4))
 
-	print(f'🍑 master json saved → {caliber}')
+	print(f'[ JSON SAVED ] master → {caliber}')
 
 
 def createZscoreDict(
@@ -259,13 +259,11 @@ def createStatsJson(caliber: str):
 		dataSetPath: str = f'{dataSetBasePath}{caliber}/{colorPair}.json'
 		calculateAndAddStatsKeyValuePairs(colorPair, dataSetPath, result)
 
-	# [print(f'{key}: {value}') for (key, value) in result.items()]
-
 	# lastly, save the json file for access later
 	with open(f'data/{caliber}Stats.json', 'w', encoding='utf-8') as jsonSaver:
 		jsonSaver.write(json.dumps(result, indent=4))
 
-	print(f'🥭 statistics json saved → {caliber}')
+	print(f'[ JSON SAVED ] μ,σ statistics json → {caliber}')
 
 
 # calculate (μ,σ) pairs for GIHWR, OHWR, and IWD from the json file specified at
