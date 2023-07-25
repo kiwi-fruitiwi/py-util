@@ -38,20 +38,8 @@ def main():
 		printFlag = False
 		userInput: str = input('\nEnter cards: ')
 
-		# special command: only '~' performs a re-query of the last query but
-		# for dataSetID = 'top'
-
-		# check userInput for just `~`, which means we want to requery with the
-		# last input, but for top players
-		if userInput == '~':
-			userInput = previousUserInput
-
-			# check for double '~'
-			if userInput[0] != '~':
-				userInput = f'~{userInput}'
-
-		# TODO consider the opposite function: no input re-queries with 'all'
-		# also avoids null input error
+		# negates previous caliber if empty line is the user input
+		# previous query to 'all' caliber set becomes 'top' and vice versa
 		if userInput == '':
 			userInput = previousUserInput
 
@@ -59,6 +47,8 @@ def main():
 			# it does contain it
 			if userInput[0] == '~':
 				userInput = userInput[1:]
+			else:
+				userInput = f'~{userInput}'
 
 		# split the input string into a list using ',' as delimiter
 		inputCardNames: List[str] = userInput.split(',')
