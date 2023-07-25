@@ -361,6 +361,7 @@ def calculateStats(
 
 
 def main():
+	print(f'')
 	# all-players vs top-players
 	for caliber in caliberRequestMap.keys():
 		createStatsJson(caliber)
