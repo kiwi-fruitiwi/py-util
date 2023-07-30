@@ -1,17 +1,35 @@
 import json
+import os
+import time
+import humanize
 
 from fuzzywuzzy import process
 from typing import List, Dict
 from scryfallCardFetch import printCardText
-
+from datetime import datetime
 # import just for 🔑 names
 from constants import caliberRequestMap
 from constants import colorPairs
-
 from cardDisplay import printCardComparison, printArchetypesData
 
-
 displayCardFetchList: bool = False
+
+
+def getFileModifiedDescription(filePath: str) -> str:
+	try:
+		# get the file's status information using os.stat()
+		fileStat = os.stat(filePath)
+
+		# extract the date of last modification from the file's status info
+		modifiedTimestamp = fileStat.st_mtime
+		datetimeObject = datetime.fromtimestamp(modifiedTimestamp)
+		timeAgo: str = humanize.naturaltime(datetimeObject)
+
+		return timeAgo
+
+	except FileNotFoundError:
+		print(f"[ WARNING ] ⚠️ File not found.")
+		return None
 
 
 # main input loop to ask for user input → return list of card stats
@@ -23,6 +41,15 @@ displayCardFetchList: bool = False
 def main():
 	previousUserInput: str = ''
 
+	# load all players card stats
+	caliber = list(caliberRequestMap.keys())[0]  # all players
+	dataSetPath: str = f'data/{caliber}Master.json'
+	print(f'\n📉 17L data update: {getFileModifiedDescription(dataSetPath)}')
+
+	# load all players data
+	with open(dataSetPath) as file:
+		masterJson: Dict = json.load(file)
+
 	# load card info from scryfall json
 	with open('data/scryfall.json', encoding='utf-8-sig') as f:
 		scryfallJson = json.load(f)
@@ -32,7 +59,6 @@ def main():
 
 	global displayCardFetchList
 	done: bool = False
-	masterJson: Dict = {}  # load this later based on special command
 
 	while not done:
 		printFlag = False
@@ -47,8 +73,10 @@ def main():
 			# it does contain it
 			if userInput[0] == '~':
 				userInput = userInput[1:]
+				# print(f'🍋 top player flag detected in previous query. new query:\n {userInput}')
 			else:
 				userInput = f'~{userInput}'
+				# print(f'🥭 all players detected in previous query. switching to top')
 
 		# split the input string into a list using ',' as delimiter
 		inputCardNames: List[str] = userInput.split(',')
@@ -56,14 +84,8 @@ def main():
 		# trim leading and trailing whitespace
 		strippedCardNames: List[str] = [name.strip() for name in inputCardNames]
 
-
 		# special command: load top data set if first char is '~'
 		firstElement: str = strippedCardNames[0]
-		caliber = list(caliberRequestMap.keys())[0]  # all players
-		dataSetPath: str = f'data/{caliber}Master.json'
-		# load all players data
-		with open(dataSetPath) as file:
-			masterJson: Dict = json.load(file)
 
 		# special command: print card text if first char is '!'
 		# we ignore all but the first token in the input string this way
@@ -87,6 +109,9 @@ def main():
 			firstElement = firstElement[1:].strip()
 			with open(dataSetPath) as file:
 				masterJson: Dict = json.load(file)
+		else:
+			# default to caliber = all players data
+			caliber = list(caliberRequestMap.keys())[0]
 
 		# dataset we'll be loading from json. default is 'all'
 		dataSetID: str = f'all'
@@ -106,7 +131,6 @@ def main():
 			# save what our current data set is so it's visible in the output
 			dataSetID = tokens[0].upper().strip()
 			strippedCardNames[0] = tokens[1].strip()
-
 
 		# set up list of card names matched to our input
 		cardFetchList: List[str] = []
@@ -145,7 +169,6 @@ def main():
 
 		# save our old userInput
 		previousUserInput = userInput
-
 
 
 main()
