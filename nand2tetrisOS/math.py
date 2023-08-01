@@ -47,4 +47,4 @@ target: int = 14
 for index in range(16):
 	print(f'the {index}-th bit of {target} is {getIthBit(target, index)}')
 
-print(f'{multiply(30, 22)}')
+print(f'{multiply(0, 0)}')

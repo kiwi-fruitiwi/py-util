@@ -8,7 +8,7 @@ from typing import List, Dict
 from scryfallCardFetch import printCardText
 from datetime import datetime
 # import just for 🔑 names
-from constants import caliberRequestMap
+from constants import caliberRequestMap, ANSI
 from constants import colorPairs
 from cardDisplay import printCardComparison, printArchetypesData
 
@@ -30,6 +30,16 @@ def getFileModifiedDescription(filePath: str) -> str:
 	except FileNotFoundError:
 		print(f"[ WARNING ] ⚠️ File not found.")
 		return None
+
+
+# returns the colorPair / colorFilter prefix from a userInput string
+# 'WG: Frodo Baggins, Samwise Gamgee, Wose Pathfinder' → 'WG'
+def getColorFilterPrefix(s: str) -> str:
+	if len(s.split(':')) != 2:
+		raise ValueError(f'color filter prefix not found in: {s}')
+
+	colorFilter: str = s.split(':')[0].upper()
+	return colorFilter
 
 
 # main input loop to ask for user input → return list of card stats
@@ -64,6 +74,46 @@ def main():
 		printFlag = False
 		userInput: str = input('\nEnter cards: ')
 
+		# special command: colorPair followed by ':'
+		# We can choose either prefix or suffix ':' → :wu or wu:
+		# If previousUserInput is null, then continue
+		# If the latter we can verify userInput[2] == ':' and len(userInput)==3
+		# Assert userInput[0:2] in colorPairs before adjusting previous query
+		# But need to check if the previous query also had a colorPair
+		# Remove it by checking for userInput[2] == ':' and
+		# 	taking previousUserInput[3:]
+
+		# one of the problems with checking for ':' at index 2 is if colorPairs
+		# include tri-colors. so maybe we can use split for ':', check len
+		# then take the split(':')[0]
+
+		# check if last character of userInput is ':' and if total length <= 5
+		# <6 because the longest possible colorPair is 'WUBRG'
+		if userInput[-1] == ':' and len(userInput) < 6:
+
+			# if this is the first iteration, ignore this command
+			if previousUserInput == '':
+				continue
+
+			colorFilter: str = getColorFilterPrefix(userInput)
+
+			print(
+				f'🏳️‍🌈 color filter: '
+				f'{ANSI.WHITE.value}{colorFilter}{ANSI.RESET.value}')
+			assert colorFilter in colorPairs
+
+			# strip previousUserInput colorPair prefix filter
+			# note that splitting by ':' checks for existence of ':'
+			if len(previousUserInput.split(':')) == 2:
+				previousInputSansFilter: str = previousUserInput.split(':')[1]
+			else:
+				previousInputSansFilter: str = previousUserInput
+
+			# assign color filter prefix to stripped previous user input
+			userInput = f'{colorFilter}:{previousInputSansFilter}'
+			# print(f'[ DEBUG ] assigning userInput in filter block: {userInput}')
+
+		# special command: empty line
 		# negates previous caliber if empty line is the user input
 		# previous query to 'all' caliber set becomes 'top' and vice versa
 		if userInput == '':
@@ -83,9 +133,6 @@ def main():
 
 		# trim leading and trailing whitespace
 		strippedCardNames: List[str] = [name.strip() for name in inputCardNames]
-
-		# special command: load top data set if first char is '~'
-		firstElement: str = strippedCardNames[0]
 
 		# special command: print card text if first char is '!'
 		# we ignore all but the first token in the input string this way
@@ -169,6 +216,7 @@ def main():
 
 		# save our old userInput
 		previousUserInput = userInput
+		# print(f'[ DEBUG ] previous user input saved: {previousUserInput}')
 
 
 main()
