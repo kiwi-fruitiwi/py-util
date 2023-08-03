@@ -61,17 +61,47 @@ def divide(dividend: int, divisor: int) -> int:
 	:param divisor: what we're dividing by
 	:return: result of integer division: dividend/divisor
 	"""
+	# dividend - accumulatedProduct = remainder
+	global accumulatedProduct
 	assert dividend != 0
 
 	if divisor > dividend:
+		# every divide call is guaranteed to reach the base case first
+		# we reset accumulatedProduct here
+		# on the first return after the base case, we're guaranteed our
+		# accumulatedProduct is equal to the divisor, as it's the smallest value
+		# before doubling it makes it exceed the dividend.
+		#
+		# e.g. in 16/3, the divisor increases like this: [3, 6, 12, 24]
+		# 	on 24, we reach the base case and return 0
+		#	on 12, the accumulated product is the divisor itself, 12
+		#	on divisor=6, the accumulated product is still 12
+		#		because divide(16, 12) returns 2q+1=1 ← q=0 from divide(16, 24)
+		# the multiply-based accumulatedProduct expression is
+		#	2 * divisor * quotient
+		# and the remainder is thus dividend - (2 * divisor * quotient)
+		accumulatedProduct = 0
 		return 0
 
-	quotient: int = divide(dividend, 2 * divisor)
-	remainder: int = dividend - 2 * divisor * quotient
+	accumulatedProduct = divisor
 
+	# TODO how can we accumulate 2 * quotient * divisor in our recursive call?
+	quotient: int = divide(dividend, 2 * divisor)
+
+	# TODO prof. schocken says this algorithm only requires addition
+	# 	how can we find divisor * quotient?
+	# quotient = dividend / divisor
+	# divisor * quotient = dividend?
+	# remainder: int = dividend - 2 * divisor * quotient
+	remainder: int = dividend - accumulatedProduct
+
+	# information whether it's +1 or just 2 * quotient is only present here
+	# how do we transfer this out of this return function?
 	if remainder >= divisor:
+		accumulatedProduct += divisor
 		return 2 * quotient + 1
 	else:
+		# previous does not change
 		return 2 * quotient
 
 
@@ -80,8 +110,9 @@ def divide(dividend: int, divisor: int) -> int:
 # 🐛 checking remainder > divisor instead of remainder >= divisor
 def divideTest():
 	dividend: int = 32
-	for index in range(1, 17):
+	for index in range(1, 10):
 		print(f'🐳 {dividend}/{index}={divide(dividend, index)}')
 
 
+accumulatedProduct: int = 0
 divideTest()
