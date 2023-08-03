@@ -1,6 +1,8 @@
 # python scratch sheet for [⊼₂] nand2tetris2's OS unit: math.jack
 # :author kiwi
 # :date 2023.07.31
+import random
+accumulatedProduct: int = 0
 
 
 def multiply(x: int, y: int):
@@ -108,11 +110,21 @@ def divide(dividend: int, divisor: int) -> int:
 # eyeball test for divide method
 # 🐛 range started at 0. exceeded recursion limit because division by zero
 # 🐛 checking remainder > divisor instead of remainder >= divisor
-def divideTest():
+def simpleDivideTest():
 	dividend: int = 32
 	for index in range(1, 10):
 		print(f'🐳 {dividend}/{index}={divide(dividend, index)}')
 
 
-accumulatedProduct: int = 0
-divideTest()
+def randomDivideTest():
+	for trialNum in range(100):
+		dividend: int = random.randint(1, 32768)
+		divisor: int = random.randint(1, 32768)
+
+		quotient: int = int(dividend / divisor)
+		print(f'{dividend} / {divisor} = {quotient}')
+		assert divide(dividend, divisor) == quotient
+
+
+randomDivideTest()
+# simpleDivideTest()
