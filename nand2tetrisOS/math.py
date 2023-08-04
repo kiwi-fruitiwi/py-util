@@ -116,6 +116,7 @@ def simpleDivideTest():
 		print(f'🐳 {dividend}/{index}={divide(dividend, index)}')
 
 
+# use python integer division to test our divide algorithm
 def randomDivideTest():
 	for trialNum in range(100):
 		dividend: int = random.randint(1, 32768)

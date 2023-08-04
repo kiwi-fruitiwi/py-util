@@ -74,6 +74,26 @@ def main():
 		printFlag = False
 		userInput: str = input('\nEnter cards: ')
 
+		# special command: empty line
+		# negates previous caliber if empty line is the user input
+		# previous query to 'all' caliber set becomes 'top' and vice versa
+		if userInput == '':
+			userInput = previousUserInput
+
+			# this is the first time we're in the input loop. restart if initial
+			# input is nothing
+			if userInput == '':
+				continue
+
+			# set the revised userInput to not include the top players flag if
+			# it does contain it
+			if userInput[0] == '~':
+				userInput = userInput[1:]
+				# print(f'🍋 top player flag detected in previous query. new query:\n {userInput}')
+			else:
+				userInput = f'~{userInput}'
+				# print(f'🥭 all players detected in previous query. switching to top')
+
 		# special command: colorPair followed by ':'
 		# We can choose either prefix or suffix ':' → :wu or wu:
 		# If previousUserInput is null, then continue
@@ -113,20 +133,8 @@ def main():
 			userInput = f'{colorFilter}:{previousInputSansFilter}'
 			# print(f'[ DEBUG ] assigning userInput in filter block: {userInput}')
 
-		# special command: empty line
-		# negates previous caliber if empty line is the user input
-		# previous query to 'all' caliber set becomes 'top' and vice versa
-		if userInput == '':
-			userInput = previousUserInput
 
-			# set the revised userInput to not include the top players flag if
-			# it does contain it
-			if userInput[0] == '~':
-				userInput = userInput[1:]
-				# print(f'🍋 top player flag detected in previous query. new query:\n {userInput}')
-			else:
-				userInput = f'~{userInput}'
-				# print(f'🥭 all players detected in previous query. switching to top')
+
 
 		# split the input string into a list using ',' as delimiter
 		inputCardNames: List[str] = userInput.split(',')
