@@ -51,15 +51,6 @@ def getColorFilterPrefix(s: str) -> str:
 def main():
 	previousUserInput: str = ''
 
-	# load all players card stats
-	caliber = list(caliberRequestMap.keys())[0]  # all players
-	dataSetPath: str = f'data/{caliber}Master.json'
-	print(f'\n📉 17L data update: {getFileModifiedDescription(dataSetPath)}')
-
-	# load all players data
-	with open(dataSetPath) as file:
-		masterJson: Dict = json.load(file)
-
 	# load card info from scryfall json
 	with open('data/scryfall.json', encoding='utf-8-sig') as f:
 		scryfallJson = json.load(f)
@@ -134,7 +125,8 @@ def main():
 			# print(f'[ DEBUG ] assigning userInput in filter block: {userInput}')
 
 
-
+		# after the userInput modifications above, now we can gather data from
+		# the input
 
 		# split the input string into a list using ',' as delimiter
 		inputCardNames: List[str] = userInput.split(',')
@@ -155,20 +147,30 @@ def main():
 			# stop here! no need to print data if we're just checking oracleText
 			continue
 
+
+		# load data based on first character: '~' means top players. default:all
 		if firstElement[0] == '~':
-			# load top players data
 			caliber = list(caliberRequestMap.keys())[1]  # top players
-			dataSetPath: str = f'data/{caliber}Master.json'
 
 			# remove special command flag but preserve first token
 			firstElement = firstElement[1:].strip()
-			with open(dataSetPath) as file:
-				masterJson: Dict = json.load(file)
 		else:
-			# default to caliber = all players data
+			# default to all players data instead of top
 			caliber = list(caliberRequestMap.keys())[0]
 
+		# load the data
+		dataSetPath: str = f'data/{caliber}Master.json'
+		with open(dataSetPath) as file:
+			masterJson: Dict = json.load(file)
+
+		# print timestamp for last load
+		print(f'\n📉 17L data update: {getFileModifiedDescription(dataSetPath)}')
+
+
+
 		# dataset we'll be loading from json. default is 'all'
+		# this is not to be confused with caliber: 'top' vs 'all'
+		# instead, this is 'all colors' vs 'wu', 'wg', 'ur', 'ug', etc.
 		dataSetID: str = f'all'
 
 		# special command: colorPair with colon, e.g. 'WU: '
