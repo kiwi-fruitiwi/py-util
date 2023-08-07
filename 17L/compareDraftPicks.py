@@ -51,6 +51,10 @@ def getColorFilterPrefix(s: str) -> str:
 def main():
 	previousUserInput: str = ''
 
+	# check timestamp on default data file
+	dataSetPath: str = f'data/{list(caliberRequestMap.keys())[0]}Master.json'
+	print(f'\n📉 17L data update: {getFileModifiedDescription(dataSetPath)}')
+
 	# load card info from scryfall json
 	with open('data/scryfall.json', encoding='utf-8-sig') as f:
 		scryfallJson = json.load(f)
@@ -162,10 +166,6 @@ def main():
 		dataSetPath: str = f'data/{caliber}Master.json'
 		with open(dataSetPath) as file:
 			masterJson: Dict = json.load(file)
-
-		# print timestamp for last load
-		print(f'\n📉 17L data update: {getFileModifiedDescription(dataSetPath)}')
-
 
 
 		# dataset we'll be loading from json. default is 'all'
