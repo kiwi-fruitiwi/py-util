@@ -36,6 +36,7 @@ def getIthBit(number: int, i: int) -> int:
 	wordLength: int = 16
 
 	# get 16-bit padded binary string for the input number
+	# format(number, '016b')
 	binaryRep: str = getBinaryStrPadded(number)
 
 	# return the i-th bit
