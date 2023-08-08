@@ -128,5 +128,23 @@ def randomDivideTest():
 		assert divide(dividend, divisor) == quotient
 
 
+# the sqrt function has two appealing properties:
+# 	its inverse function n² can be easily calculated
+#	the function is monotonically increasing, allowing for search
+#
+# this is similar to finding the binary representation of a decimal number,
+# except you square each result to check if it exceeds the number. this bit flip
+# strategy from most significant to least significant place value ensures we'll
+# find the integer square root.
+def sqrt():
+	# y = 0
+	# for j = n/2-1 to 0:
+	# 	if (y+2^j)² ≤ x:
+	#		y += 2^j
+	# return y
+
+	pass
+
+
 randomDivideTest()
 # simpleDivideTest()
