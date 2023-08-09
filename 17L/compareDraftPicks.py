@@ -138,20 +138,8 @@ def main():
 		# trim leading and trailing whitespace
 		strippedCardNames: List[str] = [name.strip() for name in inputCardNames]
 
-		# special command: print card text if first char is '!'
-		# we ignore all but the first token in the input string this way
+
 		firstElement: str = strippedCardNames[0]
-		if firstElement[0] == '!':
-			cardName: str = firstElement[1:].strip()  # remove '!' and spaces
-			bestMatch = process.extractOne(cardName, masterJson.keys())
-
-			# process always returns a list even if its length is 1
-			printCardText(bestMatch[0], scryfallJson)
-
-			# stop here! no need to print data if we're just checking oracleText
-			continue
-
-
 		# load data based on first character: '~' means top players. default:all
 		if firstElement[0] == '~':
 			caliber = list(caliberRequestMap.keys())[1]  # top players
@@ -166,6 +154,19 @@ def main():
 		dataSetPath: str = f'data/{caliber}Master.json'
 		with open(dataSetPath) as file:
 			masterJson: Dict = json.load(file)
+
+
+		# special command: print card text if first char is '!'
+		# we ignore all but the first token in the input string this way
+		if firstElement[0] == '!':
+			cardName: str = firstElement[1:].strip()  # remove '!' and spaces
+			bestMatch = process.extractOne(cardName, masterJson.keys())
+
+			# process always returns a list even if its length is 1
+			printCardText(bestMatch[0], scryfallJson)
+
+			# stop here! no need to print data if we're just checking oracleText
+			continue
 
 
 		# dataset we'll be loading from json. default is 'all'
