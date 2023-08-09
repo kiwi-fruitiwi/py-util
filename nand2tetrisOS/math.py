@@ -131,18 +131,31 @@ def randomDivideTest():
 # the sqrt function has two appealing properties:
 # 	its inverse function n² can be easily calculated
 #	the function is monotonically increasing, allowing for search
+# strategy:
+#	find an integer such that y² ≤ x < (y+1)², for 0 ≤ x < 2ⁿ by
+#	performing binary search in the range [0, 2^(n/2)-1]
 #
 # this is similar to finding the binary representation of a decimal number,
 # except you square each result to check if it exceeds the number. this bit flip
 # strategy from most significant to least significant place value ensures we'll
 # find the integer square root.
-def sqrt():
+def sqrt(x: int):
 	# y = 0
-	# for j = n/2-1 to 0:
+	# for j = n/2 - 1 to 0:
 	# 	if (y+2^j)² ≤ x:
 	#		y += 2^j
 	# return y
 
+	# in binary rep for decimal number, we start with n binary bits with:
+	# 	2ⁿ < x, e.g. 5 bits for 31
+	# here we want the square root, so 2ⁿ⁻¹>
+	# remember 0 ≤ x < 2ⁿ. we are iterating through bits 0 to n/2 - 1
+	# note it's <2ⁿ, not ≤2ⁿ
+	# 	e.g. x=31, n=5. iterate from 0-2. checks out as 5 is 101.
+	# 	e.g. x=32, n=6. iterate from 0-3. ans: 101 ←5
+	#	e.g. x=49, n=6. iterate from 0-3. but 1000 is 8 and fails
+	#	e.g. x=4, n=2
+	binaryAccumulator: int = 0
 	pass
 
 
