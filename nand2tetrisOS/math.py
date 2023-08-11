@@ -1,7 +1,10 @@
 # python scratch sheet for [⊼₂] nand2tetris2's OS unit: math.jack
 # :author kiwi
 # :date 2023.07.31
+import math
 import random
+from typing import List
+
 accumulatedProduct: int = 0
 
 
@@ -131,33 +134,73 @@ def randomDivideTest():
 # the sqrt function has two appealing properties:
 # 	its inverse function n² can be easily calculated
 #	the function is monotonically increasing, allowing for search
-# strategy:
+#
+# strategy from ⊼₂ lecture:
 #	find an integer such that y² ≤ x < (y+1)², for 0 ≤ x < 2ⁿ by
 #	performing binary search in the range [0, 2^(n/2)-1]
 #
 # this is similar to finding the binary representation of a decimal number,
 # except you square each result to check if it exceeds the number. this bit flip
 # strategy from most significant to least significant place value ensures we'll
-# find the integer square root.
+# find the integer square root, and it scales based on the number of binary
+# digits, so it's O(lg n)!
+#
+# algorithm →
+# 	y = 0
+# 	for j = (n+1)/2 - 1 to 0:
+# 		if (y+2^j)² ≤ x:
+#			y += 2^j
+# 	return y
 def sqrt(x: int):
-	# y = 0
-	# for j = n/2 - 1 to 0:
-	# 	if (y+2^j)² ≤ x:
-	#		y += 2^j
-	# return y
+	# find the smallest power of two this number is less than
+	# use twoToThe[] array, which has 16 values?
+	twoToThe: List[int] = [
+		1, 2, 4, 8, 16, 32, 64, 128,
+		256,	# 8
+		512,	# 9
+		1024, 	# 10
+		2048,	# 11
+		4096,	# 12
+		8192,	# 13
+		16384,	# 14 ← max possible positive int is all 1's: 32767! 💪🏽
+		-32768	# 15 ← note the 16th bit is -32768 for two's complement?
+	]
 
-	# in binary rep for decimal number, we start with n binary bits with:
-	# 	2ⁿ < x, e.g. 5 bits for 31
-	# here we want the square root, so 2ⁿ⁻¹>
-	# remember 0 ≤ x < 2ⁿ. we are iterating through bits 0 to n/2 - 1
-	# note it's <2ⁿ, not ≤2ⁿ
-	# 	e.g. x=31, n=5. iterate from 0-2. checks out as 5 is 101.
-	# 	e.g. x=32, n=6. iterate from 0-3. ans: 101 ←5
-	#	e.g. x=49, n=6. iterate from 0-3. but 1000 is 8 and fails
-	#	e.g. x=4, n=2
+	# accumulated result via binary bit flipping algorithm
 	binaryAccumulator: int = 0
-	pass
+
+	# smallest power of 2 greater than input
+	binaryPowerUpperBound: int = 0
+
+	for i in range(15):
+		if x < twoToThe[i]:
+			binaryPowerUpperBound: int = i
+			# print(f'[ DEBUG ] 🐳 smallest power of 2 greater than input')
+			break
+
+	# note (n+1)/2 - 1 is a deviation from the given algorithm in ⊼₂
+	# this is because that algorithm appeared to round, but we only have integer
+	# division. adding 1 to n simulates normal rounding
+	searchUpperBound: int = int((binaryPowerUpperBound+1)/2 - 1)
+
+	# for j = (n+1)/2 - 1 to 0:
+	for j in range(searchUpperBound, -1, -1): # stops at 0: exclusive bound
+		# if (y+2^j)² ≤ x:
+		if (binaryAccumulator + twoToThe[j]) ** 2 <= x:
+			# y += 2^j
+			binaryAccumulator += twoToThe[j]
+
+	return binaryAccumulator
 
 
-randomDivideTest()
+
+def sqrtTest():
+	for i in range(100):
+		testValue: int = random.randint(1, 16384)
+		pythonSqrt: int = int(math.sqrt(testValue))
+		print(f'{testValue}: python→{pythonSqrt}, 🥝→{sqrt(testValue)}')
+
+
+sqrtTest()
+# randomDivideTest()
 # simpleDivideTest()
