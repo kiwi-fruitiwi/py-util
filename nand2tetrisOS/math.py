@@ -172,7 +172,15 @@ def sqrt(x: int):
 	# smallest power of 2 greater than input
 	binaryPowerUpperBound: int = 0
 
-	for i in range(15):
+	for i in range(16):
+		# get around the fact that the bit at index 15 is negative
+		# TODO
+		if i == 15:
+			# 🦔 in Jack, must do < and ==, because 32768 doesn't exist
+			if x < 32768:
+				binaryPowerUpperBound: int = i
+				break
+
 		if x < twoToThe[i]:
 			binaryPowerUpperBound: int = i
 			# print(f'[ DEBUG ] 🐳 smallest power of 2 greater than input')
@@ -196,7 +204,7 @@ def sqrt(x: int):
 
 def sqrtTest():
 	for i in range(100):
-		testValue: int = random.randint(1, 16384)
+		testValue: int = random.randint(1, 32768)
 		pythonSqrt: int = int(math.sqrt(testValue))
 		print(f'{testValue}: python→{pythonSqrt}, 🥝→{sqrt(testValue)}')
 
