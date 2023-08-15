@@ -47,7 +47,8 @@ def sortingKey(item, colorPair: str, stat: str):
 
 # displays top cards of each colorPair by rarity: 'C', 'U', 'R', 'M'
 def displayTopCardsByRarity(rarityList: List[str]):
-	caliber: str = list(caliberRequestMap.keys())[1]  # top
+	caliber: str = list(caliberRequestMap.keys())[0]  # all
+	# caliber: str = list(caliberRequestMap.keys())[1]  # top
 
 	print(f'{caliber} →')
 	currentJsonPath: str = f'data/{caliber}Master.json'

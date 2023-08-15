@@ -7,6 +7,7 @@ from fuzzywuzzy import process
 from typing import List, Dict
 from scryfallCardFetch import printCardText
 from datetime import datetime
+
 # import just for 🔑 names
 from constants import caliberRequestMap, ANSI
 from constants import colorPairs

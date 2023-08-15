@@ -71,7 +71,12 @@ def divide(dividend: int, divisor: int) -> int:
 	global accumulatedProduct
 	assert dividend != 0
 
-	if divisor > dividend:
+	# TODO assign sign after taking the absolute value
+	dividend = abs(dividend)
+	divisor = abs(divisor)
+
+	# divisor < 0 checks for overflow
+	if divisor > dividend or divisor < 0:
 		# every divide call is guaranteed to reach the base case first
 		# we reset accumulatedProduct here
 		# on the first return after the base case, we're guaranteed our
@@ -194,7 +199,8 @@ def sqrt(x: int):
 	# for j = (n+1)/2 - 1 to 0:
 	for j in range(searchUpperBound, -1, -1): # stops at 0: exclusive bound
 		# if (y+2^j)² ≤ x:
-		if (binaryAccumulator + twoToThe[j]) ** 2 <= x:
+		squaredTerm: int = (binaryAccumulator + twoToThe[j]) ** 2
+		if squaredTerm <= x: # in Jack, need 'and squaredTerm > 0' ← overflow
 			# y += 2^j
 			binaryAccumulator += twoToThe[j]
 
