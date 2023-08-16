@@ -1,12 +1,10 @@
 # see docs.scipy.org/doc/scipy/reference/generated/scipy.stats.hypergeom.html
 
 import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn as sns
 import scipy.stats as ss
-from scipy.special import comb
 
+from constants import ANSI
 from typing import List
 
 
@@ -39,12 +37,13 @@ def hypergeoCDF(deckSize, drawSteps, hits, k):
     runningSum = [sum(partialProbabilities[:i+1]) for i in range(length)]
 
     for i in range(len(partialProbabilities)):
-        print(f'chance to draw {i+1} → {partialProbabilities[i]}')
+        print(f'draw {i+1}  → {partialProbabilities[i]*100:>5.1f}%')
 
     return sum(partialProbabilities)
 
 
-# print(f'{hypergeoCDF(33, 2, 15, 3)}')
+totalChances: str = f'{hypergeoCDF(33, 3, 15, 3)*100:>5.1f}%'
+print(f'draw 1+ → {totalChances}')
 
 
 def hypergeoPlot(N, A, n):
@@ -70,15 +69,3 @@ def hypergeoPlot(N, A, n):
     plt.ylabel('Probabilities')
     plt.title('Hypergeometric Distribution Plot')
     plt.show()
-
-
-# hypergeoPlot(33, 15, 3)
-
-
-# create and view data
-severity = ["High", "Medium", "Low"]
-freq = [10, 25, 50]
-data = pd.DataFrame(list(zip(severity, freq)), columns =['severity', 'freq'])
-
-# default matplotlib bar plot
-data.plot.bar(x="severity", y="freq")
