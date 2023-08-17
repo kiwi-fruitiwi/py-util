@@ -6,6 +6,7 @@ import seaborn as sns
 
 from scipy.integrate import quad
 from scipy.stats import norm
+from typing import Set
 
 
 def graphNormalDistribution():
@@ -50,15 +51,15 @@ def normalProbabilityDensity(x):
 	return coefficient * math.exp((-x ** 2) / 2.0)
 
 
-def safeEval(expression):
-	allowedChars = set('0123456789.+-*/() ')
+def safeEval(expression: str) -> float:
+	allowedChars: Set = set('0123456789.+-*/() ')
 	if set(expression) <= allowedChars:
 		try:
 			return eval(expression)
 		except Exception as e:
-			return f"Error: {e}"
+			print(f'Error: {e}')
 	else:
-		return "Invalid characters in expression."
+		print(f'Invalid characters in expression.')
 
 
 def main():
@@ -69,8 +70,8 @@ def main():
 		second: str = input('upper integration bound → ')
 
 		try:
-			lowerBound = safeEval(first)
-			upperBound = safeEval(second)
+			lowerBound: float = safeEval(first)
+			upperBound: float = safeEval(second)
 
 			# compute the definite integral
 			print(f'🐳 evaluating pdf: [{lowerBound:.2f}, {upperBound:.2f}]')
