@@ -43,7 +43,6 @@ def plotTest():
 	# set axes graduation label 'tick' sizes
 	plt.xticks(size=14)
 	plt.yticks(size=14)
-	sns.set_style("darkgrid")
 
 	plt.show()
 
