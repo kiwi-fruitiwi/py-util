@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 from scipy.integrate import quad
+from scipy.stats import norm
 
 
 def graphNormalDistribution():
@@ -35,8 +36,17 @@ def normalTest():
 	print(quad(normalProbabilityDensity, 0.85, np.PINF))
 
 
+def scipyNormPlot():
+	# evenly spaced numbers over an interval
+	x = np.linspace(-5, 5, 1000)
+	y = norm.pdf(x, 0, 1)  # μ=0, σ=1
+	plt.plot(x, y)
+	plt.title("Normal PDF with μ=0, σ=1")
+	plt.show()
+
+
 def normalProbabilityDensity(x):
-	coefficient = 1.0 / math.sqrt(2 * math.pi)
+	coefficient = 1.0 / np.sqrt(2 * np.pi)
 	return coefficient * math.exp((-x ** 2) / 2.0)
 
 
