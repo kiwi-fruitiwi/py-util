@@ -50,15 +50,36 @@ def normalProbabilityDensity(x):
 	return coefficient * math.exp((-x ** 2) / 2.0)
 
 
+def safeEval(expression):
+	allowedChars = set('0123456789.+-*/() ')
+	if set(expression) <= allowedChars:
+		try:
+			return eval(expression)
+		except Exception as e:
+			return f"Error: {e}"
+	else:
+		return "Invalid characters in expression."
+
+
 def main():
 	done: bool = False
 	while not done:
 		print(f'')
-		lower_bound = float(input('lower integration bound → '))
-		upper_bound = float(input('upper integration bound → '))
+		first: str = input('lower integration bound → ')
+		second: str = input('upper integration bound → ')
 
-		# compute the definite integral
-		print(quad(normalProbabilityDensity, lower_bound, upper_bound))
+		try:
+			lowerBound = safeEval(first)
+			upperBound = safeEval(second)
+
+			# compute the definite integral
+			print(f'🐳 evaluating pdf: [{lowerBound:.2f}, {upperBound:.2f}]')
+
+			# quad returns a tuple with the error in index 1. we only need
+			# the definite integral value itself in index 0
+			print(quad(normalProbabilityDensity, lowerBound, upperBound)[0])
+		except Exception as e:
+			return f'Error: {e}'
 
 
 main()
