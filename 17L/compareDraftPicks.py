@@ -85,12 +85,26 @@ def main():
 			# it does contain it
 			if userInput[0] == '~':
 				userInput = userInput[1:]
-				# print(f'🍋 top player flag detected in previous query. new query:\n {userInput}')
+				# print(f' top player flag detected in previous query. new query:\n {userInput}')
 			else:
 				userInput = f'~{userInput}'
-				# print(f'🥭 all players detected in previous query. switching to top')
+				# print(f' all players detected in previous query. switching to top')
 
-		# special command: colorPair followed by ':'
+
+		# 🌟 special command: '+'
+		# if the previous query were, for example:
+		# 	→ survivor, firebrand, bath song, relentless
+		# user input = '+ goldberry, riddermark' should append to the old query
+		#	we literally append to the previousUserInput without the '+'
+		#	then we process as normal
+		if userInput[0] == '+':
+			# ignore just the '+' character followed by an empty line
+			if len(userInput) > 1:
+				userInput = f'{previousUserInput}, {userInput[1:]}'
+			else:
+				userInput = previousUserInput
+
+		# 🌟 special command: colorPair followed by ':'
 		# We can choose either prefix or suffix ':' → :wu or wu:
 		# If previousUserInput is null, then continue
 		# If the latter we can verify userInput[2] == ':' and len(userInput)==3
@@ -157,7 +171,7 @@ def main():
 			masterJson: Dict = json.load(file)
 
 
-		# special command: print card text if first char is '!'
+		# 🌟 special command: print card text if first char is '!'
 		# we ignore all but the first token in the input string this way
 		if firstElement[0] == '!':
 			cardName: str = firstElement[1:].strip()  # remove '!' and spaces
@@ -169,13 +183,12 @@ def main():
 			# stop here! no need to print data if we're just checking oracleText
 			continue
 
-
 		# dataset we'll be loading from json. default is 'all'
 		# this is not to be confused with caliber: 'top' vs 'all'
 		# instead, this is 'all colors' vs 'wu', 'wg', 'ur', 'ug', etc.
 		dataSetID: str = f'all'
 
-		# special command: colorPair with colon, e.g. 'WU: '
+		# 🌟 special command: colorPair with colon, e.g. 'WU: '
 		# check if first element contains ':'. use this to determine what
 		# 	this will open data from the corresponding file and cache it
 		# strip after in case there are multiple spaces after 'WU:'
