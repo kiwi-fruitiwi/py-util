@@ -13,7 +13,6 @@
 # 		&user_group=top
 
 
-
 import json
 import requests
 from constants import caliberRequestMap, colorPairs
