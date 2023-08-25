@@ -3,6 +3,7 @@
 
 
 import requests
+import json
 
 
 # makes a scryfall API request and saves the file to setName.json
@@ -24,9 +25,11 @@ def getScryfallJson():
 		# add new pagination 🔑:data items to the results list
 		result.extend(data['data'])
 
-	print(f'{len(result)}')
+	print(f'{len(result)} cards found in {setName}')
 
 
+	with open(f'{setName}.json', 'w', encoding='utf-8') as json_file_handler:
+		json_file_handler.write(json.dumps(result, indent=4))
 
 
 
