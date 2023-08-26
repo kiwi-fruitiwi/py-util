@@ -8,7 +8,7 @@ import json
 
 # makes a scryfall API request and saves the file to setName.json
 def getScryfallJson():
-	setName: str = 'ltr'
+	setName: str = 'wot'
 
 	# note we can append '+OR+set:MOM' to add additional sets
 	requestURL: str = f'https://api.scryfall.com/cards/search?q=set:{setName}'
@@ -28,8 +28,8 @@ def getScryfallJson():
 	print(f'{len(result)} cards found in {setName}')
 
 
-	with open(f'{setName}.json', 'w', encoding='utf-8') as json_file_handler:
-		json_file_handler.write(json.dumps(result, indent=4))
+	with open(f'scryfall-{setName}.json', 'w', encoding='utf-8') as json_file_handler:
+		json_file_handler.write(json.dumps(result, indent=2))
 
 
 
