@@ -273,6 +273,8 @@ def calculateAndAddStatsKeyValuePairs(
 	with open(dataSetPath, 'r', encoding='utf-8') as f:
 		dataSet: Dict = json.load(f)
 
+	print(f'🍒 calculateAndAddStatsKeyValuePairs → {dataSetID} . {dataSetPath}')
+
 	# use cardName→float map instead of list of floats for error reporting in
 	# calculateStats
 	gihwrMap: Dict[str, float] = {}
@@ -342,7 +344,10 @@ def calculateStats(
 
 
 	# statistics.stdev requires at least 2 points, mean requires 1
-	if len(lst) < 3:
+
+	# total non-None values in input lst:
+	validData: List[float] = removeNoneValues(lst.values())
+	if len(validData) < 3:
 		# add another print statement to calculateAndAddStatsKeyValuePairs to
 		# find the source of this empty list
 		raise ValueError(
@@ -355,9 +360,14 @@ def calculateStats(
 		)
 	else:
 		return {
-			'mean': statistics.mean(lst.values()),
-			'stdev': statistics.stdev(lst.values())
+			'mean': statistics.mean(validData),
+			'stdev': statistics.stdev(validData)
 		}
+
+
+# remove values of 'None' in a given input list
+def removeNoneValues(inputList):
+	return [element for element in inputList if element is not None]
 
 
 def main():
