@@ -3,6 +3,7 @@ import json
 from typing import List, Dict
 from constants import colorPairs
 from constants import ANSI
+from constants import minGihSampleSize
 
 # defines lower bound zScore values for letter grades like A-, D+, B, etc.
 # each letter grade is one standard deviation, with C centered around the mean μ
@@ -40,6 +41,35 @@ def getGrade(zScore: float):
 		if zScore >= gradePair[1]:
 			letterGrade = gradePair[0]
 	return letterGrade
+
+
+# if targetMap[🔑keyName] is None, return '-'. otherwise return formatted float
+# value in string format
+#
+# makes sure output during data display doesn't break if we run into null values
+# in the data json files.
+def getValidatedKeyString(
+		targetMap: Dict[str, float], keyName: str, fFormat: str, scale: int = 1) -> str:
+
+	if targetMap[keyName] is None:
+		return '{:>4}'.format(' ')
+	else:
+		return f'{(targetMap[keyName]*scale):{fFormat}}'
+
+
+# helper method to validate values from code like this:
+# zOhwr: float = colorStats['z-scores']['OH WR']
+def getNestedValidatedKeyString(
+		targetMap: Dict[str, dict],
+		firstKey: str,
+		secondKey: str,
+		fFormat: str) -> str:
+
+	if targetMap[firstKey][secondKey] is None:
+		return f'-:{fFormat}'
+	else:
+		return f'{(targetMap[firstKey][secondKey]):{fFormat}}'
+
 
 
 def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
@@ -88,37 +118,78 @@ def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
 	for colorPair in colorPairs:
 		if colorPair in stats:
 			colorStats: Dict = stats[colorPair]
+
 			# output the data we want for each colorPair
-			ohwr: float = colorStats['OH WR']
-			zOhwr: float = colorStats['z-scores']['OH WR']
-			ohwrGrade: str = getGrade(zOhwr)
 
-			gdwr: float = colorStats['GD WR']
-			zGdwr: float = colorStats['z-scores']['GD WR']
-			gdwrGrade: str = getGrade(zGdwr)
+			ohwr: str = getValidatedKeyString(colorStats, 'OH WR', '4.1f', 100)
+			# zOhwr: str = getNestedValidatedKeyString(colorStats, 'z-scores', 'OH WR')
 
-			iwd: float = colorStats['IWD']
-			zIwd: float = colorStats['z-scores']['IWD']
-			iwdGrade: str = getGrade(zIwd)
+			if colorStats['z-scores']['OH WR'] is None:
+				zOhwr: str = '{:>5}'.format(' ')
+				ohwrGrade: str = '{:2}'.format(' ')
+			else:
+				zOhwr: str = f"{colorStats['z-scores']['OH WR']:>5.2f}"
+				ohwrGrade: str = '{:2}'.format(getGrade(colorStats['z-scores']['OH WR']))
 
+			# print(f'🐳{zOhwr} {ohwrGrade}')
+
+			# zOhwr: float = colorStats['z-scores']['OH WR']
+			# ohwrGrade: str = getGrade(zOhwr)
+
+			gdwr: str = getValidatedKeyString(colorStats, 'GD WR', '4.1f', 100)
+			if colorStats['z-scores']['GD WR'] is None:
+				zGdwr: str = '{:>5}'.format(' ')
+				gdwrGrade: str = '{:2}'.format(' ')
+			else:
+				zGdwr: str = f"{colorStats['z-scores']['GD WR']:>5.2f}"
+				gdwrGrade: str = '{:2}'.format(getGrade(colorStats['z-scores']['GD WR']))
+
+			# print(f'🥝{zGdwr} {gdwrGrade}')
+
+			# gdwr: float = colorStats['GD WR']
+			# zGdwr: float = colorStats['z-scores']['GD WR']
+			# gdwrGrade: str = getGrade(zGdwr)
+
+
+			iwd: str = getValidatedKeyString(colorStats, 'IWD', '4.1f', 100)
+
+			if colorStats['z-scores']['IWD'] is None:
+				zIwd: str = '{:>5}'.format(' ')
+				iwdGrade: str = '{:2}'.format(' ')
+			else:
+				zIwd: str = f"{colorStats['z-scores']['IWD']:>5.2f}"
+				iwdGrade: str = '{:2}'.format(getGrade(colorStats['z-scores']['IWD']))
+
+			# print(f'🔥{zIwd} {iwdGrade}')
+
+			# iwd: float = colorStats['IWD']
+			# zIwd: float = colorStats['z-scores']['IWD']
+			# iwdGrade: str = getGrade(zIwd)
+
+			if colorStats["# GIH"] is None:
+				gihCountStr: str = f'-'
+			else:
+				gihCountStr: str = f'{colorStats["# GIH"]}'
+
+			# 	print(f'{gihCountStr}')
 			print(
-				f'{ANSI.DIM_WHITE.value}{colorStats["# GIH"]:6}{ANSI.RESET.value} '
+				f'{ANSI.DIM_WHITE.value}{gihCountStr:>6}{ANSI.RESET.value} '
 				f'{columnMark} '
 				
 				f'{colorPair} {columnMark} '
-				f'{ohwrGrade:2} '
-				f'{ANSI.DIM_WHITE.value}{zOhwr:>5.2f}{ANSI.RESET.value} '
-				f'{ohwr * 100:4.1f}'
+				f'{ohwrGrade} '
+				f'{ANSI.DIM_WHITE.value}{zOhwr}{ANSI.RESET.value} '
+				f'{ohwr}'
 				f' {columnMark} '
 				
-				f'{gdwrGrade:2} '
-				f'{ANSI.DIM_WHITE.value}{zGdwr:>5.2f}{ANSI.RESET.value} '
-				f'{gdwr * 100:4.1f}'
+				f'{gdwrGrade} '
+				f'{ANSI.DIM_WHITE.value}{zGdwr}{ANSI.RESET.value} '
+				f'{gdwr}'
 				f' {columnMark} '
 				
-				f'{iwdGrade:2} '
-				f'{ANSI.DIM_WHITE.value}{zIwd:>5.2f}{ANSI.RESET.value} '
-				f'{iwd * 100:4.1f}{ANSI.DIM_WHITE.value}pp{ANSI.RESET.value}'
+				f'{iwdGrade} '
+				f'{ANSI.DIM_WHITE.value}{zIwd}{ANSI.RESET.value} '
+				f'{iwd}{ANSI.DIM_WHITE.value}pp{ANSI.RESET.value}'
 			)
 	pass
 
@@ -316,6 +387,8 @@ def printCardComparison(
 		if cardName in cardNameList:
 			if dataSetID not in cardData['filteredStats']:
 				print(f'🥝 not enough data for {cardName} in {dataSetID}')
+			elif cardData['filteredStats'][dataSetID]['# GIH'] <= minGihSampleSize:
+				print(f'🌊 not enough data for {cardName} in {dataSetID}')
 			else:
 				# print the comparison row
 				cardStats: Dict = cardData['filteredStats'][dataSetID]

@@ -343,21 +343,26 @@ def calculateStats(
 			raise ValueError(f'stat str invalid: {stat}')
 
 
-	# statistics.stdev requires at least 2 points, mean requires 1
-
 	# total non-None values in input lst:
 	validData: List[float] = removeNoneValues(lst.values())
+
+	# statistics.stdev requires at least 2 points, mean requires 1
 	if len(validData) < 3:
 		# add another print statement to calculateAndAddStatsKeyValuePairs to
 		# find the source of this empty list
-		raise ValueError(
-			f'🪶 {lst}\n\n'
+		print(
+			f'[ ERROR ] '
+			f'🪶 {validData}\n\n'
 			f'"{stat}" for {dataSetID}: {dataSetPath} '
-			f'only {len(lst)} cards in this archetype meet '
+			f'only {len(validData)} cards in this archetype meet '
 			f'sample size requirements for {stat}: {statRequirement}. '
 			f'Consider increasing the time frame of the query or lowering this '
 			f'number. Note that lowering too much makes the data useless.'
 		)
+		return {
+			'mean': None,
+			'stdev': None
+		}
 	else:
 		return {
 			'mean': statistics.mean(validData),

@@ -5,7 +5,7 @@ from enum import Enum
 # sample size threshold for being included in mean and stdev calculations
 # generally if # GIH is 50000, # OH floats around 20000. # GD is 30000
 # this makes sense because GIH is OH+GD
-minGihSampleSize: int = 200
+minGihSampleSize: int = 750
 minOhSampleSize: int = int(minGihSampleSize * 2 / 5)
 minGdSampleSize: int = int(minGihSampleSize * 3 / 5)
 
@@ -27,7 +27,7 @@ baseRequestURL: str = \
 	"https://www.17lands.com/card_ratings/data" \
 	"?expansion=LTR" \
 	"&format=PremierDraft" \
-	# "&start_date=2023-07-10" # recent data only, typically last 2 weeks
+	#"&start_date=2023-08-05" # recent data only, typically last 2 weeks
 
 # a map between player caliber set, e.g. 'all', 'top', 'bottom', 'middle', and
 # their 17lands json request URLs
