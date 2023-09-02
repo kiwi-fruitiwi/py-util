@@ -5,7 +5,7 @@ from enum import Enum
 # sample size threshold for being included in mean and stdev calculations
 # generally if # GIH is 50000, # OH floats around 20000. # GD is 30000
 # this makes sense because GIH is OH+GD
-minGihSampleSize: int = 750
+minGihSampleSize: int = 300
 minOhSampleSize: int = int(minGihSampleSize * 2 / 5)
 minGdSampleSize: int = int(minGihSampleSize * 3 / 5)
 

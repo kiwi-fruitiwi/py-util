@@ -153,6 +153,9 @@ def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
 
 			iwd: str = getValidatedKeyString(colorStats, 'IWD', '4.1f', 100)
 
+			# set a flag if IWD returns an actual value other than 'None'
+			iwdFoundFlag: bool = (iwd == '{:>4}'.format(' '))
+
 			if colorStats['z-scores']['IWD'] is None:
 				zIwd: str = '{:>5}'.format(' ')
 				iwdGrade: str = '{:2}'.format(' ')
@@ -171,7 +174,9 @@ def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
 			else:
 				gihCountStr: str = f'{colorStats["# GIH"]}'
 
-			# 	print(f'{gihCountStr}')
+			# remove the 'pp' suffix for IWD if IWD returned 'None'
+			iwdSuffix: str = 'pp' if iwdFoundFlag else ''
+
 			print(
 				f'{ANSI.DIM_WHITE.value}{gihCountStr:>6}{ANSI.RESET.value} '
 				f'{columnMark} '
@@ -189,7 +194,7 @@ def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
 				
 				f'{iwdGrade} '
 				f'{ANSI.DIM_WHITE.value}{zIwd}{ANSI.RESET.value} '
-				f'{iwd}{ANSI.DIM_WHITE.value}pp{ANSI.RESET.value}'
+				f'{iwd}{ANSI.DIM_WHITE.value}{iwdSuffix}{ANSI.RESET.value}'
 			)
 	pass
 
