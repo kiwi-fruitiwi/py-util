@@ -49,27 +49,49 @@ def getGrade(zScore: float):
 # makes sure output during data display doesn't break if we run into null values
 # in the data json files.
 def getValidatedKeyString(
-		targetMap: Dict[str, float], keyName: str, fFormat: str, scale: int = 1) -> str:
+		targetMap: Dict[str, float],
+		keyName: str,
+		noneFormat: str,
+		validFormat: str,
+		scale: int = 1) -> str:
 
-	if targetMap[keyName] is None:
-		return '{:>4}'.format(' ')
+	value: float = targetMap[keyName]
+
+	if value is None:
+		return noneFormat.format(' ')
 	else:
-		return f'{(targetMap[keyName]*scale):{fFormat}}'
+		return validFormat.format(value*scale)
 
 
-# helper method to validate values from code like this:
-# zOhwr: float = colorStats['z-scores']['OH WR']
-def getNestedValidatedKeyString(
+def getNestedValidatedKeyStrings(
 		targetMap: Dict[str, dict],
 		firstKey: str,
 		secondKey: str,
-		fFormat: str) -> str:
+		noneFormat: str,
+		validFormat: str) -> (str, str):
+	"""
+	helper method to validate values, e.g. colorStats['z-scores']['OH WR']
+	returns the appropriate whitespace if 'None' is encountered, but formats
+	properly according to supplied formatStrings if value exists
+	:param targetMap: the colorStats dictionary from json
+	:param firstKey: z-scores
+	:param secondKey: OH WR, GD WR, IWD
+	:param noneFormat: amount of whitespace to include
+	:param validFormat: format for whitespace + float decimals
+	:return: a tuple with zscore and grade
+	"""
 
-	if targetMap[firstKey][secondKey] is None:
-		return f'-:{fFormat}'
+	# grades are always two characters: A+, B-, D
+	gradeFormat: str = '{:2}'
+	value = targetMap[firstKey][secondKey]
+
+	if value is None:
+		return noneFormat.format(' '), gradeFormat.format(' ')
 	else:
-		return f'{(targetMap[firstKey][secondKey]):{fFormat}}'
-
+		return (
+			validFormat.format(value),
+			gradeFormat.format(getGrade(value))
+		)
 
 
 def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
@@ -116,42 +138,32 @@ def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
 	# ✒️ ALSA likely not necessary
 	stats: Dict = cardStats['filteredStats']
 	for colorPair in colorPairs:
+
+		# output the data we want for each colorPair
 		if colorPair in stats:
 			colorStats: Dict = stats[colorPair]
 
-			# output the data we want for each colorPair
+			ohwr: str = getValidatedKeyString(
+				colorStats, 'OH WR', '{:4}', '{:4.1f}', 100)
+			zOhwr, ohwrGrade = (
+				getNestedValidatedKeyStrings(
+					colorStats, 'z-scores', 'OH WR', '{:5}', '{:>5.2f}'))
 
-			ohwr: str = getValidatedKeyString(colorStats, 'OH WR', '4.1f', 100)
-			# zOhwr: str = getNestedValidatedKeyString(colorStats, 'z-scores', 'OH WR')
-
-			if colorStats['z-scores']['OH WR'] is None:
-				zOhwr: str = '{:5}'.format(' ')
-				ohwrGrade: str = '{:2}'.format(' ')
-			else:
-				zOhwr: str = f"{colorStats['z-scores']['OH WR']:>5.2f}"
-				ohwrGrade: str = '{:2}'.format(getGrade(colorStats['z-scores']['OH WR']))
-
-			# print(f'🐳{zOhwr} {ohwrGrade}')
-
-			# zOhwr: float = colorStats['z-scores']['OH WR']
-			# ohwrGrade: str = getGrade(zOhwr)
-
-			gdwr: str = getValidatedKeyString(colorStats, 'GD WR', '4.1f', 100)
+			gdwr: str = getValidatedKeyString(colorStats, 'GD WR', '{:4}', '{:4.1f}', 100)
 			if colorStats['z-scores']['GD WR'] is None:
-				zGdwr: str = '{:>5}'.format(' ')
+				zGdwr: str = '{:5}'.format(' ')
 				gdwrGrade: str = '{:2}'.format(' ')
 			else:
 				zGdwr: str = f"{colorStats['z-scores']['GD WR']:>5.2f}"
 				gdwrGrade: str = '{:2}'.format(getGrade(colorStats['z-scores']['GD WR']))
 
 			# print(f'🥝{zGdwr} {gdwrGrade}')
-
 			# gdwr: float = colorStats['GD WR']
 			# zGdwr: float = colorStats['z-scores']['GD WR']
 			# gdwrGrade: str = getGrade(zGdwr)
 
 
-			iwd: str = getValidatedKeyString(colorStats, 'IWD', '4.1f', 100)
+			iwd: str = getValidatedKeyString(colorStats, 'IWD', '{:4}', '{:4.1f}', 100)
 
 			# set a flag if IWD returns an actual value other than 'None'
 			iwdFoundFlag: bool = (iwd != '{:4}'.format(' '))
@@ -169,10 +181,6 @@ def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
 			# zIwd: float = colorStats['z-scores']['IWD']
 			# iwdGrade: str = getGrade(zIwd)
 
-			# if colorStats["# GIH"] is None:
-			# 	gihCountStr: str = f' '
-			# else:
-			# 	gihCountStr: str = f'{colorStats["# GIH"]}'
 
 			# remove the 'pp' suffix for IWD if IWD returned 'None'
 			iwdSuffix: str = 'pp' if iwdFoundFlag else ''
