@@ -29,6 +29,11 @@ gradeBounds: List[tuple] = [
 
 
 def getGrade(zScore: float):
+	"""
+	convert a z-score into a grade based on gradeBounds mapping
+	:param zScore:
+	:return: e.g. 'A-', 'B', 'D+', 'F'
+	"""
 	if zScore is None:
 		return None
 
@@ -72,7 +77,7 @@ def validate(value: float | None, validFormat: str, scale: int = 1) -> str:
 
 def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
 	"""
-
+	output data from archetypes that satisfy the sample size requirement
 	:param cardName:
 	:param cardStats: json containing data for a single card
 	:param caliber: 'top', 'all' for allPlayers vs topPlayers dataSet
@@ -209,11 +214,6 @@ def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
 			}
 		}, 
 	'''
-
-
-# retrieves the value, but returns
-def getValue(dictionary: Dict, key: str):
-	pass
 
 
 
@@ -363,38 +363,47 @@ def printCardComparison(
 			if dataSetID not in cardData['filteredStats']:
 				print(f'🥝 not enough data for {cardName} in {dataSetID}')
 			elif cardData['filteredStats'][dataSetID]['# GIH'] <= minGihSampleSize:
-				print(f'🌊 not enough data for {cardName} in {dataSetID}')
+				print(f'🌊 not enough data for {cardName} in {dataSetID}: <{minGihSampleSize}')
 			else:
 				# print the comparison row
 				cardStats: Dict = cardData['filteredStats'][dataSetID]
-				gdwr: float = cardStats['GD WR']  # game drawn win rate
-				nGd: int = cardStats['# GD']  # number of games draw
-				zGdwr: float = cardStats['z-scores']['GD WR']
-				gdwrGrade: str = getGrade(zGdwr)
-				ohwr: float = cardStats['OH WR']  # opening hand win rate
-				nOh: float = cardStats['# OH']  # times seen in opening hand
-				zOhwr: float = cardStats['z-scores']['OH WR']
-				ohwrGrade: str = getGrade(zOhwr)
-				iwd: float = cardStats['IWD']  # improvement when drawn
-				alsa: float = cardData['ALSA']  # average last seen at
+				zScores = cardStats['z-scores']
+
+				gdwr: str = validate(cardStats['GD WR'], '{:4.1f}', 100)
+				zGdwr: str = validate(zScores['GD WR'], '{:>5.2f}')
+				gdwrGrade: str = validate(getGrade(zScores['GD WR']), '{:2}')
+
+				ohwr: str = validate(cardStats['OH WR'], '{:4.1f}', 100)
+				zOhwr: str = validate(zScores['OH WR'],  '{:>5.2f}')
+				ohwrGrade: str = validate(getGrade(zScores['OH WR']), '{:2}')
+
+				# improvement when drawn
+				# set a flag if IWD returns an actual value other than 'None'
+				# remove the 'pp' suffix for IWD if IWD returned 'None'
+				iwd: str = validate(cardStats['IWD'], '{:4.1f}', 100)
+				iwdFoundFlag: bool = (iwd != '{:4}'.format(' '))
+				iwdSuffix: str = 'pp' if iwdFoundFlag else ''
+
+				# average last seen at
+				alsa: str = validate(cardData['ALSA'], '{:4.1f}')
 				rarity: str = cardData["Rarity"]
 
 				print(
 					f'{ANSI.DIM_WHITE.value}{cardStats["# GIH"]:6}{ANSI.RESET.value} '
-					f'{alsa:4.1f} '
+					f'{alsa} '
 					f'{columnMark} '
 					
-					f'{ohwrGrade:2} '
-					f'{ANSI.DIM_WHITE.value}{zOhwr:>5.2f}{ANSI.RESET.value} '
-					f'{ohwr * 100:4.1f} '
+					f'{ohwrGrade} '
+					f'{ANSI.DIM_WHITE.value}{zOhwr}{ANSI.RESET.value} '
+					f'{ohwr} '
 					f'{columnMark} '
 					
-					f'{gdwrGrade:2} '
-					f'{ANSI.DIM_WHITE.value}{zGdwr:>5.2f}{ANSI.RESET.value} '
-					f'{gdwr * 100:4.1f} '
+					f'{gdwrGrade} '
+					f'{ANSI.DIM_WHITE.value}{zGdwr}{ANSI.RESET.value} '
+					f'{gdwr} '
 					f'{columnMark} '
 					
-					f'{iwd * 100:4.1f}{ANSI.DIM_WHITE.value}pp{ANSI.RESET.value} '
+					f'{iwd}{ANSI.DIM_WHITE.value}{iwdSuffix}{ANSI.RESET.value} '
 					f'{rarity} '
 					f'← {ANSI.BLUE.value}{cardName}{ANSI.RESET.value}'
 				)
