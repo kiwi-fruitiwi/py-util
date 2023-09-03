@@ -125,7 +125,7 @@ def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
 			# zOhwr: str = getNestedValidatedKeyString(colorStats, 'z-scores', 'OH WR')
 
 			if colorStats['z-scores']['OH WR'] is None:
-				zOhwr: str = '{:>5}'.format(' ')
+				zOhwr: str = '{:5}'.format(' ')
 				ohwrGrade: str = '{:2}'.format(' ')
 			else:
 				zOhwr: str = f"{colorStats['z-scores']['OH WR']:>5.2f}"
@@ -154,7 +154,7 @@ def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
 			iwd: str = getValidatedKeyString(colorStats, 'IWD', '4.1f', 100)
 
 			# set a flag if IWD returns an actual value other than 'None'
-			iwdFoundFlag: bool = (iwd == '{:>4}'.format(' '))
+			iwdFoundFlag: bool = (iwd != '{:4}'.format(' '))
 
 			if colorStats['z-scores']['IWD'] is None:
 				zIwd: str = '{:>5}'.format(' ')
@@ -169,33 +169,42 @@ def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
 			# zIwd: float = colorStats['z-scores']['IWD']
 			# iwdGrade: str = getGrade(zIwd)
 
-			if colorStats["# GIH"] is None:
-				gihCountStr: str = f'-'
-			else:
-				gihCountStr: str = f'{colorStats["# GIH"]}'
+			# if colorStats["# GIH"] is None:
+			# 	gihCountStr: str = f' '
+			# else:
+			# 	gihCountStr: str = f'{colorStats["# GIH"]}'
 
 			# remove the 'pp' suffix for IWD if IWD returned 'None'
 			iwdSuffix: str = 'pp' if iwdFoundFlag else ''
 
-			print(
-				f'{ANSI.DIM_WHITE.value}{gihCountStr:>6}{ANSI.RESET.value} '
-				f'{columnMark} '
-				
-				f'{colorPair} {columnMark} '
-				f'{ohwrGrade} '
-				f'{ANSI.DIM_WHITE.value}{zOhwr}{ANSI.RESET.value} '
-				f'{ohwr}'
-				f' {columnMark} '
-				
-				f'{gdwrGrade} '
-				f'{ANSI.DIM_WHITE.value}{zGdwr}{ANSI.RESET.value} '
-				f'{gdwr}'
-				f' {columnMark} '
-				
-				f'{iwdGrade} '
-				f'{ANSI.DIM_WHITE.value}{zIwd}{ANSI.RESET.value} '
-				f'{iwd}{ANSI.DIM_WHITE.value}{iwdSuffix}{ANSI.RESET.value}'
-			)
+			gihCount: int = colorStats["# GIH"]
+			gihCountStr: str = f'{gihCount}'
+
+			# if #gih surpasses this, print the archetype data
+			# otherwise as of 2023.Sept, 17L no longer publishes request data
+			# at low sample size and the lines will show up empty
+			archetypeThreshold: int = 750
+
+			if gihCount > archetypeThreshold:
+				print(
+					f'{ANSI.DIM_WHITE.value}{gihCountStr:>6}{ANSI.RESET.value} '
+					f'{columnMark} '
+					
+					f'{colorPair} {columnMark} '
+					f'{ohwrGrade} '
+					f'{ANSI.DIM_WHITE.value}{zOhwr}{ANSI.RESET.value} '
+					f'{ohwr}'
+					f' {columnMark} '
+					
+					f'{gdwrGrade} '
+					f'{ANSI.DIM_WHITE.value}{zGdwr}{ANSI.RESET.value} '
+					f'{gdwr}'
+					f' {columnMark} '
+					
+					f'{iwdGrade} '
+					f'{ANSI.DIM_WHITE.value}{zIwd}{ANSI.RESET.value} '
+					f'{iwd}{ANSI.DIM_WHITE.value}{iwdSuffix}{ANSI.RESET.value}'
+				)
 	pass
 
 	'''
