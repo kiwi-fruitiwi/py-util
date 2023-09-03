@@ -30,7 +30,7 @@ gradeBounds: List[tuple] = [
 
 def getGrade(zScore: float):
 	if zScore is None:
-		return ''
+		return None
 
 	letterGrade: str = ''
 
@@ -43,55 +43,31 @@ def getGrade(zScore: float):
 	return letterGrade
 
 
-# if targetMap[🔑keyName] is None, return '-'. otherwise return formatted float
-# value in string format
-#
-# makes sure output during data display doesn't break if we run into null values
-# in the data json files.
-def getValidatedKeyString(
-		targetMap: Dict[str, float],
-		keyName: str,
-		noneFormat: str,
-		validFormat: str,
-		scale: int = 1) -> str:
+def validate(value: float | None, validFormat: str, scale: int = 1) -> str:
+	"""
+	helper method to validate values, e.g. colorStats['z-scores']['OH WR']
+	returns the appropriate whitespace if 'None' is encountered, but formats
+	properly according to supplied formatStrings if value exists
 
-	value: float = targetMap[keyName]
+	makes sure our output does not break when we encounter null values in json
+	:param value: dictionary value that can be a float or 'None'
+	:param validFormat: an f-string format, e.g. {:4.1f}, {:>5.2f}, {:2}
+	:param scale: sometimes we want to multiply the value by 100, e.g. 0.55 to
+		55 to indicate a percentage
+	:return: a formatted string with specified spacing
+	"""
+	# the format for 'None' will always be just the spacing from validFormat
+	# {:>5.2f} → {:>5}
+	# {:4.1f} → {:4}
+	if '.' in validFormat:
+		noneFormat: str = validFormat.split('.')[0] + '}'
+	else:
+		noneFormat: str = validFormat
 
 	if value is None:
 		return noneFormat.format(' ')
 	else:
 		return validFormat.format(value*scale)
-
-
-def getNestedValidatedKeyStrings(
-		targetMap: Dict[str, dict],
-		firstKey: str,
-		secondKey: str,
-		noneFormat: str,
-		validFormat: str) -> (str, str):
-	"""
-	helper method to validate values, e.g. colorStats['z-scores']['OH WR']
-	returns the appropriate whitespace if 'None' is encountered, but formats
-	properly according to supplied formatStrings if value exists
-	:param targetMap: the colorStats dictionary from json
-	:param firstKey: z-scores
-	:param secondKey: OH WR, GD WR, IWD
-	:param noneFormat: amount of whitespace to include
-	:param validFormat: format for whitespace + float decimals
-	:return: a tuple with zscore and grade
-	"""
-
-	# grades are always two characters: A+, B-, D
-	gradeFormat: str = '{:2}'
-	value = targetMap[firstKey][secondKey]
-
-	if value is None:
-		return noneFormat.format(' '), gradeFormat.format(' ')
-	else:
-		return (
-			validFormat.format(value),
-			gradeFormat.format(getGrade(value))
-		)
 
 
 def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
@@ -142,45 +118,22 @@ def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
 		# output the data we want for each colorPair
 		if colorPair in stats:
 			colorStats: Dict = stats[colorPair]
+			zScores: Dict = colorStats['z-scores']
 
-			ohwr: str = getValidatedKeyString(
-				colorStats, 'OH WR', '{:4}', '{:4.1f}', 100)
-			zOhwr, ohwrGrade = (
-				getNestedValidatedKeyStrings(
-					colorStats, 'z-scores', 'OH WR', '{:5}', '{:>5.2f}'))
+			ohwr: str = validate(colorStats['OH WR'], '{:4.1f}', 100)
+			zOhwr: str = validate(zScores['OH WR'],  '{:>5.2f}')
+			ohwrGrade: str = validate(getGrade(zScores['OH WR']), '{:2}')
 
-			gdwr: str = getValidatedKeyString(colorStats, 'GD WR', '{:4}', '{:4.1f}', 100)
-			if colorStats['z-scores']['GD WR'] is None:
-				zGdwr: str = '{:5}'.format(' ')
-				gdwrGrade: str = '{:2}'.format(' ')
-			else:
-				zGdwr: str = f"{colorStats['z-scores']['GD WR']:>5.2f}"
-				gdwrGrade: str = '{:2}'.format(getGrade(colorStats['z-scores']['GD WR']))
+			gdwr: str = validate(colorStats['GD WR'], '{:4.1f}', 100)
+			zGdwr: str = validate(zScores['GD WR'], '{:>5.2f}')
+			gdwrGrade: str = validate(getGrade(zScores['GD WR']), '{:2}')
 
-			# print(f'🥝{zGdwr} {gdwrGrade}')
-			# gdwr: float = colorStats['GD WR']
-			# zGdwr: float = colorStats['z-scores']['GD WR']
-			# gdwrGrade: str = getGrade(zGdwr)
-
-
-			iwd: str = getValidatedKeyString(colorStats, 'IWD', '{:4}', '{:4.1f}', 100)
+			iwd: str = validate(colorStats['IWD'], '{:4.1f}', 100)
+			zIwd: str = validate(zScores['IWD'], '{:>5.2f}')
+			iwdGrade: str = validate(getGrade(zScores['IWD']), '{:2}')
 
 			# set a flag if IWD returns an actual value other than 'None'
 			iwdFoundFlag: bool = (iwd != '{:4}'.format(' '))
-
-			if colorStats['z-scores']['IWD'] is None:
-				zIwd: str = '{:>5}'.format(' ')
-				iwdGrade: str = '{:2}'.format(' ')
-			else:
-				zIwd: str = f"{colorStats['z-scores']['IWD']:>5.2f}"
-				iwdGrade: str = '{:2}'.format(getGrade(colorStats['z-scores']['IWD']))
-
-			# print(f'🔥{zIwd} {iwdGrade}')
-
-			# iwd: float = colorStats['IWD']
-			# zIwd: float = colorStats['z-scores']['IWD']
-			# iwdGrade: str = getGrade(zIwd)
-
 
 			# remove the 'pp' suffix for IWD if IWD returned 'None'
 			iwdSuffix: str = 'pp' if iwdFoundFlag else ''
