@@ -144,7 +144,7 @@ def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
 			iwdFoundFlag: bool = (iwd != '{:4}'.format(' '))
 
 			# remove the 'pp' suffix for IWD if IWD returned 'None'
-			iwdSuffix: str = 'pp' if iwdFoundFlag else ''
+			iwdSuffix: str = 'pp' if iwdFoundFlag else '  '
 
 			gihCount: int = colorStats["# GIH"]
 			gihCountStr: str = f'{gihCount}'
@@ -342,9 +342,14 @@ def printCardComparison(
 		f'alsa '
 
 		f'{columnMark} '
-		f'   '  # ohwrGrade: 2 char + 1 space
-		f'      '  # OH z-score: 5 char + 1 space, e.g. '-1.50'
-		f'  OH '  # ohwr: 4 char + 1 space, e.g. 54.8
+		f'   '  	# ohwrGrade: 2 char + 1 space
+		f'      '  	# OH z-score: 5 char + 1 space, e.g. '-1.50'
+		f'  OH '  	# ohwr: 4 char + 1 space, e.g. 54.8
+
+		f'{columnMark} '
+		f'   '  	# gihwr grade
+		f'      '  	# z-score
+		f' GIH '  	# gihwr
 
 		f'{columnMark} '
 		f'   '  # gdwrGrade: 2 char + 1 space
@@ -372,6 +377,10 @@ def printCardComparison(
 				cardStats: Dict = cardData['filteredStats'][dataSetID]
 				zScores = cardStats['z-scores']
 
+				gihwr: str = validate(cardStats['GIH WR'], '{:4.1f}', 100)
+				zGihwr: str = validate(zScores['GIH WR'], '{:>5.2f}')
+				gihwrGrade: str = validate(getGrade(zScores['GIH WR']), '{:2}')
+
 				gdwr: str = validate(cardStats['GD WR'], '{:4.1f}', 100)
 				zGdwr: str = validate(zScores['GD WR'], '{:>5.2f}')
 				gdwrGrade: str = validate(getGrade(zScores['GD WR']), '{:2}')
@@ -385,7 +394,7 @@ def printCardComparison(
 				# remove the 'pp' suffix for IWD if IWD returned 'None'
 				iwd: str = validate(cardStats['IWD'], '{:4.1f}', 100)
 				iwdFoundFlag: bool = (iwd != '{:4}'.format(' '))
-				iwdSuffix: str = 'pp' if iwdFoundFlag else ''
+				iwdSuffix: str = 'pp' if iwdFoundFlag else '  '
 
 				# average last seen at
 				alsa: str = validate(cardData['ALSA'], '{:4.1f}')
@@ -399,6 +408,11 @@ def printCardComparison(
 					f'{ohwrGrade} '
 					f'{ANSI.DIM_WHITE.value}{zOhwr}{ANSI.RESET.value} '
 					f'{ohwr} '
+					f'{columnMark} '
+					
+					f'{gihwrGrade} '
+					f'{ANSI.DIM_WHITE.value}{zGihwr}{ANSI.RESET.value} '
+					f'{gihwr} '
 					f'{columnMark} '
 					
 					f'{gdwrGrade} '
