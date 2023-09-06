@@ -18,7 +18,7 @@ from constants import \
 	minGihSampleSize, minOhSampleSize, minGdSampleSize, \
 	minJsonInclusionSampleSize
 
-dataSetBasePath: str = 'data/ltr-converted/'
+dataSetBasePath: str = 'data/converted/'
 
 
 # generates a dictionary mapping card names to their mana costs in format '2UUU'
@@ -116,7 +116,9 @@ def createMasterJson(caliber: str):
 		# grab the mana cost from our collapsed scryfall dictionary:
 		# format is [cardName, mana cost] where latter is formatted
 		# 1UUU instead of {1}{U}{U}{U}
-		masterCardData['manaCost'] = nameManacostDict[name]
+
+		# TODO make this work for double faced cards: adventures multiple costs
+		# masterCardData['manaCost'] = nameManacostDict[name]
 
 		# iterate through every colorPair, adding data in key,value pairs:
 		# OH, OHWR, #GIH, GIHWR, #GD, GDWR, IWD, z-scores

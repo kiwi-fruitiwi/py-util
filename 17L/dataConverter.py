@@ -10,7 +10,7 @@ import json
 
 
 # converts 17L request json into a custom format that resembles 17L csv export
-# saves this new json to 📁 data/ltr-converted
+# saves this new json to 📁 data/converted
 def convertJson(jsonInputPath: str, jsonOutputPath: str):
     with open(jsonInputPath, 'r', encoding='utf-8') as f:
         json_data = json.load(f)
@@ -59,8 +59,8 @@ def convertJson(jsonInputPath: str, jsonOutputPath: str):
     
 
 def main():
-    inputJsonPath: str = f'data/ltr-requests/'
-    outputJsonPath: str = f'data/ltr-converted/'
+    inputJsonPath: str = f'data/requests/'
+    outputJsonPath: str = f'data/converted/'
 
     # data set names are 'all-players' and 'top-players'
     for dataSetName in caliberRequestMap.keys():

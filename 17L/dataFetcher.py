@@ -24,12 +24,12 @@ def main():
 		print(f'🫐 processing {dataSetName} → {dataSetURL}')
 
 		# iterate through colorPairs, making a request for each pair
-		# then dump into 📂ltr-requests as 'all.json' or the colorPair name
+		# then dump into 📂requests as 'all.json' or the colorPair name
 
 		# first, the 'all.json' output
 		allColors = requests.get(dataSetURL).json()
 		with open(
-				f'data/ltr-requests/{dataSetName}/all.json',
+				f'data/requests/{dataSetName}/all.json',
 				'w',
 				encoding='utf-8') as json_file_handler:
 			json_file_handler.write(json.dumps(allColors, indent=4))
@@ -44,7 +44,7 @@ def main():
 
 			# save locally to 'WU.json', 'WG.json', etc.
 			with open(
-					f'data/ltr-requests/{dataSetName}/{colorPair}.json',
+					f'data/requests/{dataSetName}/{colorPair}.json',
 					'w', encoding='utf-8') as json_file_handler:
 				json_file_handler.write(json.dumps(colorPairJson, indent=4))
 			print(f', {colorPair}', end='')
