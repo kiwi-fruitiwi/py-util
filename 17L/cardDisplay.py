@@ -118,7 +118,10 @@ def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
 	# include the colorPairStr
 	# ✒️ ALSA likely not necessary
 	stats: Dict = cardStats['filteredStats']
-	for colorPair in colorPairs:
+
+	colorPairsInclAll: list[str] = colorPairs.copy()
+	colorPairsInclAll.append('all')
+	for colorPair in colorPairsInclAll:
 
 		# output the data we want for each colorPair
 		if colorPair in stats:
