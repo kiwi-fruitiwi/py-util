@@ -8,10 +8,16 @@ import json
 
 # makes a scryfall API request and saves the file to setName.json
 def getScryfallJson():
-	setName: str = 'wot'
+	setName: str = 'woe'
+	secondSetName: str = 'wot'
 
 	# note we can append '+OR+set:MOM' to add additional sets
-	requestURL: str = f'https://api.scryfall.com/cards/search?q=set:{setName}'
+	baseRequestURL: str = f'https://api.scryfall.com/cards/search?q='
+	requestURL: str = f'{baseRequestURL}set:{setName}'
+
+	if secondSetName:
+		requestURL += f'+OR+set:{secondSetName}'
+
 	data = requests.get(requestURL).json()
 
 	# final result json ← concatenation of all 🔑:data pages
@@ -19,6 +25,7 @@ def getScryfallJson():
 
 	# pagination offers another page if 🔑:has_more is true
 	while data['has_more']:
+		print(f'🐳 🔑has_more!')
 		nextRequestURL: str = data['next_page']
 		data = requests.get(nextRequestURL).json()
 

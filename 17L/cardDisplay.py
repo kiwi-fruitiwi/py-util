@@ -317,7 +317,7 @@ def printCardComparison(
 
 	# to obtain stats for a colorPair, we query data['filteredStats'][dataSet],
 	# where dataSet ⊂ {default, WU, UG, WR...}.
-	sortingStat: str = 'OH WR'
+	sortingStat: str = 'GIH WR'
 	sortedData = dict(
 		sorted(
 			masterData.items(),
@@ -342,14 +342,14 @@ def printCardComparison(
 		f'alsa '
 
 		f'{columnMark} '
-		f'   '  	# ohwrGrade: 2 char + 1 space
-		f'      '  	# OH z-score: 5 char + 1 space, e.g. '-1.50'
-		f'  OH '  	# ohwr: 4 char + 1 space, e.g. 54.8
-
-		f'{columnMark} '
 		f'   '  	# gihwr grade
 		f'      '  	# z-score
 		f' GIH '  	# gihwr
+
+		f'{columnMark} '
+		f'   '  	# ohwrGrade: 2 char + 1 space
+		f'      '  	# OH z-score: 5 char + 1 space, e.g. '-1.50'
+		f'  OH '  	# ohwr: 4 char + 1 space, e.g. 54.8
 
 		f'{columnMark} '
 		f'   '  # gdwrGrade: 2 char + 1 space
@@ -377,6 +377,7 @@ def printCardComparison(
 				cardStats: Dict = cardData['filteredStats'][dataSetID]
 				zScores = cardStats['z-scores']
 
+				# TODO this is duplicated code
 				gihwr: str = validate(cardStats['GIH WR'], '{:4.1f}', 100)
 				zGihwr: str = validate(zScores['GIH WR'], '{:>5.2f}')
 				gihwrGrade: str = validate(getGrade(zScores['GIH WR']), '{:2}')
@@ -405,14 +406,14 @@ def printCardComparison(
 					f'{alsa} '
 					f'{columnMark} '
 					
-					f'{ohwrGrade} '
-					f'{ANSI.DIM_WHITE.value}{zOhwr}{ANSI.RESET.value} '
-					f'{ohwr} '
-					f'{columnMark} '
-					
 					f'{gihwrGrade} '
 					f'{ANSI.DIM_WHITE.value}{zGihwr}{ANSI.RESET.value} '
 					f'{gihwr} '
+					f'{columnMark} '
+					
+					f'{ohwrGrade} '
+					f'{ANSI.DIM_WHITE.value}{zOhwr}{ANSI.RESET.value} '
+					f'{ohwr} '
 					f'{columnMark} '
 					
 					f'{gdwrGrade} '

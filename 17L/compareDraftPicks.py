@@ -1,6 +1,5 @@
 import json
 import os
-import time
 import humanize
 
 from fuzzywuzzy import process
@@ -16,7 +15,7 @@ from cardDisplay import printCardComparison, printArchetypesData
 displayCardFetchList: bool = False
 
 
-def getFileModifiedDescription(filePath: str) -> str:
+def getFileModifiedDescription(filePath: str) -> str or None:
 	try:
 		# get the file's status information using os.stat()
 		fileStat = os.stat(filePath)
