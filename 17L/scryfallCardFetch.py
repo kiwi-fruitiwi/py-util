@@ -9,7 +9,7 @@ from constants import ANSI
 
 def printCardText(cardName: str, scryfallJson):
 	# iterate through scryfall data to find the matching unique card name
-	# then print out the text! note scryfall data is not keyed by card name!
+	# then return the text! note scryfall data is not keyed by card name!
 	for element in scryfallJson:
 		# for now, ignore multiple face cards like invasions and MDFCs
 		# if element['card_faces']:
@@ -23,25 +23,44 @@ def printCardText(cardName: str, scryfallJson):
 		#	"oracle_text": "Whenever the Ring tempts you, ..."
 
 		name: str = element['name']
+
+		if cardName in name and '//' in name:
+			print(f'🐳 {cardName} found in {name}')
+
 		if cardName == name:
-			manaCost: str = element['mana_cost']
-			typeLine: str = element['type_line']
-			oracleText: str = element['oracle_text']
+			print(f'{getCardFaceText(element, name)}')
 
-			print(f'')
-			print(f'{ANSI.WHITE.value}{name}{ANSI.RESET.value} {manaCost}')
-			print(f'{typeLine}')
-			print(f'{oracleText}')
 
-			# only creatures, artifact creatures, and vehicles have p/t
-			if 'power' in element:
-				power: str = element['power']
-				toughness: str = element['toughness']
-				print(f'{power}/{toughness}')
+def getCardFaceText(face: dict, name: str):
+	"""
+	returns card text for one face of a card
+	:param name:
+	:param face:
+	:return:
+	"""
+	manaCost: str = face['mana_cost']
+	typeLine: str = face['type_line']
+	oracleText: str = face['oracle_text']
 
-			if 'flavor_text' in element:
-				flavorText: str = element['flavor_text']
-				print(f'{ANSI.DIM_WHITE.value}{flavorText}{ANSI.RESET.value}')
+	# stringBuilder: piece together the typeText output we want
+	textOutput: str = ''
+
+	textOutput += f'\n'
+	textOutput += f'{ANSI.WHITE.value}{name}{ANSI.RESET.value} {manaCost}\n'
+	textOutput += f'{typeLine}\n'
+	textOutput += f'{oracleText}\n'
+
+	# only creatures, artifact creatures, and vehicles have p/t
+	if 'power' in face:
+		power: str = face['power']
+		toughness: str = face['toughness']
+		textOutput += f'{power}/{toughness}\n'
+
+	if 'flavor_text' in face:
+		flavorText: str = face['flavor_text']
+		textOutput += f'{ANSI.DIM_WHITE.value}{flavorText}{ANSI.RESET.value}\n'
+
+	return textOutput
 
 
 def getCardNames(scryfallJson):

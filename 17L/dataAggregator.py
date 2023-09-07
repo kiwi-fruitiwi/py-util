@@ -49,6 +49,8 @@ def createMasterJson(caliber: str):
 		card data from scryfall, including oracle text and img links
 		'''
 
+	# TODO double faced cards are a problem
+	#	if 'adventure' and '//' detected, truncate and only take first token
 	nameManacostDict: Dict = generateNameManacostDict(scryfallJson)
 
 	# load all.json. this contains default data from 17L. it's the default

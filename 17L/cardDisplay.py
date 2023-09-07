@@ -96,7 +96,7 @@ def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
 	print(
 		f'     n '  # # GIH: sample size
 		f'{columnMark} '  # outer column
-		f'   '  # colorPair: 2 char + 1 space
+		f'    '  # colorPair: 2 char + 1 space ← now 3 with 'all' included
 		f'{columnMark}  '  # ' → '
 		f'   '  # ohwrGrade: 2 char + 1 space
 		f'    '  # OH z-score: 5 char + 1 space, e.g. '-1.50'
@@ -152,14 +152,14 @@ def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
 			# if #gih surpasses this, print the archetype data
 			# otherwise as of 2023.Sept, 17L no longer publishes request data
 			# at low sample size and the lines will show up empty
-			archetypeThreshold: int = 750
+			archetypeThreshold: int = 500
 
 			if gihCount > archetypeThreshold:
 				print(
 					f'{ANSI.DIM_WHITE.value}{gihCountStr:>6}{ANSI.RESET.value} '
 					f'{columnMark} '
 					
-					f'{colorPair} {columnMark} '
+					f'{colorPair:>3} {columnMark} '
 					f'{ohwrGrade} '
 					f'{ANSI.DIM_WHITE.value}{zOhwr}{ANSI.RESET.value} '
 					f'{ohwr}'
