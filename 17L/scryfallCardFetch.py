@@ -24,8 +24,13 @@ def printCardText(cardName: str, scryfallJson):
 
 		name: str = element['name']
 
+		# for multi-faced cards like adventures in Wilds of Eldraine 🍁
+		# iterate through all card faces and print each one
 		if cardName in name and '//' in name:
 			print(f'🐳 {cardName} found in {name}')
+
+			for face in element['card_faces']:
+				print(f'{getCardFaceText(face, face["name"])}', end='')
 
 		if cardName == name:
 			print(f'{getCardFaceText(element, name)}')
