@@ -2,6 +2,8 @@
 # incorporated into compareDraftPicks.py via import
 
 import json
+import re
+
 from fuzzywuzzy import process
 from typing import List
 from constants import ANSI
@@ -46,6 +48,13 @@ def getCardFaceText(face: dict, name: str):
 	manaCost: str = face['mana_cost']
 	typeLine: str = face['type_line']
 	oracleText: str = face['oracle_text']
+
+	# process oracle text to remove reminder text: everything inside parens:
+	#	\( 		→ opening paren
+	# 	.*?		→ any number of characters
+	#	\)		→ closing paren
+	parenRegex: str = r'\(.*?\)'
+	oracleText = re.sub(parenRegex, '', oracleText)
 
 	# stringBuilder: piece together the typeText output we want
 	textOutput: str = ''
