@@ -368,14 +368,15 @@ def printCardComparison(
 		f'  OH '  	# ohwr: 4 char + 1 space, e.g. 54.8
 
 		f'{columnMark} '
-		f'   '  # gdwrGrade: 2 char + 1 space
-		f'      '  # GD z-score
-		f'  GD '  # gdwr: 4 char + 1 space
+		f'   '  	# gdwrGrade: 2 char + 1 space
+		f'      '  	# GD z-score
+		f'  GD '  	# gdwr: 4 char + 1 space
 
 		f'{columnMark} '
-		f'   IWD'  # IWD: 4 char + 1 space, e.g. -15.2pp
+		f'   IWD'  	# IWD: 4 char + 1 space, e.g. -15.2pp
 		f' R'
-		f'   '  # ' ← ' in rows	
+		f'     ' 	# mana cost
+		f'   '  	# ' ← ' in rows	
 		f'{ANSI.WHITE.value}{dataSetID}{ANSI.RESET.value} '
 		f'{ANSI.DIM_WHITE.value}μ={ANSI.RESET.value}{ohwrMean * 100:4.1f}, '
 		f'{ANSI.DIM_WHITE.value}σ={ANSI.RESET.value}{ohwrStdev * 100:3.1f}'
@@ -415,7 +416,9 @@ def printCardComparison(
 
 				# average last seen at
 				alsa: str = validate(cardData['ALSA'], '{:4.1f}')
+
 				rarity: str = cardData["Rarity"]
+				manaCost: str = cardData["manaCost"]
 
 				print(
 					f'{ANSI.DIM_WHITE.value}{cardStats["# GIH"]:6}{ANSI.RESET.value} '
@@ -439,5 +442,6 @@ def printCardComparison(
 					
 					f'{iwd}{ANSI.DIM_WHITE.value}{iwdSuffix}{ANSI.RESET.value} '
 					f'{rarity} '
+					f'{manaCost:>4} '
 					f'← {ANSI.BLUE.value}{cardName}{ANSI.RESET.value}'
 				)
