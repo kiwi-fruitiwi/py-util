@@ -97,6 +97,12 @@ def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
 		f'     n '  # # GIH: sample size
 		f'{columnMark} '  # outer column
 		f'    '  # colorPair: 2 char + 1 space ← now 3 with 'all' included
+
+		f'{columnMark} '
+		f'   '  	# gihwr grade
+		f'      '  	# z-score
+		f' GIH '  	# gihwr
+		
 		f'{columnMark}  '  # ' → '
 		f'   '  # ohwrGrade: 2 char + 1 space
 		f'    '  # OH z-score: 5 char + 1 space, e.g. '-1.50'
@@ -127,6 +133,10 @@ def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
 		if colorPair in stats:
 			colorStats: Dict = stats[colorPair]
 			zScores: Dict = colorStats['z-scores']
+
+			gihwr: str = validate(colorStats['GIH WR'], '{:4.1f}', 100)
+			zGihwr: str = validate(zScores['GIH WR'], '{:>5.2f}')
+			gihwrGrade: str = validate(getGrade(zScores['GIH WR']), '{:2}')
 
 			ohwr: str = validate(colorStats['OH WR'], '{:4.1f}', 100)
 			zOhwr: str = validate(zScores['OH WR'],  '{:>5.2f}')
@@ -160,6 +170,12 @@ def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
 					f'{columnMark} '
 					
 					f'{colorPair:>3} {columnMark} '
+					
+					f'{gihwrGrade} '
+					f'{ANSI.DIM_WHITE.value}{zGihwr}{ANSI.RESET.value} '
+					f'{gihwr} '
+					f'{columnMark} '
+					
 					f'{ohwrGrade} '
 					f'{ANSI.DIM_WHITE.value}{zOhwr}{ANSI.RESET.value} '
 					f'{ohwr}'

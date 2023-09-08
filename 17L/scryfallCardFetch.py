@@ -29,24 +29,23 @@ def printCardText(cardName: str, scryfallJson):
 		# for multi-faced cards like adventures in Wilds of Eldraine 🍁
 		# iterate through all card faces and print each one
 		if cardName in name and '//' in name:
-			print(f'🐳 {cardName} found in {name}')
-
 			for face in element['card_faces']:
-				print(f'{getCardFaceText(face, face["name"])}', end='')
+				print(f'{getCardFaceText(face, face["name"], element["rarity"])}', end='')
 
 		if cardName == name:
-			print(f'{getCardFaceText(element, name)}')
+			print(f'{getCardFaceText(element, name, element["rarity"])}')
 
 
-def getCardFaceText(face: dict, name: str):
+def getCardFaceText(face: dict, name: str, rarity: str):
 	"""
 	returns card text for one face of a card
 	:param name:
 	:param face:
+	:param rarity:
 	:return:
 	"""
 	manaCost: str = face['mana_cost']
-	typeLine: str = face['type_line']
+	typeLine: str = f'{face["type_line"]}'
 	oracleText: str = face['oracle_text']
 
 	# process oracle text to remove reminder text: everything inside parens:
@@ -62,6 +61,7 @@ def getCardFaceText(face: dict, name: str):
 	textOutput += f'\n'
 	textOutput += f'{ANSI.WHITE.value}{name}{ANSI.RESET.value} {manaCost}\n'
 	textOutput += f'{typeLine}\n'
+	textOutput += f'{ANSI.DIM_WHITE.value}{rarity.title()}{ANSI.RESET.value}\n'
 	textOutput += f'{oracleText}\n'
 
 	# only creatures, artifact creatures, and vehicles have p/t

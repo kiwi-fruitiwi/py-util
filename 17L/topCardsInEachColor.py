@@ -2,7 +2,6 @@
 # gihwr, ohwr, gdwr, iwd, alsa
 import json
 from typing import Dict, List
-from constants import colorPairs  # WU, UG, WR, etc.
 from constants import minGihSampleSize, caliberRequestMap
 
 from cardDisplay import printCardComparison
@@ -19,16 +18,17 @@ def displayTopCardsInEachColorByRarity(rarityList: List[str]):
 		master: Dict = json.load(jsonFileHandler)
 
 	for color in 'WUBRG':
-		print(f'\n🌊 color: {color}')
+		# print(f'\n🌊 color: {color}')
 
 		# take the first n items of a set rarity and display them
 		# TODO print stats! → # GIH, GIH WR, OH WR, IWD, zScore, grade
-		maxCount: int = 20
+		maxCount: int = 10
 		count: int = 0
 		cardFetchList: List[str] = []
 		for key, value in master.items():
 			if value.get("Rarity") in rarityList:
-				if color == value.get("Color"):
+				print(f'{value.get("Name")} → {value.get("Color")}')
+				if color in value.get("Color"):
 					nGih: int = value['filteredStats']['all']['# GIH']
 					if nGih > minGihSampleSize:
 						cardFetchList.append(key)
@@ -40,4 +40,4 @@ def displayTopCardsInEachColorByRarity(rarityList: List[str]):
 		printCardComparison(cardFetchList, 'all', caliber)
 
 
-displayTopCardsInEachColorByRarity(['C', 'U', 'R', 'M'])
+displayTopCardsInEachColorByRarity(['C'])
