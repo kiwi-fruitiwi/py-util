@@ -28,6 +28,12 @@ gradeBounds: List[tuple] = [
 ]
 
 
+gihwrDisplayToggle: bool = True
+ohwrDisplayToggle: bool = True
+gdwrDisplayToggle: bool = False
+iwdDisplayToggle: bool = True
+
+
 def getGrade(zScore: float):
 	"""
 	convert a z-score into a grade based on gradeBounds mapping
@@ -92,30 +98,49 @@ def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
 		f'{caliber} '
 		f'{ANSI.DIM_WHITE.value}players{ANSI.RESET.value}'
 	)
+
 	print(f'{ANSI.BLUE.value}{cardName}{ANSI.RESET.value} → ALSA {cardStats["ALSA"]:.1f}')
+
 	print(
 		f'     n '  # # GIH: sample size
 		f'{columnMark} '  # outer column
-		f'    '  # colorPair: 2 char + 1 space ← now 3 with 'all' included
-
-		f'{columnMark} '
-		f'   '  	# gihwr grade
-		f'      '  	# z-score
-		f' GIH '  	# gihwr
-		
-		f'{columnMark}  '  # ' → '
-		f'   '  # ohwrGrade: 2 char + 1 space
-		f'    '  # OH z-score: 5 char + 1 space, e.g. '-1.50'
-		f'   OH'  # ohwr: 4 char + 1 space, e.g. 54.8
-		f' {columnMark}  '  # column break
-		f'   '  # gdwrGrade: 2 char + 1 space
-		f'    '  # GD z-score
-		f'   GD'  # gdwr: 4 char + 1 space
-		f' {columnMark}  '  # column break
-		f'   '  # iwdGrade: 2 char + 1 space
-		f'    '  # IWD z-score
-		f'    IWD'  # IWD: 4 char + 1 space, e.g. -15.2pp
+		f'    ', end=''   	# colorPair: 2 char + 1 space ← now 3 with 'all' included
 	)
+
+	if gihwrDisplayToggle:
+		print(
+			f'{columnMark} '
+			f'   '  	# gihwr grade
+			f'      '  	# z-score
+			f' GIH ', end='' # gihwr
+
+		)
+
+	if ohwrDisplayToggle:
+		print(
+			f'{columnMark}  '  # ' → '
+			f'   '  	# ohwrGrade: 2 char + 1 space
+			f'    '  	# OH z-score: 5 char + 1 space, e.g. '-1.50'
+			f'   OH ', end=''   	# ohwr: 4 char + 1 space, e.g. 54.8
+		)
+
+	if gdwrDisplayToggle:
+		print(
+			f'{columnMark}  '  # column break
+			f'   '  # gdwrGrade: 2 char + 1 space
+			f'    '  # GD z-score
+			f'   GD ', end=''   # gdwr: 4 char + 1 space
+		)
+
+	if iwdDisplayToggle:
+		print(
+			f'{columnMark}  '  # column break
+			f'   '  # iwdGrade: 2 char + 1 space
+			f'    '  # IWD z-score
+			f'    IWD', end='' # IWD: 4 char + 1 space, e.g. -15.2pp
+		)
+
+	print(f'')  # newline
 
 	# iterate through colorPairs data to display the following stats:
 	# OH WR, OH WR z-score
@@ -167,29 +192,43 @@ def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
 			if gihCount > archetypeThreshold:
 				print(
 					f'{ANSI.DIM_WHITE.value}{gihCountStr:>6}{ANSI.RESET.value} '
-					f'{columnMark} '
-					
-					f'{colorPair:>3} {columnMark} '
-					
-					f'{gihwrGrade} '
-					f'{ANSI.DIM_WHITE.value}{zGihwr}{ANSI.RESET.value} '
-					f'{gihwr} '
-					f'{columnMark} '
-					
-					f'{ohwrGrade} '
-					f'{ANSI.DIM_WHITE.value}{zOhwr}{ANSI.RESET.value} '
-					f'{ohwr}'
-					f' {columnMark} '
-					
-					f'{gdwrGrade} '
-					f'{ANSI.DIM_WHITE.value}{zGdwr}{ANSI.RESET.value} '
-					f'{gdwr}'
-					f' {columnMark} '
-					
-					f'{iwdGrade} '
-					f'{ANSI.DIM_WHITE.value}{zIwd}{ANSI.RESET.value} '
-					f'{iwd}{ANSI.DIM_WHITE.value}{iwdSuffix}{ANSI.RESET.value}'
+					f'{columnMark} '					
+					f'{colorPair:>3} ', end=''
 				)
+
+				if gihwrDisplayToggle:
+					print(
+						f'{columnMark} '
+						f'{gihwrGrade} '
+						f'{ANSI.DIM_WHITE.value}{zGihwr}{ANSI.RESET.value} '
+						f'{gihwr} ', end=''
+					)
+
+				if ohwrDisplayToggle:
+					print(
+						f'{columnMark} '					
+						f'{ohwrGrade} '
+						f'{ANSI.DIM_WHITE.value}{zOhwr}{ANSI.RESET.value} '
+						f'{ohwr} ', end=''
+					)
+
+				if gdwrDisplayToggle:
+					print(
+						f'{columnMark} '					
+						f'{gdwrGrade} '
+						f'{ANSI.DIM_WHITE.value}{zGdwr}{ANSI.RESET.value} '
+						f'{gdwr} ', end=''
+					)
+
+				if iwdDisplayToggle:
+					print(
+						f'{columnMark} '					
+						f'{iwdGrade} '
+						f'{ANSI.DIM_WHITE.value}{zIwd}{ANSI.RESET.value} '
+						f'{iwd}{ANSI.DIM_WHITE.value}{iwdSuffix}{ANSI.RESET.value}', end=''
+					)
+
+				print(f'')  # newline
 	pass
 
 	'''
