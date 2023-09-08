@@ -30,9 +30,20 @@ def generateNameManacostDict(sfJson):
 	# return results
 	results: Dict[str, str] = {}
 	for card in sfJson:
+		# identify presence of double faced card cost, e.g. Gingerbread Hunter
+		# "mana_cost": "{4}{G} // {2}{B}"
+		# use only the first cost
+		cost: str = card['mana_cost']
+		if '//' in cost:
+			cost = cost.split(' // ')[0]
+
 		# strip {}, converting {2}{W}{R} to 2WR
-		manaCost: str = card['mana_cost'].replace("{", "").replace("}", "")
+		manaCost: str = cost.replace("{", "").replace("}", "")
+
 		name: str = card['name']
+		if '//' in card['name']:
+			name = card['name'].split(' // ')[0]
+
 		results[name] = manaCost
 
 	return results
@@ -120,7 +131,7 @@ def createMasterJson(caliber: str):
 		# 1UUU instead of {1}{U}{U}{U}
 
 		# TODO make this work for double faced cards: adventures multiple costs
-		# masterCardData['manaCost'] = nameManacostDict[name]
+		masterCardData['manaCost'] = nameManacostDict[name]
 
 		# iterate through every colorPair, adding data in key,value pairs:
 		# OH, OHWR, #GIH, GIHWR, #GD, GDWR, IWD, z-scores
@@ -157,7 +168,7 @@ def createMasterJson(caliber: str):
 	with open(f'data/{caliber}Master.json', 'w', encoding='utf-8') as jsonSaver:
 		jsonSaver.write(json.dumps(master, indent=4))
 
-	print(f'[ JSON SAVED ] master → {caliber}')
+	print(f'🐭 [ JSON SAVED ] master → {caliber}')
 
 
 def createZscoreDict(
@@ -267,7 +278,7 @@ def createStatsJson(caliber: str):
 	with open(f'data/{caliber}Stats.json', 'w', encoding='utf-8') as jsonSaver:
 		jsonSaver.write(json.dumps(result, indent=4))
 
-	print(f'[ JSON SAVED ] μ,σ statistics json → {caliber}')
+	print(f'🦈 [ JSON SAVED ] μ,σ statistics json → {caliber}')
 
 
 # calculate (μ,σ) pairs for GIHWR, OHWR, and IWD from the json file specified at
@@ -277,7 +288,7 @@ def calculateAndAddStatsKeyValuePairs(
 	with open(dataSetPath, 'r', encoding='utf-8') as f:
 		dataSet: Dict = json.load(f)
 
-	print(f'🍒 calculateAndAddStatsKeyValuePairs → {dataSetID} . {dataSetPath}')
+	# print(f'calculateAndAddStatsKeyValuePairs → {dataSetID} . {dataSetPath}')
 
 	# use cardName→float map instead of list of floats for error reporting in
 	# calculateStats
@@ -356,12 +367,12 @@ def calculateStats(
 		# find the source of this empty list
 		print(
 			f'[ ERROR ] '
-			f'🪶 {validData}\n\n'
+			f'🪶 data after removing None values: {validData}\n'
 			f'"{stat}" for {dataSetID}: {dataSetPath} '
 			f'only {len(validData)} cards in this archetype meet '
 			f'sample size requirements for {stat}: {statRequirement}. '
 			f'Consider increasing the time frame of the query or lowering this '
-			f'number. Note that lowering too much makes the data useless.'
+			f'number. Note that lowering too much makes the data useless.\n'
 		)
 		return {
 			'mean': None,
