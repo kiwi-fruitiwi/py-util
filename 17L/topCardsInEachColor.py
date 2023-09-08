@@ -7,6 +7,26 @@ from constants import minGihSampleSize, caliberRequestMap
 from cardDisplay import printCardComparison
 
 
+# this sorting key lets us parameterize the stat, e.g. GDWR OHWR GIHWR
+def statSortingKey(item, stat: str):
+	value: Dict = item[1]  # item[0] is the 🔑
+	allData: dict = value['filteredStats']['all']
+	sortingValue: float = allData[stat]
+
+	# sometimes the json value is null. this is converted to None in python
+	# we want these values to be as infinitely negative as possible so they sort
+	# to the end of the list in descending order
+	if sortingValue is None:
+		return float('-inf')
+
+	# sample size needs to be high enough. based this solely on # GIH
+	# which is number of game-in-hand, i.e. in opening hand or drawn
+	if allData['# GIH'] < minGihSampleSize:
+		return float('-inf')
+
+	return sortingValue
+
+
 # displays top cards of each colorPair by rarity: 'C', 'U', 'R', 'M'
 def displayTopCardsInEachColorByRarity(rarityList: List[str]):
 	caliber: str = list(caliberRequestMap.keys())[0]  # all
@@ -18,16 +38,30 @@ def displayTopCardsInEachColorByRarity(rarityList: List[str]):
 		master: Dict = json.load(jsonFileHandler)
 
 	for color in 'WUBRG':
-		# print(f'\n🌊 color: {color}')
+		print(f'\n🌊 color: {color}')
 
-		# take the first n items of a set rarity and display them
-		# TODO print stats! → # GIH, GIH WR, OH WR, IWD, zScore, grade
+		# sorting the data must come before iterating because we take the
+		# -first- n entries that satisfy our color and rarity requirements below
+		# not sorting thus misses possibilities at the end of the json
+		sortingStat: str = 'OH WR'
+		sortedData = dict(
+			sorted(
+				master.items(),
+				key=lambda item: statSortingKey(item, sortingStat),
+				reverse=True
+			)
+		)
+
+		# take the first n sorted-by-stat items of a rarity and display them
 		maxCount: int = 10
 		count: int = 0
 		cardFetchList: List[str] = []
-		for key, value in master.items():
+
+		for key, value in sortedData.items():
 			if value.get("Rarity") in rarityList:
-				print(f'{value.get("Name")} → {value.get("Color")}')
+
+				# we can either use 'color in' to include multicolor cards
+				# or 'color ==' to restrict only monocolor ones
 				if color in value.get("Color"):
 					nGih: int = value['filteredStats']['all']['# GIH']
 					if nGih > minGihSampleSize:
@@ -40,4 +74,4 @@ def displayTopCardsInEachColorByRarity(rarityList: List[str]):
 		printCardComparison(cardFetchList, 'all', caliber)
 
 
-displayTopCardsInEachColorByRarity(['C'])
+displayTopCardsInEachColorByRarity(['C', 'U'])
