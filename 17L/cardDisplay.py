@@ -33,6 +33,8 @@ ohwrDisplayToggle: bool = True
 gdwrDisplayToggle: bool = False
 iwdDisplayToggle: bool = True
 
+columnMark: str = f'{ANSI.BLACK.value}|{ANSI.RESET.value}'
+
 
 def getGrade(zScore: float):
 	"""
@@ -81,6 +83,40 @@ def validate(value: float | None, validFormat: str, scale: int = 1) -> str:
 		return validFormat.format(value*scale)
 
 
+
+def printColumnHeader(statStr: str):
+	print(
+		f'{columnMark} '
+		f'   '  			# grade
+		f'      '  			# z-score
+		f' {statStr:>3}'
+		f' ', end=''  	# stat name
+	)
+
+
+def printColumnData(statKey: str, data: Dict, colorPair: str):
+	"""
+	prints a column of data inside various console data displays
+	:param statKey: "GIH WR", "OH WR", "GD WR"
+	:param data: typically master.json → cardData['filteredStats']
+	:param colorPair: "all", "WU", "UG", "BR", etc.
+	:return:
+	"""
+	colorStats: Dict = data[colorPair]
+	zScores: Dict = colorStats['z-scores']
+
+	statPercentage: str = validate(colorStats[statKey], '{:4.1f}', 100)
+	statZScore: str = validate(zScores[statKey], '{:>5.2f}')
+	statGrade: str = validate(getGrade(zScores[statKey]), '{:2}')
+
+	print(
+		f'{columnMark} '
+		f'{statGrade} '
+		f'{ANSI.DIM_WHITE.value}{statZScore}{ANSI.RESET.value} '
+		f'{statPercentage} ', end=''
+	)
+
+
 def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
 	"""
 	output data from archetypes that satisfy the sample size requirement
@@ -89,8 +125,6 @@ def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
 	:param caliber: 'top', 'all' for allPlayers vs topPlayers dataSet
 	:return:
 	"""
-
-	columnMark: str = f'{ANSI.BLACK.value}|{ANSI.RESET.value}'
 
 	# header: display columns and title above the colorPairStrs
 	print(
@@ -108,29 +142,13 @@ def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
 	)
 
 	if gihwrDisplayToggle:
-		print(
-			f'{columnMark} '
-			f'   '  	# gihwr grade
-			f'      '  	# z-score
-			f' GIH ', end='' # gihwr
-
-		)
+		printColumnHeader('GIH')
 
 	if ohwrDisplayToggle:
-		print(
-			f'{columnMark}  '  # ' → '
-			f'   '  	# ohwrGrade: 2 char + 1 space
-			f'    '  	# OH z-score: 5 char + 1 space, e.g. '-1.50'
-			f'   OH ', end=''   	# ohwr: 4 char + 1 space, e.g. 54.8
-		)
+		printColumnHeader('OH')
 
 	if gdwrDisplayToggle:
-		print(
-			f'{columnMark}  '  # column break
-			f'   '  # gdwrGrade: 2 char + 1 space
-			f'    '  # GD z-score
-			f'   GD ', end=''   # gdwr: 4 char + 1 space
-		)
+		printColumnHeader('GD')
 
 	if iwdDisplayToggle:
 		print(
@@ -159,18 +177,6 @@ def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
 			colorStats: Dict = stats[colorPair]
 			zScores: Dict = colorStats['z-scores']
 
-			gihwr: str = validate(colorStats['GIH WR'], '{:4.1f}', 100)
-			zGihwr: str = validate(zScores['GIH WR'], '{:>5.2f}')
-			gihwrGrade: str = validate(getGrade(zScores['GIH WR']), '{:2}')
-
-			ohwr: str = validate(colorStats['OH WR'], '{:4.1f}', 100)
-			zOhwr: str = validate(zScores['OH WR'],  '{:>5.2f}')
-			ohwrGrade: str = validate(getGrade(zScores['OH WR']), '{:2}')
-
-			gdwr: str = validate(colorStats['GD WR'], '{:4.1f}', 100)
-			zGdwr: str = validate(zScores['GD WR'], '{:>5.2f}')
-			gdwrGrade: str = validate(getGrade(zScores['GD WR']), '{:2}')
-
 			iwd: str = validate(colorStats['IWD'], '{:4.1f}', 100)
 			zIwd: str = validate(zScores['IWD'], '{:>5.2f}')
 			iwdGrade: str = validate(getGrade(zScores['IWD']), '{:2}')
@@ -197,28 +203,13 @@ def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
 				)
 
 				if gihwrDisplayToggle:
-					print(
-						f'{columnMark} '
-						f'{gihwrGrade} '
-						f'{ANSI.DIM_WHITE.value}{zGihwr}{ANSI.RESET.value} '
-						f'{gihwr} ', end=''
-					)
+					printColumnData('GIH WR', stats, colorPair)
 
 				if ohwrDisplayToggle:
-					print(
-						f'{columnMark} '					
-						f'{ohwrGrade} '
-						f'{ANSI.DIM_WHITE.value}{zOhwr}{ANSI.RESET.value} '
-						f'{ohwr} ', end=''
-					)
+					printColumnData('OH WR', stats, colorPair)
 
 				if gdwrDisplayToggle:
-					print(
-						f'{columnMark} '					
-						f'{gdwrGrade} '
-						f'{ANSI.DIM_WHITE.value}{zGdwr}{ANSI.RESET.value} '
-						f'{gdwr} ', end=''
-					)
+					printColumnData('GD WR', stats, colorPair)
 
 				if iwdDisplayToggle:
 					print(
@@ -275,11 +266,14 @@ def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
 
 
 
-def printCardComparison(
-		cardNameList: List[str],  	# fuzzy input matching results
-		dataSetID: str,  			# 'all', 'WU', 'UG', 'RG'
-		caliber: str, 				# descriptor for 'all' vs 'top' player data
-):
+def printCardComparison(cardNameList: List[str], dataSetID: str, caliber: str):
+	"""
+	prints data from many cards at once
+	:param cardNameList: fuzzy input matching results
+	:param dataSetID: 'all', 'WU', 'UG', 'RG'
+	:param caliber: descriptor for 'all' vs 'top' player data
+	:return:
+	"""
 
 	masterJsonPath: str = f'data/{caliber}Master.json' 	# 'data/allMaster.json'
 	statsJsonPath: str = f'data/{caliber}Stats.json' 	# 'data/allStats.json'
@@ -384,8 +378,6 @@ def printCardComparison(
 	ohwrMean: float = statsData[dataSetID]['OH WR']['mean']
 	ohwrStdev: float = statsData[dataSetID]['OH WR']['stdev']
 
-	columnMark: str = f'{ANSI.BLACK.value}|{ANSI.RESET.value}'
-
 	# header: display columns and title above the colorPairStrs
 	# generally, spaces come after the column
 	print(
@@ -394,23 +386,18 @@ def printCardComparison(
 		f'{ANSI.DIM_WHITE.value}players{ANSI.RESET.value}'
 		f'\n'
 		f'     n '  # GIH: sample size
-		f'alsa '
+		f'alsa ', end='')
 
-		f'{columnMark} '
-		f'   '  	# gihwr grade
-		f'      '  	# z-score
-		f' GIH '  	# gihwr
+	if gihwrDisplayToggle:
+		printColumnHeader('GIH')
 
-		f'{columnMark} '
-		f'   '  	# ohwrGrade: 2 char + 1 space
-		f'      '  	# OH z-score: 5 char + 1 space, e.g. '-1.50'
-		f'  OH '  	# ohwr: 4 char + 1 space, e.g. 54.8
+	if ohwrDisplayToggle:
+		printColumnHeader('OH')
 
-		f'{columnMark} '
-		f'   '  	# gdwrGrade: 2 char + 1 space
-		f'      '  	# GD z-score
-		f'  GD '  	# gdwr: 4 char + 1 space
+	if gdwrDisplayToggle:
+		printColumnHeader('GD')
 
+	print(
 		f'{columnMark} '
 		f'   IWD'  	# IWD: 4 char + 1 space, e.g. -15.2pp
 		f' R'
@@ -423,6 +410,9 @@ def printCardComparison(
 
 	# display stats of selected cards from fuzzy input matching
 	for cardName, cardData in sortedData.items():
+
+		stats: Dict = cardData['filteredStats']
+
 		if cardName in cardNameList:
 			if dataSetID not in cardData['filteredStats']:
 				print(f'🥝 not enough data for {cardName} in {dataSetID}')
@@ -430,21 +420,7 @@ def printCardComparison(
 				print(f'🌊 not enough data for {cardName} in {dataSetID}: <{minGihSampleSize}')
 			else:
 				# print the comparison row
-				cardStats: Dict = cardData['filteredStats'][dataSetID]
-				zScores = cardStats['z-scores']
-
-				# TODO this is duplicated code
-				gihwr: str = validate(cardStats['GIH WR'], '{:4.1f}', 100)
-				zGihwr: str = validate(zScores['GIH WR'], '{:>5.2f}')
-				gihwrGrade: str = validate(getGrade(zScores['GIH WR']), '{:2}')
-
-				gdwr: str = validate(cardStats['GD WR'], '{:4.1f}', 100)
-				zGdwr: str = validate(zScores['GD WR'], '{:>5.2f}')
-				gdwrGrade: str = validate(getGrade(zScores['GD WR']), '{:2}')
-
-				ohwr: str = validate(cardStats['OH WR'], '{:4.1f}', 100)
-				zOhwr: str = validate(zScores['OH WR'],  '{:>5.2f}')
-				ohwrGrade: str = validate(getGrade(zScores['OH WR']), '{:2}')
+				cardStats: Dict = stats[dataSetID]
 
 				# improvement when drawn
 				# set a flag if IWD returns an actual value other than 'None'
@@ -461,24 +437,21 @@ def printCardComparison(
 
 				print(
 					f'{ANSI.DIM_WHITE.value}{cardStats["# GIH"]:6}{ANSI.RESET.value} '
-					f'{alsa} '
+					f'{alsa} ', end=''
+				)
+
+				# display data from colorPairs in cardData['filteredStats']
+				if gihwrDisplayToggle:
+					printColumnData('GIH WR', stats, dataSetID)
+
+				if ohwrDisplayToggle:
+					printColumnData('OH WR', stats, dataSetID)
+
+				if gdwrDisplayToggle:
+					printColumnData('GD WR', stats, dataSetID)
+
+				print(
 					f'{columnMark} '
-					
-					f'{gihwrGrade} '
-					f'{ANSI.DIM_WHITE.value}{zGihwr}{ANSI.RESET.value} '
-					f'{gihwr} '
-					f'{columnMark} '
-					
-					f'{ohwrGrade} '
-					f'{ANSI.DIM_WHITE.value}{zOhwr}{ANSI.RESET.value} '
-					f'{ohwr} '
-					f'{columnMark} '
-					
-					f'{gdwrGrade} '
-					f'{ANSI.DIM_WHITE.value}{zGdwr}{ANSI.RESET.value} '
-					f'{gdwr} '
-					f'{columnMark} '
-					
 					f'{iwd}{ANSI.DIM_WHITE.value}{iwdSuffix}{ANSI.RESET.value} '
 					f'{rarity} '
 					f'{manaCost:>4} '
