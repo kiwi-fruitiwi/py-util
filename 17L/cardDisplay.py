@@ -30,7 +30,7 @@ gradeBounds: List[tuple] = [
 
 gihwrDisplayToggle: bool = True
 ohwrDisplayToggle: bool = True
-gdwrDisplayToggle: bool = False
+gdwrDisplayToggle: bool = True
 iwdDisplayToggle: bool = True
 
 columnMark: str = f'{ANSI.BLACK.value}|{ANSI.RESET.value}'
@@ -88,7 +88,7 @@ def printColumnHeader(statStr: str):
 	print(
 		f'{columnMark} '
 		f'   '  			# grade
-		f'      '  			# z-score
+		f'     '  			# z-score
 		f' {statStr:>3}'
 		f' ', end=''  	# stat name
 	)
@@ -106,7 +106,7 @@ def printColumnData(statKey: str, data: Dict, colorPair: str):
 	zScores: Dict = colorStats['z-scores']
 
 	statPercentage: str = validate(colorStats[statKey], '{:4.1f}', 100)
-	statZScore: str = validate(zScores[statKey], '{:>5.2f}')
+	statZScore: str = validate(zScores[statKey], '{:>4.1f}')
 	statGrade: str = validate(getGrade(zScores[statKey]), '{:2}')
 
 	print(
@@ -155,7 +155,7 @@ def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
 			f'{columnMark}  '  # column break
 			f'   '  # iwdGrade: 2 char + 1 space
 			f'    '  # IWD z-score
-			f'    IWD', end='' # IWD: 4 char + 1 space, e.g. -15.2pp
+			f'   IWD', end='' # IWD: 4 char + 1 space, e.g. -15.2pp
 		)
 
 	print(f'')  # newline
@@ -178,7 +178,7 @@ def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
 			zScores: Dict = colorStats['z-scores']
 
 			iwd: str = validate(colorStats['IWD'], '{:4.1f}', 100)
-			zIwd: str = validate(zScores['IWD'], '{:>5.2f}')
+			zIwd: str = validate(zScores['IWD'], '{:>4.1f}')
 			iwdGrade: str = validate(getGrade(zScores['IWD']), '{:2}')
 
 			# set a flag if IWD returns an actual value other than 'None'
