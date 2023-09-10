@@ -397,6 +397,9 @@ def printCardComparison(cardNameList: List[str], dataSetID: str, caliber: str):
 	if gdwrDisplayToggle:
 		printColumnHeader('GD')
 
+	ohwrMeanStr: str = validate(ohwrMean, '{:4.1f}', 100)
+	ohwrStdevStr: str = validate(ohwrStdev, '{:3.1f}', 100)
+
 	print(
 		f'{columnMark} '
 		f'   IWD'  	# IWD: 4 char + 1 space, e.g. -15.2pp
@@ -404,8 +407,8 @@ def printCardComparison(cardNameList: List[str], dataSetID: str, caliber: str):
 		f'     ' 	# mana cost
 		f'   '  	# ' ← ' in rows	
 		f'{ANSI.WHITE.value}{dataSetID}{ANSI.RESET.value} '
-		f'{ANSI.DIM_WHITE.value}μ={ANSI.RESET.value}{ohwrMean * 100:4.1f}, '
-		f'{ANSI.DIM_WHITE.value}σ={ANSI.RESET.value}{ohwrStdev * 100:3.1f}'
+		f'{ANSI.DIM_WHITE.value}μ={ANSI.RESET.value}{ohwrMeanStr}, '
+		f'{ANSI.DIM_WHITE.value}σ={ANSI.RESET.value}{ohwrStdevStr}'
 	)
 
 	# display stats of selected cards from fuzzy input matching
