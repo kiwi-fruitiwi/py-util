@@ -53,7 +53,7 @@ def displayTopCardsInEachColorByRarity(rarityList: List[str]):
 		)
 
 		# take the first n sorted-by-stat items of a rarity and display them
-		maxCount: int = 10
+		maxCount: int = 15
 		count: int = 0
 		cardFetchList: List[str] = []
 

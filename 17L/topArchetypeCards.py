@@ -70,7 +70,7 @@ def displayTopCardsByRarity(rarityList: List[str]):
 
 		# take the first n items of a set rarity and display them
 		# TODO print stats! → # GIH, GIH WR, OH WR, IWD, zScore, grade
-		maxCount: int = 30
+		maxCount: int = 14
 		count: int = 0
 		cardFetchList: List[str] = []
 		for key, value in sortedData.items():
