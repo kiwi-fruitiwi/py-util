@@ -435,7 +435,9 @@ def printCardComparison(cardNameList: List[str], dataSetID: str, caliber: str):
 				# average last seen at
 				alsa: str = validate(cardData['ALSA'], '{:4.1f}')
 
-				rarity: str = cardData["Rarity"]
+				# dim 'C' in rarity
+				rarity: str = styleRarity(cardData["Rarity"])
+
 				manaCost: str = cardData["manaCost"]
 
 				print(
@@ -460,3 +462,11 @@ def printCardComparison(cardNameList: List[str], dataSetID: str, caliber: str):
 					f'{manaCost:>4} '
 					f'← {ANSI.BLUE.value}{cardName}{ANSI.RESET.value}'
 				)
+
+
+def styleRarity(rarity: str):
+	match rarity:
+		case 'C': return f'{ANSI.DIM_WHITE.value}{rarity}{ANSI.RESET.value}'
+		case 'R': return f'{ANSI.WHITE.value}{rarity}{ANSI.RESET.value}'
+		case 'M': return f'{ANSI.WHITE.value}{rarity}{ANSI.RESET.value}'
+		case _: return rarity
