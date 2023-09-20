@@ -51,6 +51,7 @@ def getColorFilterPrefix(s: str) -> str:
 # 	(or the default all colors file)
 def main():
 	previousUserInput: str = ''
+	previousCardFetchList: List[str] = []
 
 	# check timestamp on default data file
 	dataSetPath: str = f'data/{list(caliberRequestMap.keys())[0]}Master.json'
@@ -104,7 +105,20 @@ def main():
 			else:
 				userInput = previousUserInput
 
+		# 🌟 special command: '-'
+		# we need masterJson to be loaded to execute this one
+		# remove card names from previous query, then run query again as normal
+		userWishesToDeleteEntries: bool = False
+		userDeletionInput: str = ''
+		if userInput[0] == '-':
+			# save the subtraction user input, set a flag
+			userWishesToDeleteEntries = True
+			userDeletionInput: str = userInput[1:]
 
+			# take previousUserInput as the input we're going to work with
+			# because we're going to remove from this later after all other
+			# processing is done!
+			userInput = previousUserInput
 
 
 		# 🌟 special command: colorPair followed by ':'
@@ -212,6 +226,19 @@ def main():
 			getBestCardNameMatches(masterJson.keys(), strippedCardNames)
 
 
+		# handle if we detected the 🌟 subtraction special command op, '-'
+		# TODO maybe don't need flag; can check non-empty string
+		if userWishesToDeleteEntries:
+			# get card name matches from userDeletionInput
+			deletionInputCardNames: List[str] = userDeletionInput.split(',')
+			strippedNames: List[str] = [name.strip() for name in deletionInputCardNames]
+
+			cardsPendingDeletion: List[str] = \
+				getBestCardNameMatches(masterJson.keys(), strippedNames)
+
+			cardFetchList = [name for name in cardFetchList if name not in cardsPendingDeletion]
+
+
 		# if there's only one card, we will show an archetype analysis!
 		if len(cardFetchList) == 1:
 			cardName: str = cardFetchList[0]
@@ -221,6 +248,7 @@ def main():
 			if displayCardFetchList:
 				[print(name) for name in cardFetchList]
 
+			# 🎂 display the card stats!
 			printCardComparison(
 				cardFetchList,
 				dataSetID,
@@ -238,7 +266,9 @@ def main():
 		# print(f'[ DEBUG ] previous user input saved: {previousUserInput}')
 
 
-def getBestCardNameMatches(cardNames: KeysView[str], strippedCardNames: List[str]):
+def getBestCardNameMatches(
+		cardNames: KeysView[str], strippedCardNames: List[str]) -> List[str]:
+
 	cardFetchList: List[str] = []
 	for name in strippedCardNames:
 		# extractOne returns a tuple like this: ('Arwen Undómiel', 90)
