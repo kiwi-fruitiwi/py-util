@@ -1,9 +1,10 @@
 import json
 import os
+
 import humanize
 
 from fuzzywuzzy import process
-from typing import List, Dict
+from typing import List, Dict, KeysView
 from scryfallCardFetch import printCardText
 from datetime import datetime
 
@@ -69,7 +70,7 @@ def main():
 		printFlag = False
 		userInput: str = input('\nEnter cards: ')
 
-		# special command: empty line
+		# 🌟 special command: empty line
 		# negates previous caliber if empty line is the user input
 		# previous query to 'all' caliber set becomes 'top' and vice versa
 		if userInput == '':
@@ -102,6 +103,9 @@ def main():
 				userInput = f'{previousUserInput}, {userInput[1:]}'
 			else:
 				userInput = previousUserInput
+
+
+
 
 		# 🌟 special command: colorPair followed by ':'
 		# We can choose either prefix or suffix ':' → :wu or wu:
@@ -204,18 +208,9 @@ def main():
 			strippedCardNames[0] = tokens[1].strip()
 
 		# set up list of card names matched to our input
-		cardFetchList: List[str] = []
+		cardFetchList: List[str] = \
+			getBestCardNameMatches(masterJson.keys(), strippedCardNames)
 
-		for name in strippedCardNames:
-			# extractOne returns a tuple like this: ('Arwen Undómiel', 90)
-			# we're just interested in the name, not the closeness
-			bestMatch = process.extractOne(name, masterJson.keys())
-
-			if bestMatch:
-				bestMatchName = bestMatch[0]  # process always returns a List
-				cardFetchList.append(bestMatchName)
-			else:
-				print(f'🍆 best match not found for {name}')
 
 		# if there's only one card, we will show an archetype analysis!
 		if len(cardFetchList) == 1:
@@ -241,6 +236,21 @@ def main():
 		# save our old userInput
 		previousUserInput = userInput
 		# print(f'[ DEBUG ] previous user input saved: {previousUserInput}')
+
+
+def getBestCardNameMatches(cardNames: KeysView[str], strippedCardNames: List[str]):
+	cardFetchList: List[str] = []
+	for name in strippedCardNames:
+		# extractOne returns a tuple like this: ('Arwen Undómiel', 90)
+		# we're just interested in the name, not the closeness
+		bestMatch = process.extractOne(name, cardNames)
+
+		if bestMatch:
+			bestMatchName = bestMatch[0]  # process always returns a List
+			cardFetchList.append(bestMatchName)
+		else:
+			print(f'🍆 best match not found for {name}')
+	return cardFetchList
 
 
 main()
