@@ -236,6 +236,8 @@ def main():
 			cardsPendingDeletion: List[str] = \
 				getBestCardNameMatches(masterJson.keys(), strippedNames)
 
+			# remove all cards pending deletion from cardFetchList
+			# 🐛 note this does not modify previousUserInput
 			cardFetchList = [name for name in cardFetchList if name not in cardsPendingDeletion]
 
 
