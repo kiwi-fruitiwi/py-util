@@ -8,6 +8,7 @@
 import json
 from typing import List, Dict
 from constants import colorPairs
+from cardDisplay import getGrade, gradeBounds
 
 
 # displays cards that have a large diff between (all users, top users) by rarity
@@ -37,26 +38,38 @@ def displayDiffsByRarity(rarityList: List[str]):
 
 		for key in allMaster.keys():
 			print(f'{key}')
+
 			# extract win rates by key; note dictionaries keyed by card name
-			try:
-				allGIHWR: float or None = \
-					allMaster[key]['filteredStats'][colorPair]['GIH WR']
-			except KeyError:
-				allGIHWR = None
+			# sometimes top players don't use a card at all, e.g. eerie
+			# interference, so we must check for null values in the json
+			#
+			# other times, certain archetypes just have no data
+			allGIHWRz: float or None = getStatValue(allMaster[key], colorPair, 'GIH WR', True)
+			topGIHWRz: float or None = getStatValue(topMaster[key], colorPair, 'GIH WR', True)
 
-			try:
-				topGIHWR: float or None = \
-					topMaster[key]['filteredStats'][colorPair]['GIH WR']
-			except KeyError:
-				# sometimes top players don't use a card at all, e.g.
-				# eerie interference
-				topGIHWR = None
-
-			if allGIHWR and topGIHWR:
-				print(f'{key} → all:{allGIHWR}, top:{topGIHWR}')
+			if allGIHWRz and topGIHWRz:
+				print(f'{key} → all:{getGrade(allGIHWRz)}, top:{getGrade(topGIHWRz)}')
 
 			pass
 		print(f'🐳')
+
+
+def getStatValue(caliberStats: Dict, colorPair: str, stat: str, getZScore: bool = False) -> float or None:
+	"""
+
+	:param caliberStats:
+	:param colorPair:
+	:param stat:
+	:param getZScore:
+	:return:
+	"""
+	try:
+		target: Dict = caliberStats['filteredStats'][colorPair]
+		result = target['z-scores'][stat] if getZScore else target[stat]
+	except KeyError:
+		result = None
+
+	return result
 
 
 displayDiffsByRarity(list('CMUR'))
