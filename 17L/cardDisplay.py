@@ -265,6 +265,14 @@ def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
 	'''
 
 
+def printCaliberDifferences(
+		cardName: str,
+		topMaster: Dict, topStats: Dict,
+		allMaster: Dict, allStats: Dict):
+
+
+	pass
+
 
 def printCardComparison(cardNameList: List[str], dataSetID: str, caliber: str):
 	"""

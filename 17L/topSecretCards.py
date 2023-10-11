@@ -12,18 +12,27 @@ from cardDisplay import getGrade, gradeBounds
 
 
 # displays cards that have a large diff between (all users, top users) by rarity
-def displayDiffsByRarity(rarityList: List[str]):
+def displayCaliberDiffsByRarity(rarityList: List[str]):
 	# assume there's only top and allUsers data. no need to parameterize by
 	# caliberRequestMap
 
 	topUsersJsonPath: str = f'data/topMaster.json'
+	topStatsJsonPath: str = f'data/topStats.json'
+
 	allUsersJsonPath: str = f'data/allMaster.json'
+	allStatsJsonPath: str = f'data/allStats.json'
 
 	with open(topUsersJsonPath, 'r', encoding='utf-8') as jsonFileHandler:
 		topMaster: Dict = json.load(jsonFileHandler)
 
+	with open(topStatsJsonPath, 'r', encoding='utf-8') as jsonFileHandler:
+		topStats: Dict = json.load(jsonFileHandler)
+
 	with open(allUsersJsonPath, 'r', encoding='utf-8') as jsonFileHandler:
 		allMaster: Dict = json.load(jsonFileHandler)
+
+	with open(allStatsJsonPath, 'r', encoding='utf-8') as jsonFileHandler:
+		allStats: Dict = json.load(jsonFileHandler)
 
 	# assume the keys are identical in both topMaster and allMaster json files
 	for key, value in allMaster.items():
@@ -49,6 +58,8 @@ def displayDiffsByRarity(rarityList: List[str]):
 				if abs(allGIHWRz - topGIHWRz) > 0.5:
 					print(f'{key} → all:{allGIHWRz}, top:{topGIHWRz}')
 
+					# printCaliberDifferences(cardName, topMaster, topStats, allMaster, allStats)
+
 			pass
 		print(f'🐳')
 
@@ -71,4 +82,4 @@ def getStatValue(caliberStats: Dict, colorPair: str, stat: str, getZScore: bool 
 	return result
 
 
-displayDiffsByRarity(list('CMUR'))
+displayCaliberDiffsByRarity(list('CMUR'))
