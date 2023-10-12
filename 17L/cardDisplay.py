@@ -265,13 +265,24 @@ def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
 	'''
 
 
+# TODO similar to printCardComparison, but new caliber column, μ σ per entry
+# 	and new header → [CARD] {cardName} {rarity} in {colorPair / all}
 def printCaliberDifferences(
 		cardName: str,
+		dataSetID: str, # colorPair / all
 		topMaster: Dict, topStats: Dict,
 		allMaster: Dict, allStats: Dict):
 
+	# display title with ANSI coloring: [CARD] {cardName} {rarity} in {colorPair / all}
+	rarity: str = styleRarity(allMaster[cardName]["Rarity"])
 
-	pass
+	print(
+		f'{ANSI.DIM_WHITE.value}[CARD]{ANSI.RESET.value} '
+		f'{rarity} '
+		f'{ANSI.BLUE.value}{cardName}{ANSI.RESET.value} '
+		f'{ANSI.DIM_WHITE.value}in{ANSI.RESET.value} '
+		f'{ANSI.WHITE.value}{dataSetID}{ANSI.RESET.value}'
+	)
 
 
 def printCardComparison(cardNameList: List[str], dataSetID: str, caliber: str):

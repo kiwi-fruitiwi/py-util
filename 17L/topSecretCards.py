@@ -8,7 +8,7 @@
 import json
 from typing import List, Dict
 from constants import colorPairs
-from cardDisplay import getGrade, gradeBounds
+from cardDisplay import getGrade, gradeBounds, printCaliberDifferences
 
 
 # displays cards that have a large diff between (all users, top users) by rarity
@@ -46,6 +46,8 @@ def displayCaliberDiffsByRarity(rarityList: List[str]):
 		# 	value['filteredStats'][colorPair]['# GIH']
 
 		for key in allMaster.keys():
+			cardName: str = key
+
 			# extract win rates by key; note dictionaries keyed by card name
 			# sometimes top players don't use a card at all, e.g. eerie
 			# interference, so we must check for null values in the json
@@ -56,9 +58,11 @@ def displayCaliberDiffsByRarity(rarityList: List[str]):
 
 			if allGIHWRz and topGIHWRz:
 				if abs(allGIHWRz - topGIHWRz) > 0.5:
-					print(f'{key} → all:{allGIHWRz}, top:{topGIHWRz}')
-
-					# printCaliberDifferences(cardName, topMaster, topStats, allMaster, allStats)
+					# print(f'{key} → all:{allGIHWRz}, top:{topGIHWRz}')
+					printCaliberDifferences(
+						cardName, colorPair,
+						topMaster, topStats,
+						allMaster, allStats)
 
 			pass
 		print(f'🐳')
