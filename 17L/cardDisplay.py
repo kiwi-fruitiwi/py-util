@@ -4,6 +4,7 @@ from typing import List, Dict
 from constants import colorPairs
 from constants import ANSI
 from constants import minGihSampleSize
+from constants import caliberRequestMap
 
 # defines lower bound zScore values for letter grades like A-, D+, B, etc.
 # each letter grade is one standard deviation, with C centered around the mean μ
@@ -273,9 +274,12 @@ def printCaliberDifferences(
 		topMaster: Dict, topStats: Dict,
 		allMaster: Dict, allStats: Dict):
 
-	# display title with ANSI coloring: [CARD] {cardName} {rarity} in {colorPair / all}
-	rarity: str = styleRarity(allMaster[cardName]["Rarity"])
+	calibers: List[str] = list(caliberRequestMap.keys())
+	statsDict: Dict[str, Dict[str, float]]
 
+	# display title with ANSI coloring:
+	# 	[CARD] {rarity} {cardName} in {colorPair / all}
+	rarity: str = styleRarity(allMaster[cardName]["Rarity"])
 	print(
 		f'{ANSI.DIM_WHITE.value}[CARD]{ANSI.RESET.value} '
 		f'{rarity} '
@@ -283,6 +287,41 @@ def printCaliberDifferences(
 		f'{ANSI.DIM_WHITE.value}in{ANSI.RESET.value} '
 		f'{ANSI.WHITE.value}{dataSetID}{ANSI.RESET.value}'
 	)
+
+	# each row will need μ, σ data
+	topOhwrMean: float = topStats[dataSetID]['OH WR']['mean']
+	topOhwrStdev: float = topStats[dataSetID]['OH WR']['stdev']
+	allOhwrMean: float = allStats[dataSetID]['OH WR']['mean']
+	allOhwrStdev: float = allStats[dataSetID]['OH WR']['stdev']
+	
+	topOhwrMeanStr: str = validate(topOhwrMean, '{:4.1f}', 100)
+	topOhwrStdevStr: str = validate(topOhwrStdev, '{:3.1f}', 100)
+	allOhwrMeanStr: str = validate(allOhwrMean, '{:4.1f}', 100)
+	allOhwrStdevStr: str = validate(allOhwrStdev, '{:3.1f}', 100)
+
+	# istatsDict.
+
+	# header: display column titles
+	print(
+		f'caliber '
+		f'     n '  # GIH: sample size
+		f'alsa ', end='')
+
+	if gihwrDisplayToggle:
+		printColumnHeader('GIH')
+
+	if ohwrDisplayToggle:
+		printColumnHeader('OH')
+
+	if gdwrDisplayToggle:
+		printColumnHeader('GD')
+
+	print(
+		f'{columnMark} '
+		f'   IWD')  	# IWD: 4 char + 1 space, e.g. -15.2pp
+
+
+
 
 
 def printCardComparison(cardNameList: List[str], dataSetID: str, caliber: str):
