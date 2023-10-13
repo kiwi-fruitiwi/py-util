@@ -275,7 +275,7 @@ def printCaliberDifferences(
 		allMaster: Dict, allStats: Dict):
 
 	calibers: List[str] = list(caliberRequestMap.keys())
-	statsDict: Dict[str, Dict[str, float]]
+	statsDict: Dict[str, Dict[str, float]] = {}
 
 	# display title with ANSI coloring:
 	# 	[CARD] {rarity} {cardName} in {colorPair / all}
@@ -299,7 +299,8 @@ def printCaliberDifferences(
 	allOhwrMeanStr: str = validate(allOhwrMean, '{:4.1f}', 100)
 	allOhwrStdevStr: str = validate(allOhwrStdev, '{:3.1f}', 100)
 
-	# istatsDict.
+	statsDict.update({'top': {'mean': topOhwrMean, 'stdev': topOhwrStdev}})
+	statsDict.update({'all': {'mean': allOhwrMean, 'stdev': allOhwrStdev}})
 
 	# header: display column titles
 	print(
@@ -320,7 +321,7 @@ def printCaliberDifferences(
 		f'{columnMark} '
 		f'   IWD')  	# IWD: 4 char + 1 space, e.g. -15.2pp
 
-
+	print(f'{statsDict}')
 
 
 
