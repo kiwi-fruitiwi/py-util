@@ -293,11 +293,6 @@ def printCaliberDifferences(
 	topOhwrStdev: float = topStats[dataSetID]['OH WR']['stdev']
 	allOhwrMean: float = allStats[dataSetID]['OH WR']['mean']
 	allOhwrStdev: float = allStats[dataSetID]['OH WR']['stdev']
-	
-	topOhwrMeanStr: str = validate(topOhwrMean, '{:4.1f}', 100)
-	topOhwrStdevStr: str = validate(topOhwrStdev, '{:3.1f}', 100)
-	allOhwrMeanStr: str = validate(allOhwrMean, '{:4.1f}', 100)
-	allOhwrStdevStr: str = validate(allOhwrStdev, '{:3.1f}', 100)
 
 	statsDict.update({'top': {'mean': topOhwrMean, 'stdev': topOhwrStdev}})
 	statsDict.update({'all': {'mean': allOhwrMean, 'stdev': allOhwrStdev}})
@@ -321,8 +316,74 @@ def printCaliberDifferences(
 		f'{columnMark} '
 		f'   IWD')  	# IWD: 4 char + 1 space, e.g. -15.2pp
 
-	print(f'{statsDict}')
+	# print data per row for each caliber, currently only top and all players:
+	# all
+	print('    all ', end='')
+	printCardStatsRow(cardName, allMaster, dataSetID, displayMvName=False)
 
+
+	print('    top ', end='')
+	printCardStatsRow(cardName, topMaster, dataSetID, displayMvName=False)
+
+	# newline
+	print(f'')
+
+# top
+
+
+# displays a partial line of card stats
+def printCardStatsRow(cardName, masterJson: Dict, dataSetID, displayMvName: bool = True):
+	cardData = masterJson[cardName]
+	stats: Dict = cardData['filteredStats']
+
+	# make sure data is available and we meet sample size requirements
+	if dataSetID not in cardData['filteredStats']:
+		print(f'🥝 not enough data for {cardName} in {dataSetID}')
+	elif cardData['filteredStats'][dataSetID]['# GIH'] <= minGihSampleSize:
+		print(
+			f'🌊 not enough data for {cardName} in {dataSetID}: <{minGihSampleSize}')
+	else:
+		cardStats: Dict = stats[dataSetID]
+		iwd: str = validate(cardStats['IWD'], '{:4.1f}', 100)
+		iwdFoundFlag: bool = (iwd != '{:4}'.format(' '))
+		iwdSuffix: str = 'pp' if iwdFoundFlag else '  '
+
+		# average last seen at
+		alsa: str = validate(cardData['ALSA'], '{:4.1f}')
+
+		# dim 'C' in rarity
+		rarity: str = styleRarity(cardData["Rarity"])
+
+		manaCost: str = cardData["manaCost"]
+
+		print(
+			f'{ANSI.DIM_WHITE.value}{cardStats["# GIH"]:6}{ANSI.RESET.value} '
+			f'{alsa} ', end=''
+		)
+
+		# display data from colorPairs in cardData['filteredStats']
+		if gihwrDisplayToggle:
+			printColumnData('GIH WR', stats, dataSetID)
+
+		if ohwrDisplayToggle:
+			printColumnData('OH WR', stats, dataSetID)
+
+		if gdwrDisplayToggle:
+			printColumnData('GD WR', stats, dataSetID)
+
+		print(
+			f'{columnMark} '
+			f'{iwd}{ANSI.DIM_WHITE.value}{iwdSuffix}{ANSI.RESET.value} ',
+			end='')
+
+		if displayMvName:
+			print(
+				f'{rarity} '
+				f'{manaCost:>4} '
+				f'← {ANSI.BLUE.value}{cardName}{ANSI.RESET.value}'
+			)
+		else: # restore the newline
+			print(f'')
 
 
 def printCardComparison(cardNameList: List[str], dataSetID: str, caliber: str):
@@ -472,55 +533,8 @@ def printCardComparison(cardNameList: List[str], dataSetID: str, caliber: str):
 
 	# display stats of selected cards from fuzzy input matching
 	for cardName, cardData in sortedData.items():
-
-		stats: Dict = cardData['filteredStats']
-
 		if cardName in cardNameList:
-			if dataSetID not in cardData['filteredStats']:
-				print(f'🥝 not enough data for {cardName} in {dataSetID}')
-			elif cardData['filteredStats'][dataSetID]['# GIH'] <= minGihSampleSize:
-				print(f'🌊 not enough data for {cardName} in {dataSetID}: <{minGihSampleSize}')
-			else:
-				# print the comparison row
-				cardStats: Dict = stats[dataSetID]
-
-				# improvement when drawn
-				# set a flag if IWD returns an actual value other than 'None'
-				# remove the 'pp' suffix for IWD if IWD returned 'None'
-				iwd: str = validate(cardStats['IWD'], '{:4.1f}', 100)
-				iwdFoundFlag: bool = (iwd != '{:4}'.format(' '))
-				iwdSuffix: str = 'pp' if iwdFoundFlag else '  '
-
-				# average last seen at
-				alsa: str = validate(cardData['ALSA'], '{:4.1f}')
-
-				# dim 'C' in rarity
-				rarity: str = styleRarity(cardData["Rarity"])
-
-				manaCost: str = cardData["manaCost"]
-
-				print(
-					f'{ANSI.DIM_WHITE.value}{cardStats["# GIH"]:6}{ANSI.RESET.value} '
-					f'{alsa} ', end=''
-				)
-
-				# display data from colorPairs in cardData['filteredStats']
-				if gihwrDisplayToggle:
-					printColumnData('GIH WR', stats, dataSetID)
-
-				if ohwrDisplayToggle:
-					printColumnData('OH WR', stats, dataSetID)
-
-				if gdwrDisplayToggle:
-					printColumnData('GD WR', stats, dataSetID)
-
-				print(
-					f'{columnMark} '
-					f'{iwd}{ANSI.DIM_WHITE.value}{iwdSuffix}{ANSI.RESET.value} '
-					f'{rarity} '
-					f'{manaCost:>4} '
-					f'← {ANSI.BLUE.value}{cardName}{ANSI.RESET.value}'
-				)
+			printCardStatsRow(cardName, masterData, dataSetID)
 
 
 def styleRarity(rarity: str):
