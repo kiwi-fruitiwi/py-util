@@ -20,6 +20,20 @@ from constants import caliberRequestMap, colorPairs
 
 # get requested json data from 17lands.com for all data sets
 def main():
+	# getRawRequestsFrom17L()
+	getRecentAlsaMaps()
+
+
+def getRecentAlsaMaps():
+	for dataSetName, dataSetURL in caliberRequestMap.items():
+		dataSetURL += f'&start_date=2023-10-01'
+		print(f'🫐 processing {dataSetName} → {dataSetURL}')
+
+
+	pass
+
+
+def getRawRequestsFrom17L():
 	for dataSetName, dataSetURL in caliberRequestMap.items():
 		print(f'🫐 processing {dataSetName} → {dataSetURL}')
 
