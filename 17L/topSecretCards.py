@@ -7,7 +7,7 @@
 
 import json
 from typing import List, Dict
-from constants import colorPairs
+from constants import colorPairs, ANSI
 from cardDisplay import getGrade, gradeBounds, printCaliberDifferences
 
 
@@ -40,7 +40,7 @@ def displayCaliberDiffsByRarity(rarityList: List[str]):
 		pass
 
 	for colorPair in colorPairs:
-		print(f'\n🌊 colors: {colorPair}')
+		print(f'\n🏳️‍🌈 colors: {ANSI.WHITE.value}{colorPair}{ANSI.RESET.value}\n')
 
 		# print OH and GD win rates across both calibers per color pair
 		# 	value['filteredStats'][colorPair]['# GIH']
@@ -63,9 +63,6 @@ def displayCaliberDiffsByRarity(rarityList: List[str]):
 						cardName, colorPair,
 						topMaster, topStats,
 						allMaster, allStats)
-
-			pass
-		print(f'🐳')
 
 
 def getStatValue(caliberStats: Dict, colorPair: str, stat: str, getZScore: bool = False) -> float or None:

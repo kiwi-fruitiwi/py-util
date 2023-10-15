@@ -27,7 +27,7 @@ baseRequestURL: str = \
 	"https://www.17lands.com/card_ratings/data" \
 	"?expansion=WOE" \
 	"&format=PremierDraft" \
-	"&start_date=2023-09-25" # recent data only, typically last 2 weeks
+	# "&start_date=2023-09-25" # recent data only, typically last 2 weeks
 
 # a map between player caliber set, e.g. 'all', 'top', 'bottom', 'middle', and
 # their 17lands json request URLs

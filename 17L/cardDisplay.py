@@ -106,6 +106,7 @@ def printColumnData(statKey: str, data: Dict, colorPair: str):
 	colorStats: Dict = data[colorPair]
 	zScores: Dict = colorStats['z-scores']
 
+	# e.g. 58.2% +1.1 B-
 	statPercentage: str = validate(colorStats[statKey], '{:4.1f}', 100)
 	statZScore: str = validate(zScores[statKey], '{:>4.1f}')
 	statGrade: str = validate(getGrade(zScores[statKey]), '{:2}')
@@ -118,14 +119,21 @@ def printColumnData(statKey: str, data: Dict, colorPair: str):
 	)
 
 
-def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
+def printArchetypesData(
+		cardName: str,
+		masterJson: Dict,
+		statsJson: Dict,
+		caliber: str):
 	"""
 	output data from archetypes that satisfy the sample size requirement
 	:param cardName:
-	:param cardStats: json containing data for a single card
+	:param masterJson: a list of card data keyed by name
+	:param statsJson: contains μ σ info for stats per color pair
 	:param caliber: 'top', 'all' for allPlayers vs topPlayers dataSet
 	:return:
 	"""
+
+	cardStats: Dict = masterJson[cardName]
 
 	# header: display columns and title above the colorPairStrs
 	print(
@@ -139,7 +147,12 @@ def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
 	print(
 		f'     n '  # # GIH: sample size
 		f'{columnMark} '  # outer column
-		f'    ', end=''   	# colorPair: 2 char + 1 space ← now 3 with 'all' included
+		f'    '
+		f'{columnMark} '
+		f'   μ '
+		f'{columnMark} '
+		f'  σ '
+		, end=''   	# colorPair: 2 char + 1 space ← now 3 with 'all' included
 	)
 
 	if gihwrDisplayToggle:
@@ -175,6 +188,8 @@ def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
 
 		# output the data we want for each colorPair
 		if colorPair in stats:
+			# printCardStatsRow(cardName, masterJson, statsJson, caliber)
+
 			colorStats: Dict = stats[colorPair]
 			zScores: Dict = colorStats['z-scores']
 
@@ -194,13 +209,26 @@ def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
 			# if #gih surpasses this, print the archetype data
 			# otherwise as of 2023.Sept, 17L no longer publishes request data
 			# at low sample size and the lines will show up empty
-			archetypeThreshold: int = 500
+			archetypeThreshold: int = 250
 
 			if gihCount > archetypeThreshold:
+
+				# categorize by GIHWR μ σ
+				gihwrMean: float = statsJson[colorPair]['GIH WR']['mean']
+				gihwrStdev: float = statsJson[colorPair]['GIH WR']['stdev']
+
+				ohwrMeanStr: str = validate(gihwrMean, '{:4.1f}', 100)
+				ohwrStdevStr: str = validate(gihwrStdev, '{:3.1f}', 100)
+
+
 				print(
 					f'{ANSI.DIM_WHITE.value}{gihCountStr:>6}{ANSI.RESET.value} '
 					f'{columnMark} '					
-					f'{colorPair:>3} ', end=''
+					f'{ANSI.WHITE.value}{colorPair:>3}{ANSI.RESET.value} '
+					f'{columnMark} '
+					f'{ANSI.DIM_WHITE.value}{ohwrMeanStr}{ANSI.RESET.value} '
+					f'{columnMark} '
+					f'{ANSI.DIM_WHITE.value}{ohwrStdevStr}{ANSI.RESET.value} ', end=''
 				)
 
 				if gihwrDisplayToggle:
@@ -223,48 +251,6 @@ def printArchetypesData(cardName: str, cardStats: Dict, caliber: str):
 				print(f'')  # newline
 	pass
 
-	'''
-	sample json data from master.json
-	"Mushroom Watchdogs": {
-    "Name": "Mushroom Watchdogs",
-    "ALSA": 6.540190935273274,
-    "ATA": 9.316888800477422,
-    "URL": "https://cards.scryfall.io/border_crop/...
-    "Color": "G",
-    "Rarity": "C",
-    "filteredStats": {
-		"all": {
-			"GIH WR": 0.5307067390663804,
-			"# GIH": 23757,
-			"OH WR": 0.5347051294673624,
-			"# OH": 10157,
-			"GD WR": 0.5277205882352941,
-			"# GD": 13600,
-			"IWD": 0.01449355618653092,
-			"z-scores": {
-				"GIH WR": -0.6087595880909483,
-				"OH WR": -0.26421759784763266,
-				"GD WR": -0.9673573311007,
-				"IWD": -0.4456916782217906
-			}
-		},
-		"WG": {
-			"GIH WR": 0.5320304968889668,
-			"# GIH": 11411,
-			"OH WR": 0.5375103050288541,
-			"# OH": 4852,
-			"GD WR": 0.5279768257356304,
-			"# GD": 6559,
-			"IWD": 0.020120355516556998,
-			"z-scores": {
-				"GIH WR": -0.1501275360237784,
-				"OH WR": 0.37914599272031013,
-				"GD WR": -0.6613069872127326,
-				"IWD": -0.3508266920392758
-			}
-		}, 
-	'''
-
 
 # TODO similar to printCardComparison, but new caliber column, μ σ per entry
 # 	and new header → [CARD] {cardName} {rarity} in {colorPair / all}
@@ -277,17 +263,6 @@ def printCaliberDifferences(
 	calibers: List[str] = list(caliberRequestMap.keys())
 	statsDict: Dict[str, Dict[str, float]] = {}
 
-	# display title with ANSI coloring:
-	# 	[CARD] {rarity} {cardName} in {colorPair / all}
-	rarity: str = styleRarity(allMaster[cardName]["Rarity"])
-	print(
-		f'{ANSI.DIM_WHITE.value}[CARD]{ANSI.RESET.value} '
-		f'{rarity} '
-		f'{ANSI.BLUE.value}{cardName}{ANSI.RESET.value} '
-		f'{ANSI.DIM_WHITE.value}in{ANSI.RESET.value} '
-		f'{ANSI.WHITE.value}{dataSetID}{ANSI.RESET.value}'
-	)
-
 	# each row will need μ, σ data
 	topOhwrMean: float = topStats[dataSetID]['OH WR']['mean']
 	topOhwrStdev: float = topStats[dataSetID]['OH WR']['stdev']
@@ -296,6 +271,34 @@ def printCaliberDifferences(
 
 	statsDict.update({'top': {'mean': topOhwrMean, 'stdev': topOhwrStdev}})
 	statsDict.update({'all': {'mean': allOhwrMean, 'stdev': allOhwrStdev}})
+
+	# find difference in GIH WR z-scores between calibers to display in title
+	topGihz: float = topMaster[cardName]['filteredStats'][dataSetID]['z-scores']['GIH WR']
+	allGihz: float = allMaster[cardName]['filteredStats'][dataSetID]['z-scores']['GIH WR']
+	signMarker: str = ''
+
+	if topGihz and allGihz:
+		difference: float = (topGihz - allGihz)
+		diffStr: str = f'{difference:>5.2f}'
+
+		if topGihz - allGihz > 0:
+			signMarker = f'📈'
+		else:
+			signMarker = f'📉'
+			return
+
+	# display title with ANSI coloring:
+	# 	[CARD] {rarity} {cardName} in {colorPair / all}
+	rarity: str = styleRarity(allMaster[cardName]["Rarity"])
+	print(
+		f'{diffStr} {signMarker} '
+		# f'{ANSI.DIM_WHITE.value}[CARD]{ANSI.RESET.value} '
+		f'{rarity} '
+		f'{ANSI.BLUE.value}{cardName}{ANSI.RESET.value} '
+		f'{ANSI.DIM_WHITE.value}in{ANSI.RESET.value} '
+		f'{ANSI.WHITE.value}{dataSetID}{ANSI.RESET.value}'
+	)
+
 
 	# header: display column titles
 	print(
@@ -319,11 +322,19 @@ def printCaliberDifferences(
 	# print data per row for each caliber, currently only top and all players:
 	# all
 	print('    all ', end='')
-	printCardStatsRow(cardName, allMaster, dataSetID, displayMvName=False)
+	printCardStatsRow(
+		cardName, allMaster, allStats, dataSetID,
+		displayMvName=False,
+		displayArchetypeStats=True
+	)
 
 
 	print('    top ', end='')
-	printCardStatsRow(cardName, topMaster, dataSetID, displayMvName=False)
+	printCardStatsRow(
+		cardName, topMaster, topStats, dataSetID,
+		displayMvName=False,
+		displayArchetypeStats=True
+	)
 
 	# newline
 	print(f'')
@@ -332,7 +343,11 @@ def printCaliberDifferences(
 
 
 # displays a partial line of card stats
-def printCardStatsRow(cardName, masterJson: Dict, dataSetID, displayMvName: bool = True):
+def printCardStatsRow(
+		cardName, masterJson: Dict, statsJson: Dict, dataSetID,
+		displayMvName: bool = True,
+		displayArchetypeStats: bool = False):
+
 	cardData = masterJson[cardName]
 	stats: Dict = cardData['filteredStats']
 
@@ -381,6 +396,20 @@ def printCardStatsRow(cardName, masterJson: Dict, dataSetID, displayMvName: bool
 				f'{rarity} '
 				f'{manaCost:>4} '
 				f'← {ANSI.BLUE.value}{cardName}{ANSI.RESET.value}'
+			)
+		elif displayArchetypeStats:
+			# categorize by GIHWR μ σ
+			gihwrMean: float = statsJson[dataSetID]['GIH WR']['mean']
+			gihwrStdev: float = statsJson[dataSetID]['GIH WR']['stdev']
+
+			ohwrMeanStr: str = validate(gihwrMean, '{:4.1f}', 100)
+			ohwrStdevStr: str = validate(gihwrStdev, '{:3.1f}', 100)
+
+			print(
+				f' '  # ' ← ' in rows    
+				f'{ANSI.WHITE.value}{dataSetID}{ANSI.RESET.value} '
+				f'{ANSI.DIM_WHITE.value}μ={ANSI.RESET.value}{ohwrMeanStr}, '
+				f'{ANSI.DIM_WHITE.value}σ={ANSI.RESET.value}{ohwrStdevStr}'
 			)
 		else: # restore the newline
 			print(f'')
@@ -495,8 +524,8 @@ def printCardComparison(cardNameList: List[str], dataSetID: str, caliber: str):
 	)
 
 	# get μ, σ pair to display in header
-	ohwrMean: float = statsData[dataSetID]['OH WR']['mean']
-	ohwrStdev: float = statsData[dataSetID]['OH WR']['stdev']
+	gihwrMean: float = statsData[dataSetID]['GIH WR']['mean']
+	gihwrStdev: float = statsData[dataSetID]['GIH WR']['stdev']
 
 	# header: display columns and title above the colorPairStrs
 	# generally, spaces come after the column
@@ -517,8 +546,8 @@ def printCardComparison(cardNameList: List[str], dataSetID: str, caliber: str):
 	if gdwrDisplayToggle:
 		printColumnHeader('GD')
 
-	ohwrMeanStr: str = validate(ohwrMean, '{:4.1f}', 100)
-	ohwrStdevStr: str = validate(ohwrStdev, '{:3.1f}', 100)
+	ohwrMeanStr: str = validate(gihwrMean, '{:4.1f}', 100)
+	ohwrStdevStr: str = validate(gihwrStdev, '{:3.1f}', 100)
 
 	print(
 		f'{columnMark} '
@@ -534,7 +563,7 @@ def printCardComparison(cardNameList: List[str], dataSetID: str, caliber: str):
 	# display stats of selected cards from fuzzy input matching
 	for cardName, cardData in sortedData.items():
 		if cardName in cardNameList:
-			printCardStatsRow(cardName, masterData, dataSetID)
+			printCardStatsRow(cardName, masterData, statsData, dataSetID)
 
 
 def styleRarity(rarity: str):

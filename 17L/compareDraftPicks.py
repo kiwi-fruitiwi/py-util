@@ -199,6 +199,10 @@ def main():
 		with open(dataSetPath) as file:
 			masterJson: Dict = json.load(file)
 
+		# stats for current caliber
+		with open(f'data/{caliber}Stats.json') as file:
+			statsJson: Dict = json.load(file)
+
 
 		# 🌟 special command: print card text if first char is '!'
 		# we ignore all but the first token in the input string this way
@@ -256,7 +260,7 @@ def main():
 		# if there's only one card, we will show an archetype analysis!
 		if len(cardFetchList) == 1:
 			cardName: str = cardFetchList[0]
-			printArchetypesData(cardName, masterJson[cardName], caliber)
+			printArchetypesData(cardName, masterJson, statsJson, caliber)
 		else:
 			# print a list of names if we're matching more than one card
 			if displayCardFetchList:

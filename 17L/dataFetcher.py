@@ -24,7 +24,7 @@ def main():
 	getRawRequestsFrom17L()
 
 	# enable this when we don't restrict startDate so ALSAs are more accurate
-	# getRecentAlsaMaps()
+	getRecentAlsaMaps()
 
 
 def getRecentAlsaMaps():
