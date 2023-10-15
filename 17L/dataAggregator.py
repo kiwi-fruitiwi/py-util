@@ -94,6 +94,21 @@ def createMasterJson(caliber: str):
 	# json files and append them. note we also need to remove default stats
 	# entries and stuff them into a "🔑 all" key to represent 'all colors'
 	for name, masterCardData in master.items():
+		# update with recent ALSA numbers, not ALSA for the entire format
+		del masterCardData['ALSA']
+		dataSetPath: str = f'data/{caliber}RecentAlsa.json'
+		with open(dataSetPath, 'r', encoding='utf-8') as jsonFileHandler:
+			alsas: Dict = json.load(jsonFileHandler)
+
+		masterCardData['ALSA'] = alsas[name]
+
+		# grab the mana cost from our collapsed scryfall dictionary:
+		# format is [cardName, mana cost] where latter is formatted
+		# 1UUU instead of {1}{U}{U}{U}
+		# TODO make this work for double faced cards: adventures multiple costs
+		masterCardData['manaCost'] = nameManacostDict[name]
+
+
 		# stats we want z-scores for
 		stats: List[str] = ['GIH WR', 'OH WR', 'GD WR', 'IWD']
 
@@ -125,13 +140,6 @@ def createMasterJson(caliber: str):
 		del masterCardData['GD WR']
 		del masterCardData['# GD']
 		del masterCardData['IWD']
-
-		# grab the mana cost from our collapsed scryfall dictionary:
-		# format is [cardName, mana cost] where latter is formatted
-		# 1UUU instead of {1}{U}{U}{U}
-
-		# TODO make this work for double faced cards: adventures multiple costs
-		masterCardData['manaCost'] = nameManacostDict[name]
 
 		# iterate through every colorPair, adding data in key,value pairs:
 		# OH, OHWR, #GIH, GIHWR, #GD, GDWR, IWD, z-scores
