@@ -1,7 +1,8 @@
 import json
 import os
-
+import re
 import humanize
+
 
 from fuzzywuzzy import process
 from typing import List, Dict, KeysView
@@ -9,8 +10,7 @@ from scryfallCardFetch import printCardText
 from datetime import datetime
 
 # import just for 🔑 names
-from constants import caliberRequestMap, ANSI
-from constants import colorPairs
+from constants import caliberRequestMap, ANSI, colorPairs, baseRequestURL
 from cardDisplay import printCardComparison, printArchetypesData
 
 displayCardFetchList: bool = False
@@ -53,9 +53,21 @@ def main():
 	previousUserInput: str = ''
 	previousCardFetchList: List[str] = []
 
+	# extract data start date from constants.baseRequestURL
+	# regex pattern to match 'start_date=YYYY-MM-DD'
+	pattern = re.compile(r"start_date=(\d{4}-\d{2}-\d{2})")
+	match = pattern.search(baseRequestURL)
+	dateStr: str = ''
+	if match:
+		dateStr = f', starting from {match.group(1)}'
+
 	# check timestamp on default data file
 	dataSetPath: str = f'data/{list(caliberRequestMap.keys())[0]}Master.json'
-	print(f'\n📉 17L data update: {getFileModifiedDescription(dataSetPath)}')
+	print(
+		f'\n📉 17L data update: {getFileModifiedDescription(dataSetPath)}'
+		f'{dateStr}'
+	)
+
 
 	# load card info from scryfall json
 	with open('data/scryfall.json', encoding='utf-8-sig') as f:

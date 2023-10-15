@@ -22,7 +22,9 @@ from constants import caliberRequestMap, colorPairs
 # get requested json data from 17lands.com for all data sets
 def main():
 	getRawRequestsFrom17L()
-	getRecentAlsaMaps()
+
+	# enable this when we don't restrict startDate so ALSAs are more accurate
+	# getRecentAlsaMaps()
 
 
 def getRecentAlsaMaps():
