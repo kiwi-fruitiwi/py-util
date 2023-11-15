@@ -25,7 +25,7 @@ colorPairs: List[str] = [
 # it's possible to leave out start and end date. defaults to entire format!
 baseRequestURL: str = \
 	"https://www.17lands.com/card_ratings/data" \
-	"?expansion=WOE" \
+	"?expansion=LCI" \
 	"&format=PremierDraft" \
 	# "&start_date=2023-09-25" # recent data only, typically last 2 weeks
 

@@ -24,12 +24,13 @@ def main():
 	getRawRequestsFrom17L()
 
 	# enable this when we don't restrict startDate so ALSAs are more accurate
+	# TODO explain what happens when this isn't run
 	getRecentAlsaMaps()
 
 
 def getRecentAlsaMaps():
 	for dataSetName, dataSetURL in caliberRequestMap.items():
-		dataSetURL += f'&start_date=2023-10-01'
+		dataSetURL += f'&start_date=2023-11-14'
 		print(f'🫐 processing {dataSetName} → {dataSetURL}')
 
 		# query 17L for data for 'all' users, usually within last two weeks

@@ -33,9 +33,19 @@ def generateNameManacostDict(sfJson):
 		# identify presence of double faced card cost, e.g. Gingerbread Hunter
 		# "mana_cost": "{4}{G} // {2}{B}"
 		# use only the first cost
-		cost: str = card['mana_cost']
-		if '//' in cost:
-			cost = cost.split(' // ')[0]
+
+		# 🍁Wilds of Eldraine had mana costs in // format
+		# Rip the Seams // Threadbind Clique's 🔑mana_cost was {3}{U} // {2}{W}
+		# but 🧭Lost Caverns of Ixalan's Gods are different
+		#   they have no 🔑mana_cost in the main card json
+		#	but transfer these to card faces: 3BB front, empty string back
+		if 'mana_cost' in card:
+			cost: str = card['mana_cost']
+			if '//' in cost:
+				cost = cost.split(' // ')[0]
+		else:
+			# take the cost of the front side of the card
+			cost: str = card['card_faces'][0]['mana_cost']
 
 		# strip {}, converting {2}{W}{R} to 2WR
 		manaCost: str = cost.replace("{", "").replace("}", "")
