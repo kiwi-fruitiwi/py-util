@@ -28,10 +28,7 @@ def statSortingKey(item, stat: str):
 
 
 # displays top cards of each colorPair by rarity: 'C', 'U', 'R', 'M'
-def displayTopCardsInEachColorByRarity(rarityList: List[str]):
-	# caliber: str = list(caliberRequestMap.keys())[0]  # all
-	caliber: str = list(caliberRequestMap.keys())[1]  # top
-
+def displayTopCardsInEachColorByRarity(rarityList: List[str], caliber: str):
 	print(f'{caliber} →')
 	currentJsonPath: str = f'data/{caliber}Master.json'
 	with open(currentJsonPath, 'r', encoding='utf-8') as jsonFileHandler:
@@ -74,4 +71,5 @@ def displayTopCardsInEachColorByRarity(rarityList: List[str]):
 		printCardComparison(cardFetchList, 'all', caliber)
 
 
-displayTopCardsInEachColorByRarity(['C', 'U'])
+for key in caliberRequestMap.keys():
+	displayTopCardsInEachColorByRarity(['C', 'U'], key)
