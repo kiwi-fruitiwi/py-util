@@ -8,13 +8,50 @@ from cardDisplay import getGrade, gradeBounds, printArchetypesData
 
 
 def displayArchetypeDiffs(rarityList: List[str]):
+	targetStat: str = 'GIH WR'
+	targetDiff: float = 0.5
+
 	topMaster: Dict = loadJson('data/topMaster.json')
 	topStats: Dict = loadJson('data/topStats.json')
 	allMaster: Dict = loadJson('data/allMaster.json')
 	allStats: Dict = loadJson('data/allStats.json')
 
-	for key, value in allMaster.items():
-		print(f'{key}')
+
+	# for each card:
+	# 	for each colorPair, check the difference between the win rate in that
+	# 	pair vs the win rate in all
+	for name in allMaster.keys():
+		# grab card win rate data
+		allGIHWRz: float or None = getStatValue(allMaster[name], 'all', 'GIH WR', True)
+		print(f'{name} → {allGIHWRz}')
+
+		# find z-scores in each colorPair that exceed the 'all' stat
+		# save these to a dictionary: 🔑colorPairStr, value: stat value
+		# then call cardDisplay.printArchetypeData if the list is nonEmpty, with
+		# a header saying how many archetypes the card is a secretGoldCard in.
+		for colorPair in colorPairs:
+
+			pass
+
+
+def getStatValue(caliberStats: Dict, colorPair: str, stat: str, getZScore: bool = False) -> float or None:
+	"""
+	protects against KeyErrors by returning None if key does not have a value
+
+	:param caliberStats: allMaster, topMaster dictionaries
+	:param colorPair: one of the 10 color pairs
+	:param stat: GIH WR, OH WR, GD WR
+	:param getZScore: set to True if we want the z-score of the stat instead of
+		the float value of the stat itself
+	:return: None, a win rate float, or z-score float
+	"""
+	try:
+		target: Dict = caliberStats['filteredStats'][colorPair]
+		result = target['z-scores'][stat] if getZScore else target[stat]
+	except KeyError:
+		result = None
+
+	return result
 
 
 displayArchetypeDiffs(list('CMUR'))
