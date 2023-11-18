@@ -8,20 +8,13 @@ from cardDisplay import getGrade, gradeBounds, printArchetypesData
 
 
 def displayArchetypeDiffs(rarityList: List[str]):
-	topUsersJsonPath: str = f'data/topMaster.json'
-	topStatsJsonPath: str = f'data/topStats.json'
+	topMaster: Dict = loadJson('data/topMaster.json')
+	topStats: Dict = loadJson('data/topStats.json')
+	allMaster: Dict = loadJson('data/allMaster.json')
+	allStats: Dict = loadJson('data/allStats.json')
 
-	allUsersJsonPath: str = f'data/allMaster.json'
-	allStatsJsonPath: str = f'data/allStats.json'
+	for key, value in allMaster.items():
+		print(f'{key}')
 
-	with open(topUsersJsonPath, 'r', encoding='utf-8') as jsonFileHandler:
-		topMaster: Dict = json.load(jsonFileHandler)
 
-	with open(topStatsJsonPath, 'r', encoding='utf-8') as jsonFileHandler:
-		topStats: Dict = json.load(jsonFileHandler)
-
-	with open(allUsersJsonPath, 'r', encoding='utf-8') as jsonFileHandler:
-		allMaster: Dict = json.load(jsonFileHandler)
-
-	with open(allStatsJsonPath, 'r', encoding='utf-8') as jsonFileHandler:
-		allStats: Dict = json.load(jsonFileHandler)
+displayArchetypeDiffs(list('CMUR'))
