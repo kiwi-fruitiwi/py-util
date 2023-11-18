@@ -7,7 +7,7 @@
 
 import json
 from typing import List, Dict
-from constants import colorPairs, ANSI
+from constants import colorPairs, ANSI, loadJson
 from cardDisplay import getGrade, gradeBounds, printCaliberDifferences
 
 

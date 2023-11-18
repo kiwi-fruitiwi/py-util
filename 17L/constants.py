@@ -1,3 +1,4 @@
+import json
 from typing import List, Dict
 from enum import Enum
 
@@ -16,24 +17,24 @@ minGdSampleSize: int = int(minGihSampleSize * 3 / 5)
 minJsonInclusionSampleSize: int = 50
 
 colorPairs: List[str] = [
-	'WU', 'WB', 'WR', 'WG',
-	'UB', 'UR', 'UG',
-	'BR', 'BG',
-	'RG'
+    'WU', 'WB', 'WR', 'WG',
+    'UB', 'UR', 'UG',
+    'BR', 'BG',
+    'RG'
 ]
 
 # it's possible to leave out start and end date. defaults to entire format!
 baseRequestURL: str = \
-	"https://www.17lands.com/card_ratings/data" \
-	"?expansion=LCI" \
-	"&format=PremierDraft" \
-	# "&start_date=2023-09-25" # recent data only, typically last 2 weeks
+    "https://www.17lands.com/card_ratings/data" \
+    "?expansion=LCI" \
+    "&format=PremierDraft" \
+    # "&start_date=2023-09-25" # recent data only, typically last 2 weeks
 
 # a map between player caliber set, e.g. 'all', 'top', 'bottom', 'middle', and
 # their 17lands json request URLs
 caliberRequestMap: Dict = {
-	"all": f'{baseRequestURL}',
-	"top": f'{baseRequestURL}&user_group=top'
+    "all": f'{baseRequestURL}',
+    "top": f'{baseRequestURL}&user_group=top'
 }
 
 
@@ -45,26 +46,34 @@ caliberRequestMap: Dict = {
 # dim foreground colors: [2;30m → [2;37m
 # background colors: [40m → [47m
 class ANSI(Enum):
-	RESET = '\033[0m'  # Reset to default text color
-	UNDERLINE = '\033[4m'
-	ITALIC = '\033[3m'
+    RESET = '\033[0m'  # Reset to default text color
+    UNDERLINE = '\033[4m'
+    ITALIC = '\033[3m'
 
-	# the default console text output can be considered 'standard white'
-	# but the ANSI 'standard white' looks bold
-	BLACK = '\033[90m'
-	RED = '\033[91m'
-	GREEN = '\033[92m'
-	YELLOW = '\033[93m'
-	BLUE = '\033[94m'
-	PURPLE = '\033[95m'
-	CYAN = '\033[96m'
-	WHITE = '\033[97m'
-	DIM_WHITE = '\033[2;37m'
+    # the default console text output can be considered 'standard white'
+    # but the ANSI 'standard white' looks bold
+    BLACK = '\033[90m'
+    RED = '\033[91m'
+    GREEN = '\033[92m'
+    YELLOW = '\033[93m'
+    BLUE = '\033[94m'
+    PURPLE = '\033[95m'
+    CYAN = '\033[96m'
+    WHITE = '\033[97m'
+    DIM_WHITE = '\033[2;37m'
 
 
 def displayDict(dictionary):
-	# display contents of card dictionary neatly
-	for key, value in dictionary.items():
-		print(f'\n{key} :')
-		for innerKey, innerValue in value.items():
-			print(f"    {innerKey}: {innerValue}")
+    # display contents of card dictionary neatly
+    for key, value in dictionary.items():
+        print(f'\n{key} :')
+        for innerKey, innerValue in value.items():
+            print(f"    {innerKey}: {innerValue}")
+
+
+def loadJson(filepath: str) -> Dict:
+    """
+    Load JSON data from a given file path.
+    """
+    with open(filepath, 'r', encoding='utf-8') as jsonFileHandler:
+        return json.load(jsonFileHandler)
