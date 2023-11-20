@@ -27,47 +27,49 @@ def statSortingKey(item, stat: str):
 
 
 # displays top cards of each colorPair by rarity: 'C', 'U', 'R', 'M'
-def displayTopCardsInEachColorByRarity(rarityList: List[str], caliber: str):
-	print(f'{caliber} →')
-	master: Dict = loadJson(f'data/{caliber}Master.json')
+def displayTopCardsInEachColorByRarity(rarityList: List[str]):
 
+	# go through colors and iterate through calibers in each
 	for color in 'WUBRG':
 		print(f'\n🌊 color: {color}')
 
-		# sorting the data must come before iterating because we take the
-		# -first- n entries that satisfy our color and rarity requirements below
-		# not sorting thus misses possibilities at the end of the json
-		sortingStat: str = 'OH WR'
-		sortedData = dict(
-			sorted(
-				master.items(),
-				key=lambda item: statSortingKey(item, sortingStat),
-				reverse=True
+		for caliber in caliberRequestMap.keys():
+			master: Dict = loadJson(f'data/{caliber}Master.json')
+
+			# sorting the data must come before iterating because we take the
+			# -first- n entries that satisfy our color and rarity requirements below
+			# not sorting thus misses possibilities at the end of the json
+			sortingStat: str = 'OH WR'
+			sortedData = dict(
+				sorted(
+					master.items(),
+					key=lambda item: statSortingKey(item, sortingStat),
+					reverse=True
+				)
 			)
-		)
 
-		# take the first n sorted-by-stat items of a rarity and display them
-		maxCount: int = 5
-		count: int = 0
-		cardFetchList: List[str] = []
+			# take the first n sorted-by-stat items of a rarity and display them
+			maxCount: int = 5
+			count: int = 0
+			cardFetchList: List[str] = []
 
-		for name, cardData in sortedData.items():
-			if cardData.get("Rarity") in rarityList:
+			for name, cardData in sortedData.items():
+				if cardData.get("Rarity") in rarityList:
 
-				# we can either use 'color in' to include multicolor cards
-				# or 'color ==' to restrict only monocolor ones
-				if color in cardData.get("Color"):
-					nGih: int = cardData['filteredStats']['all']['# GIH']
-					if nGih > minGihSampleSize:
-						cardFetchList.append(name)
-					count += 1
+					# we can either use 'color in' to include multicolor cards
+					# or 'color ==' to restrict only monocolor ones
+					if color in cardData.get("Color"):
+						nGih: int = cardData['filteredStats']['all']['# GIH']
+						if nGih > minGihSampleSize:
+							cardFetchList.append(name)
+						count += 1
 
-					if count >= maxCount:
-						break
+						if count >= maxCount:
+							break
 
-		printCardComparison(cardFetchList, 'all', caliber)
+			printCardComparison(cardFetchList, 'all', caliber)
+			print()
 
 
-for key in caliberRequestMap.keys():
-	# displayTopCardsInEachColorByRarity(['C', 'U'], key)
-	displayTopCardsInEachColorByRarity(['C'], key)
+# displayTopCardsInEachColorByRarity(['C', 'U'], key)
+displayTopCardsInEachColorByRarity(['C'])
