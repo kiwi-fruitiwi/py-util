@@ -73,10 +73,10 @@ def displayTopCardsInEachColorByRarity(rarityList: List[str], n: int):
 
 # don't run this on imports
 if __name__ == '__main__':
+	print(f'be aware lack of sample size for top caliber players will put commons and uncommons at the top of the list')
 	userInput: str = input('n rarityList: ')
 	inputs: List[str] = userInput.split(' ')
 	n: int = int(inputs[0])
 	colors: List[str] = list(inputs[1].upper())
 
 	displayTopCardsInEachColorByRarity(colors, n)
-	# displayTopCardsInEachColorByRarity(['C', 'U'], key)

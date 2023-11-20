@@ -46,10 +46,7 @@ def sortingKey(item, colorPair: str, stat: str):
 
 
 # displays top cards of each colorPair by rarity: 'C', 'U', 'R', 'M'
-def displayTopCardsByRarity(rarityList: List[str]):
-	caliber: str = list(caliberRequestMap.keys())[0]  # all
-	# caliber: str = list(caliberRequestMap.keys())[1]  # top
-
+def displayTopCardsByRarity(rarityList: List[str], caliber: str = 'all', maxCards: int = 5, ):
 	print(f'{caliber} →')
 	currentJsonPath: str = f'data/{caliber}Master.json'
 	with open(currentJsonPath, 'r', encoding='utf-8') as jsonFileHandler:
@@ -70,7 +67,7 @@ def displayTopCardsByRarity(rarityList: List[str]):
 
 		# take the first n items of a set rarity and display them
 		# TODO print stats! → # GIH, GIH WR, OH WR, IWD, zScore, grade
-		maxCount: int = 5
+		maxCount: int = maxCards
 		count: int = 0
 		cardFetchList: List[str] = []
 		for key, value in sortedData.items():
@@ -87,5 +84,12 @@ def displayTopCardsByRarity(rarityList: List[str]):
 		printCardComparison(cardFetchList, colorPair, caliber)
 
 
-displayTopCardsByRarity(['C'])
-# displayTopCardsByRarity(['C', 'U', 'R', 'M'])
+# don't run this when importing this file
+if __name__ == '__main__':
+	userInput: str = input('n rarityList caliber: ')
+	inputs: List[str] = userInput.split(' ')
+	n: int = int(inputs[0])
+	colors: List[str] = list(inputs[1].upper())
+	caliber: str = inputs[2]
+
+	displayTopCardsByRarity(colors, maxCards=n, caliber=caliber)
