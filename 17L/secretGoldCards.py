@@ -9,19 +9,26 @@ from cardDisplay import getGrade, gradeBounds, printArchetypesData
 
 def displayArchetypeDiffs(rarityList: List[str]):
 	targetStat: str = 'GIH WR'
-	targetDiff: float = 0.5
+	targetDiff: float = 0.4
 
 	topMaster: Dict = loadJson('data/topMaster.json')
 	topStats: Dict = loadJson('data/topStats.json')
 	allMaster: Dict = loadJson('data/allMaster.json')
 	allStats: Dict = loadJson('data/allStats.json')
 
+	namesToColorIdentity: Dict = generateNameColorIdentityDict()
+
 	# for each card:
 	# 	for each colorPair, check the difference between the win rate in that
 	# 	pair vs the win rate in all
-	for name in allMaster.keys():
+	for name in topMaster.keys():
+		colorIdentityList: List[str] = namesToColorIdentity[name]
+		if len(colorIdentityList) > 1:
+			print(f'🖋 skipping {name} →{colorIdentityList}')
+			continue
+
 		# grab card win rate data
-		allGIHWRz: float or None = getStatValue(allMaster[name], 'all', 'GIH WR', True)
+		allGIHWRz: float or None = getStatValue(topMaster[name], 'all', 'GIH WR', getZScore=True)
 
 		# find z-scores in each colorPair that exceed the 'all' stat
 		# save these to a dictionary: 🔑colorPairStr, value: stat value
@@ -29,7 +36,7 @@ def displayArchetypeDiffs(rarityList: List[str]):
 		# a header saying how many archetypes the card is a secretGoldCard in.
 		successfulColorPairZScores: Dict = {}
 		for colorPair in colorPairs:
-			colorPairZScore: float or None = getStatValue(allMaster[name], colorPair, 'GIH WR', True)
+			colorPairZScore: float or None = getStatValue(topMaster[name], colorPair, 'GIH WR', True)
 
 			# if the target stat exists in this colorPair, check the difference
 			if colorPairZScore:
@@ -38,11 +45,31 @@ def displayArchetypeDiffs(rarityList: List[str]):
 					successfulColorPairZScores[colorPair] = zscoreDifference
 
 		if successfulColorPairZScores:
-			print(f'{name} ', end='')
+			archetypeDescription: str = '→ best in '
+
 			for key, value in successfulColorPairZScores.items():
-				print(f'{key} +{value:.2f} ', end='')
+				archetypeDescription += f'{ANSI.WHITE.value}{key}{ANSI.RESET.value} +{value:.2f} '
+
+			printArchetypesData(name, topMaster, topStats, 'top', archetypeDescription)
 			print(f'')
 
+
+# helper method because scryfall json is not keyed by name. generates a dict
+# with 🔑cardName, value: colorIdentity. e.g. Restless Anchorage ["U","W"]
+def generateNameColorIdentityDict() -> Dict[str, List[str]]:
+	scryfallData: Dict = loadJson('data/scryfall.json')
+	results: Dict[str, List[str]] = {}
+
+	for card in scryfallData:
+		# truncate so we only get the main card's name
+		# not MDFC backsides or adventures
+		name: str = card['name']
+		if '//' in card['name']:
+			name = card['name'].split(' // ')[0]
+
+		results[name] = card['color_identity']
+
+	return results
 
 
 def getStatValue(caliberStats: Dict, colorPair: str, stat: str, getZScore: bool = False) -> float or None:

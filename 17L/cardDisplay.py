@@ -123,13 +123,15 @@ def printArchetypesData(
 		cardName: str,
 		masterJson: Dict,
 		statsJson: Dict,
-		caliber: str):
+		caliber: str,
+		optionalDescription: str = ''):
 	"""
 	output data from archetypes that satisfy the sample size requirement
 	:param cardName:
 	:param masterJson: a list of card data keyed by name
 	:param statsJson: contains μ σ info for stats per color pair
 	:param caliber: 'top', 'all' for allPlayers vs topPlayers dataSet
+	:param optionalDescription: additional description slot for secretGoldCards
 	:return:
 	"""
 
@@ -142,7 +144,11 @@ def printArchetypesData(
 		f'{ANSI.DIM_WHITE.value}players{ANSI.RESET.value}'
 	)
 
-	print(f'{ANSI.BLUE.value}{cardName}{ANSI.RESET.value} → ALSA {cardStats["ALSA"]:.1f}')
+	print(
+		f'{ANSI.BLUE.value}{cardName}{ANSI.RESET.value} '
+		f'→ ALSA {cardStats["ALSA"]:.1f} '
+		f'{optionalDescription}'
+	)
 
 	print(
 		f'     n '  # # GIH: sample size
@@ -209,7 +215,7 @@ def printArchetypesData(
 			# if #gih surpasses this, print the archetype data
 			# otherwise as of 2023.Sept, 17L no longer publishes request data
 			# at low sample size and the lines will show up empty
-			archetypeThreshold: int = 250
+			archetypeThreshold: int = 500
 
 			if gihCount > archetypeThreshold:
 
