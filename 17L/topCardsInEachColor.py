@@ -26,8 +26,8 @@ def statSortingKey(item, stat: str):
 	return sortingValue
 
 
-# displays top cards of each colorPair by rarity: 'C', 'U', 'R', 'M'
-def displayTopCardsInEachColorByRarity(rarityList: List[str]):
+# displays top n cards of each colorPair by rarity: 'C', 'U', 'R', 'M'
+def displayTopCardsInEachColorByRarity(rarityList: List[str], n: int):
 
 	# go through colors and iterate through calibers in each
 	for color in 'WUBRG':
@@ -49,7 +49,7 @@ def displayTopCardsInEachColorByRarity(rarityList: List[str]):
 			)
 
 			# take the first n sorted-by-stat items of a rarity and display them
-			maxCount: int = 5
+			maxCount: int = n
 			count: int = 0
 			cardFetchList: List[str] = []
 
@@ -71,5 +71,12 @@ def displayTopCardsInEachColorByRarity(rarityList: List[str]):
 			print()
 
 
-# displayTopCardsInEachColorByRarity(['C', 'U'], key)
-displayTopCardsInEachColorByRarity(['C'])
+# don't run this on imports
+if __name__ == '__main__':
+	userInput: str = input('n rarityList: ')
+	inputs: List[str] = userInput.split(' ')
+	n: int = int(inputs[0])
+	colors: List[str] = list(inputs[1].upper())
+
+	displayTopCardsInEachColorByRarity(colors, n)
+	# displayTopCardsInEachColorByRarity(['C', 'U'], key)
