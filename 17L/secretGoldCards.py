@@ -7,28 +7,33 @@ from constants import colorPairs, ANSI, loadJson
 from cardDisplay import getGrade, gradeBounds, printArchetypesData
 
 
-def displayArchetypeDiffs(rarityList: List[str]):
+def displayArchetypeDiffs(rarityList: List[str], caliber: str):
 	targetStat: str = 'GIH WR'
 	targetDiff: float = 0.4
 
-	topMaster: Dict = loadJson('data/topMaster.json')
-	topStats: Dict = loadJson('data/topStats.json')
-	allMaster: Dict = loadJson('data/allMaster.json')
-	allStats: Dict = loadJson('data/allStats.json')
+	masterJson: Dict = loadJson(f'data/{caliber}Master.json')
+	statsJson: Dict = loadJson(f'data/{caliber}Stats.json')
 
 	namesToColorIdentity: Dict = generateNameColorIdentityDict()
 
 	# for each card:
 	# 	for each colorPair, check the difference between the win rate in that
 	# 	pair vs the win rate in all
-	for name in topMaster.keys():
+	for name, value in masterJson.items():
 		colorIdentityList: List[str] = namesToColorIdentity[name]
+
+		# skip cards not of the correct rarity
+		if value.get("Rarity") not in rarityList:
+			continue
+
+		# skip cards that aren't colorless or mono-colored, since signpost un-
+		# commons will obviously be strongest in that color pair
 		if len(colorIdentityList) > 1:
-			print(f'🖋 skipping {name} →{colorIdentityList}')
+			print(f'⛔ skipping {name} →{colorIdentityList}')
 			continue
 
 		# grab card win rate data
-		allGIHWRz: float or None = getStatValue(topMaster[name], 'all', 'GIH WR', getZScore=True)
+		allGIHWRz: float or None = getStatValue(masterJson[name], 'all', targetStat, getZScore=True)
 
 		# find z-scores in each colorPair that exceed the 'all' stat
 		# save these to a dictionary: 🔑colorPairStr, value: stat value
@@ -36,7 +41,7 @@ def displayArchetypeDiffs(rarityList: List[str]):
 		# a header saying how many archetypes the card is a secretGoldCard in.
 		successfulColorPairZScores: Dict = {}
 		for colorPair in colorPairs:
-			colorPairZScore: float or None = getStatValue(topMaster[name], colorPair, 'GIH WR', True)
+			colorPairZScore: float or None = getStatValue(masterJson[name], colorPair, 'GIH WR', True)
 
 			# if the target stat exists in this colorPair, check the difference
 			if colorPairZScore:
@@ -47,10 +52,10 @@ def displayArchetypeDiffs(rarityList: List[str]):
 		if successfulColorPairZScores:
 			archetypeDescription: str = '→ best in '
 
-			for key, value in successfulColorPairZScores.items():
-				archetypeDescription += f'{ANSI.WHITE.value}{key}{ANSI.RESET.value} +{value:.2f} '
+			for colorPairID, zScoreValue in successfulColorPairZScores.items():
+				archetypeDescription += f'{ANSI.WHITE.value}{colorPairID}{ANSI.RESET.value} +{zScoreValue:.2f} '
 
-			printArchetypesData(name, topMaster, topStats, 'top', archetypeDescription)
+			printArchetypesData(name, masterJson, statsJson, caliber, archetypeDescription)
 			print(f'')
 
 
@@ -92,4 +97,4 @@ def getStatValue(caliberStats: Dict, colorPair: str, stat: str, getZScore: bool 
 	return result
 
 
-displayArchetypeDiffs(list('CU'))
+displayArchetypeDiffs(list('C'), 'top')
