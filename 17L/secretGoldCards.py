@@ -97,4 +97,11 @@ def getStatValue(caliberStats: Dict, colorPair: str, stat: str, getZScore: bool 
 	return result
 
 
-displayArchetypeDiffs(list('C'), 'top')
+# don't run this on imports
+if __name__ == '__main__':
+	userInput: str = input('caliber rarityList: ')
+	inputs: List[str] = userInput.split(' ')
+	caliber: str = inputs[0]
+	rarityList: List[str] = list(inputs[1].upper())
+
+	displayArchetypeDiffs(rarityList, caliber)
