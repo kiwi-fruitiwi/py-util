@@ -7,9 +7,8 @@ from constants import colorPairs, ANSI, loadJson
 from cardDisplay import getGrade, gradeBounds, printArchetypesData
 
 
-def displayArchetypeDiffs(rarityList: List[str], caliber: str):
+def displayArchetypeDiffs(rarityList: List[str], caliber: str, diff: float = 0.5):
 	targetStat: str = 'GIH WR'
-	targetDiff: float = 0.4
 
 	masterJson: Dict = loadJson(f'data/{caliber}Master.json')
 	statsJson: Dict = loadJson(f'data/{caliber}Stats.json')
@@ -46,7 +45,7 @@ def displayArchetypeDiffs(rarityList: List[str], caliber: str):
 			# if the target stat exists in this colorPair, check the difference
 			if colorPairZScore:
 				zscoreDifference: float = colorPairZScore - allGIHWRz
-				if zscoreDifference > targetDiff:
+				if zscoreDifference > diff:
 					successfulColorPairZScores[colorPair] = zscoreDifference
 
 		if successfulColorPairZScores:
@@ -54,6 +53,7 @@ def displayArchetypeDiffs(rarityList: List[str], caliber: str):
 
 			for colorPairID, zScoreValue in successfulColorPairZScores.items():
 				archetypeDescription += f'{ANSI.WHITE.value}{colorPairID}{ANSI.RESET.value} +{zScoreValue:.2f} '
+				archetypeDescription += f'over {getGrade(allGIHWRz)}'
 
 			printArchetypesData(name, masterJson, statsJson, caliber, archetypeDescription)
 			print(f'')
@@ -99,9 +99,10 @@ def getStatValue(caliberStats: Dict, colorPair: str, stat: str, getZScore: bool 
 
 # don't run this on imports
 if __name__ == '__main__':
-	userInput: str = input('caliber rarityList: ')
+	userInput: str = input('caliber rarityList targetDiff: ')
 	inputs: List[str] = userInput.split(' ')
 	caliber: str = inputs[0]
 	rarityList: List[str] = list(inputs[1].upper())
+	diff: float = float(inputs[2])
 
-	displayArchetypeDiffs(rarityList, caliber)
+	displayArchetypeDiffs(rarityList, caliber, diff)
