@@ -42,10 +42,6 @@ def hypergeoCDF(deckSize, drawSteps, hits, k):
     return sum(partialProbabilities)
 
 
-totalChances: str = f'{hypergeoCDF(33, 3, 15, 3)*100:>5.1f}%'
-print(f'draw 1+ → {totalChances}')
-
-
 def hypergeoPlot(N, A, n):
     """
     Visualization of Hypergeometric Distribution for given parameters
@@ -69,3 +65,19 @@ def hypergeoPlot(N, A, n):
     plt.ylabel('Probabilities')
     plt.title('Hypergeometric Distribution Plot')
     plt.show()
+
+
+# don't run this on imports
+if __name__ == '__main__':
+    done: bool = False
+
+    while not done:
+        userInput: str = input('library draws successPop hitsDesired: ')
+        inputs: List[str] = userInput.split(' ')
+        deckSize: int = int(inputs[0])
+        drawSteps: int = int(inputs[1])
+        totalHits: int = int(inputs[2])
+        hitsDesired: int = int(inputs[3])
+
+        totalChances: str = f'{hypergeoCDF(deckSize, drawSteps, totalHits, hitsDesired) * 100:>5.1f}%'
+        print(f'draw 1+ → {totalChances}\n')
