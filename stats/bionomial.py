@@ -1,5 +1,6 @@
 # compare binomial distribution functions from scipy.stats
 # but also implement them myself
+from typing import List
 
 from scipy.stats import binom
 import math
@@ -34,7 +35,7 @@ def binomialPMF(k: int, n: int, p: float) -> float:
 
 
 def binomialCDF(k: int, n: int, p: float) -> float:
-	# sum up all binomialPMFs up to and including k
+	# sum up all binomialPMFs up to and including k (from 0)
 	result = 0
 	for i in range(0, k+1):
 		result += binomialPMF(i, n, p)
@@ -44,15 +45,16 @@ def binomialCDF(k: int, n: int, p: float) -> float:
 # prevent imports from running this test code
 if __name__ == "__main__":
 	done: bool = False
+	while not done:
+		userInput: str = input('successes, numtrials, probability: ')
+		inputs: List[str] = userInput.split(',')
 
-	numTrials = 7  # Number of trials
-	prob = 0.35  # Probability of success
-	successes = 4  # Number of successes
+		successes: int = int(inputs[0]) # number of successes
+		numTrials: int = int(inputs[1]) # number of trials
+		prob: float = float(inputs[2])	# probability of success
 
-
-	# compare manual calculations with library ones
-	print(f'🐍 PMF: {binom.pmf(successes, numTrials, prob)}')
-	print(f'🥝 PMF: {binomialPMF(successes, numTrials, prob)}')
-	print(f'🐍 CDF: {binom.cdf(successes, numTrials, prob)}')
-	print(f'🥝 CDF: {binomialCDF(successes, numTrials, prob)}')
-
+		# compare manual calculations with library ones
+		print(f'🐍 PMF: {binom.pmf(successes, numTrials, prob)}')
+		print(f'🥝 PMF: {binomialPMF(successes, numTrials, prob)}')
+		print(f'🐍 CDF: {binom.cdf(successes, numTrials, prob)}')
+		print(f'🥝 CDF: {binomialCDF(successes, numTrials, prob)}')
