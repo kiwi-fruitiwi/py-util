@@ -43,6 +43,8 @@ def binomialCDF(k: int, n: int, p: float) -> float:
 
 # prevent imports from running this test code
 if __name__ == "__main__":
+	done: bool = False
+
 	numTrials = 7  # Number of trials
 	prob = 0.35  # Probability of success
 	successes = 4  # Number of successes
