@@ -46,8 +46,8 @@ def binomialCDF(k: int, n: int, p: float) -> float:
 if __name__ == "__main__":
 	done: bool = False
 	while not done:
-		userInput: str = input('successes, numtrials, probability: ')
-		inputs: List[str] = userInput.split(',')
+		userInput: str = input('\nsuccesses numtrials probability: ')
+		inputs: List[str] = userInput.split(' ')
 
 		successes: int = int(inputs[0]) # number of successes
 		numTrials: int = int(inputs[1]) # number of trials
