@@ -1,11 +1,18 @@
 # generate names for who gets what debuff for xiv encounters
+import random
 from typing import List, Dict
 from enum import Enum
 
 playerNames: List[str] = ['kiwi', 'aerry', 'winry', 'cody']
 
 
-# todo add isSupport method returning true if TANK|HEALER
+class Direction(Enum):
+    FRONT = 'Front'
+    BACK = 'Back'
+    LEFT = 'Left'
+    RIGHT = 'Right'
+
+
 class Role(Enum):
     TANK = 'Tank'
     HEALER = 'Healer'
@@ -75,21 +82,47 @@ class Player:
         self.role = job.getRole()
 
 
+team: List = [
+    Player('Kiwi', Job.SGE),
+    Player('Aerry', Job.WAR),
+    Player('Winry', Job.DRG),
+    Player('Cody', Job.RDM)
+]
+
+
+# arms and double cleave mechanic with binary proximity bait
+def mokoShadowTwin():
+
+
+
+# four expanding fire lines with stack and spread
 def mokoScarletAuspice():
     # two stack markers on one support and one dps
     # stack first or spread first?
-    # moko's cleave direction
 
-    team: List = [
-        Player('Kiwi', Job.SGE),
-        Player('Aerry', Job.WAR),
-        Player('Winry', Job.DRG),
-        Player('Cody', Job.RDM)
-    ]
-
-    print(f'amr: moko ability → scarlet auspice')
+    print(f'\nTeam Composition: ')
     for player in team:
         print(f'{player.name:6} {player.job.value:10} {player.role.value}')
+    print(f'')
 
 
-mokoScarletAuspice()
+    print(f'amr: moko ability → scarlet auspice')
+    # stack first or spread first?
+    print(f"\t{random.choice(['stack', 'spread'])} first")
+
+    # get stack markers from random unique samples
+    supportPlayers = \
+        [player for player in team if player.role in (Role.HEALER, Role.TANK)]
+    dpsPlayers = [player for player in team if player.role == Role.DPS]
+
+    # randomly select one player from each group
+    selectedSupport = random.choice(supportPlayers)
+    selectedDPS = random.choice(dpsPlayers)
+
+    print(f'\tstack markers on → {selectedSupport.name} and {selectedDPS.name}')
+
+    # print the cleave direction of moko or his adds
+    print(f'\tcleave direction: {random.choice(list(Direction)).value.lower()}')
+
+
+# mokoScarletAuspice()
