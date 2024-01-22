@@ -91,8 +91,34 @@ team: List = [
 
 
 # arms and double cleave mechanic with binary proximity bait
+# 💎 mechanics: shadow-twin → triple kasumi-giri → azure auspice
+# 	tether adjust: NE, SW
+# 	arm location → rotate if necessary
+# 	second cleave directions: 2 after first back
+# 	near vs far proximity for bind
+#
+# 	variables:
+# 		tether. completely random and need to adjust, like scurrySpark
+# 		arm location: binary
+# 		second cleave directions: front back left right
+# 		near vs far proximity bait and bind
 def mokoShadowTwin():
+    print(f'🫂 amr mechanic: moko → shadow twin')
 
+    # tether. completely random and need to adjust, like scurrySpark
+    tetheredPlayers: List[str] = [player.name for player in random.sample(team, 2)]
+    print(f'\ttethers on → {tetheredPlayers}')
+
+    # arm location: binary
+    locations: List[str] = ['W-E hands', 'N-S hands']
+    print(f'\t{random.choice(locations)}')
+
+    # second cleave directions: front back left right
+    print(f'\tsecond cleave: {random.choice(list(Direction)).value.lower()}')
+
+    # near vs far proximity bait and bind
+    proximity: List[str] = ['close', 'far']
+    print(f'\tproximity marker: {random.choice(proximity)}')
 
 
 # four expanding fire lines with stack and spread
@@ -106,7 +132,7 @@ def mokoScarletAuspice():
     print(f'')
 
 
-    print(f'amr: moko ability → scarlet auspice')
+    print(f'🔥 amr mechanic: moko → scarlet auspice')
     # stack first or spread first?
     print(f"\t{random.choice(['stack', 'spread'])} first")
 
@@ -126,3 +152,4 @@ def mokoScarletAuspice():
 
 
 # mokoScarletAuspice()
+mokoShadowTwin()
