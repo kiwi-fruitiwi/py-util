@@ -122,6 +122,12 @@ def mokoShadowTwin():
 
 
 # four expanding fire lines with stack and spread
+# variables
+#   stack first vs spread first
+#   stack markers don't matter! because it's always one from each support or dps
+#   one person gets a cleave marker
+#   where do the first two fire lines intersect?
+#   🕯️ how does this affect permutations for where to go after cleave?
 def mokoScarletAuspice():
     # two stack markers on one support and one dps
     # stack first or spread first?
