@@ -8,7 +8,7 @@ import json
 
 # makes a scryfall API request and saves the file to setName.json
 def getScryfallJson():
-	setName: str = 'woe'
+	setName: str = 'mkm'
 	# secondSetName: str = 'wot'
 
 	# note we can append '+OR+set:MOM' to add additional sets
