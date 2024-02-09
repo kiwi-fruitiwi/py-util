@@ -26,7 +26,7 @@ colorPairs: List[str] = [
 # it's possible to leave out start and end date. defaults to entire format!
 baseRequestURL: str = \
     "https://www.17lands.com/card_ratings/data" \
-    "?expansion=LCI" \
+    "?expansion=MKM" \
     "&format=PremierDraft" \
     # "&start_date=2023-09-25" # recent data only, typically last 2 weeks
 
@@ -37,6 +37,12 @@ caliberRequestMap: Dict = {
     "top": f'{baseRequestURL}&user_group=top'
 }
 
+# map between set names and additional inclusions, starting from mkm
+extraCardsForEachSet: Dict[str, str] = {
+    # 40 cards from 'The List', 10 'special guests'
+    'mkm': '((set:kld AND cn:235) OR (set:ORI AND cn:176) OR (set:DGM AND cn:34) OR (e:spg cn≥19 cn≤28) OR (e:plst (((cn≥ cn≤) OR cn:"APC-117" OR cn:"MH1-21" OR cn:"DIS-33" OR cn:"XLN-91" OR cn:"C16-47" OR cn:"SOM-96" OR cn:"MH2-191" OR cn:"ISD-183" OR cn:"DKA-143" OR cn:"MRD-99" OR cn:"ELD-107" OR cn:"DKA-4" OR cn:"RTR-140" OR cn:"ONS-89" OR cn:"WAR-54" OR cn:"DOM-130" OR cn:"HOU-149" OR cn:"MBS-10" OR cn:"RAV-277" OR cn:"2X2-17" OR cn:"STX-220" OR cn:"M14-213" OR cn:"KLD-221" OR cn:"ARB-68" OR cn:"JOU-153" OR cn:"RNA-182" OR cn:"C21-19" OR cn:"UMA-138" OR cn:"MH2-46" OR cn:"VOW-207" OR cn:"ONS-272" OR cn:"UMA-247" OR cn:"SOM-98" OR cn:"DDU-50" OR cn:"CLB-85" OR cn:"DIS-173" OR cn:"SOI-262"))))'
+
+}
 
 # it appears that ANSI sequences always start with \033
 # colors always are in this order:

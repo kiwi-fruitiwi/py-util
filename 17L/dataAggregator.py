@@ -51,8 +51,8 @@ def generateNameManacostDict(sfJson):
 		manaCost: str = cost.replace("{", "").replace("}", "")
 
 		name: str = card['name']
-		if '//' in card['name']:
-			name = card['name'].split(' // ')[0]
+		# if '//' in card['name']:
+		# 	name = card['name'].split(' // ')[0]
 
 		results[name] = manaCost
 
@@ -62,6 +62,7 @@ def generateNameManacostDict(sfJson):
 # requires statistics.json to exist and be updated.
 # needs scryfall.json to exist ← scryfall data for the entire set
 # ⚠️ run createStatisticsJson first!
+# this also creates the recentAlsa jsons
 def createMasterJson(caliber: str):
 	# load card info from scryfall json
 	with open('data/scryfall.json', encoding='utf-8-sig') as f:

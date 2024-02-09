@@ -1,22 +1,26 @@
 # download scryfall JSON data with pagination for any given set
 # https://api.scryfall.com/cards/search?q=set:${setName}
-
+from typing import Dict
 
 import requests
 import json
+from constants import extraCardsForEachSet
 
 
 # makes a scryfall API request and saves the file to setName.json
 def getScryfallJson():
 	setName: str = 'mkm'
-	# secondSetName: str = 'wot'
+
+	# 'the list' and 'special guests' are part of 🗡️mkm but require large
+	# queries of individual cards
 
 	# note we can append '+OR+set:MOM' to add additional sets
 	baseRequestURL: str = f'https://api.scryfall.com/cards/search?q='
 	requestURL: str = f'{baseRequestURL}set:{setName}'
 
-	# if secondSetName:
-	# 	requestURL += f'+OR+set:{secondSetName}'
+	# used for standard bonus sheets like MAT→🦿MOM, 🍂WOT→🍁WOE
+	if setName in extraCardsForEachSet:
+		requestURL += f'+OR+{extraCardsForEachSet[setName]}'
 
 	data = requests.get(requestURL).json()
 
