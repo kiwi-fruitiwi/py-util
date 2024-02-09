@@ -30,7 +30,7 @@ def main():
 
 def getRecentAlsaMaps():
 	for dataSetName, dataSetURL in caliberRequestMap.items():
-		dataSetURL += f'&start_date=2023-11-14'
+		dataSetURL += f'&start_date=2024-02-05'
 		print(f'🫐 processing {dataSetName} → {dataSetURL}')
 
 		# query 17L for data for 'all' users, usually within last two weeks
@@ -73,9 +73,6 @@ def getRecentAlsaMaps():
 		for card in recentAllData:
 			alsa: float = card['avg_seen']
 			name: str = card['name']
-			if '//' in card['name']:
-				name = card['name'].split(' // ')[0]
-
 			result[name] = alsa
 
 		# export json to allRecentAlsa.json and topRecentAlsa.json

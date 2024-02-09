@@ -51,8 +51,8 @@ def generateNameManacostDict(sfJson):
 		manaCost: str = cost.replace("{", "").replace("}", "")
 
 		name: str = card['name']
-		# if '//' in card['name']:
-		# 	name = card['name'].split(' // ')[0]
+		if '//' in card['name']:
+			name = card['name'].split(' // ')[0]
 
 		results[name] = manaCost
 
@@ -71,7 +71,7 @@ def createMasterJson(caliber: str):
 		card data from scryfall, including oracle text and img links
 		'''
 
-	# TODO double faced cards are a problem
+	# TODO double faced cards are a problem → no idea how I resolved this issue
 	#	if 'adventure' and '//' detected, truncate and only take first token
 	nameManacostDict: Dict = generateNameManacostDict(scryfallJson)
 
@@ -106,6 +106,13 @@ def createMasterJson(caliber: str):
 	# entries and stuff them into a "🔑 all" key to represent 'all colors'
 	for name, masterCardData in master.items():
 		# update with recent ALSA numbers, not ALSA for the entire format
+
+		if '//' in name:
+			masterCardData['manaCost'] = nameManacostDict[name.split(' // ')[0]]
+		else:
+			masterCardData['manaCost'] = nameManacostDict[name]
+
+		# TODO re-enable and debug alsa once mkm works
 		del masterCardData['ALSA']
 		dataSetPath: str = f'data/{caliber}RecentAlsa.json'
 		with open(dataSetPath, 'r', encoding='utf-8') as jsonFileHandler:
@@ -113,12 +120,18 @@ def createMasterJson(caliber: str):
 
 		masterCardData['ALSA'] = alsas[name]
 
+
+
 		# grab the mana cost from our collapsed scryfall dictionary:
 		# format is [cardName, mana cost] where latter is formatted
 		# 1UUU instead of {1}{U}{U}{U}
 		# TODO make this work for double faced cards: adventures multiple costs
-		masterCardData['manaCost'] = nameManacostDict[name]
 
+		# nameManacostDict[name] relies on front faces only
+		if '//' in name:
+			masterCardData['manaCost'] = nameManacostDict[name.split(' // ')[0]]
+		else:
+			masterCardData['manaCost'] = nameManacostDict[name]
 
 		# stats we want z-scores for
 		stats: List[str] = ['GIH WR', 'OH WR', 'GD WR', 'IWD']
