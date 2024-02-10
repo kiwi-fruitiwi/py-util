@@ -112,7 +112,6 @@ def createMasterJson(caliber: str):
 		else:
 			masterCardData['manaCost'] = nameManacostDict[name]
 
-		# TODO re-enable and debug alsa once mkm works
 		del masterCardData['ALSA']
 		dataSetPath: str = f'data/{caliber}RecentAlsa.json'
 		with open(dataSetPath, 'r', encoding='utf-8') as jsonFileHandler:
