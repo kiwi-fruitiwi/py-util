@@ -19,6 +19,7 @@ def displayArchetypeDiffs(rarityList: List[str], caliber: str, diff: float = 0.5
 	# 	for each colorPair, check the difference between the win rate in that
 	# 	pair vs the win rate in all
 	for name, value in masterJson.items():
+		print(f'{namesToColorIdentity}')
 		colorIdentityList: List[str] = namesToColorIdentity[name]
 
 		# skip cards not of the correct rarity

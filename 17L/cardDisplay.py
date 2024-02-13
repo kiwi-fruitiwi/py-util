@@ -144,6 +144,8 @@ def printArchetypesData(
 		f'{ANSI.DIM_WHITE.value}players{ANSI.RESET.value}'
 	)
 
+
+	# TODO we need to validate ALSA here
 	print(
 		f'{ANSI.BLUE.value}{cardName}{ANSI.RESET.value} '
 		f'→ ALSA {cardStats["ALSA"]:.1f} '
