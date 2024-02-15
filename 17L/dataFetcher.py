@@ -19,15 +19,6 @@ from typing import Dict
 from constants import caliberRequestMap, colorPairs
 
 
-# get requested json data from 17lands.com for all data sets
-def main():
-	getRawRequestsFrom17L()
-
-	# enable this when we don't restrict startDate so ALSAs are more accurate
-	# TODO explain what happens when this isn't run
-	getRecentAlsaMaps()
-
-
 def getRecentAlsaMaps():
 	for dataSetName, dataSetURL in caliberRequestMap.items():
 		dataSetURL += f'&start_date=2024-02-05'
@@ -112,4 +103,10 @@ def getRawRequestsFrom17L():
 		print(f']')
 
 
-main()
+# get requested json data from 17lands.com for all data sets
+def fetch():
+	getRawRequestsFrom17L()
+
+	# enable this when we don't restrict startDate so ALSAs are more accurate
+	# TODO explain what happens when this isn't run
+	getRecentAlsaMaps()

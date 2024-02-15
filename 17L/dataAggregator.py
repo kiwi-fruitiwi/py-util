@@ -421,12 +421,10 @@ def removeNoneValues(inputList):
 	return [element for element in inputList if element is not None]
 
 
-def main():
+# prevent imports from running this test code
+def aggregate():
 	print(f'')
 	# all-players vs top-players
 	for caliber in caliberRequestMap.keys():
 		createStatsJson(caliber)
 		createMasterJson(caliber)
-
-
-main()

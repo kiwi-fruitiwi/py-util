@@ -58,7 +58,8 @@ def convertJson(jsonInputPath: str, jsonOutputPath: str):
     print(f'🌊 {jsonInputPath} converted!')
     
 
-def main():
+# prevent imports from running this test code
+def convert():
     inputJsonPath: str = f'data/requests/'
     outputJsonPath: str = f'data/converted/'
 
@@ -77,7 +78,6 @@ def main():
             convertJson(pairInput, pairOutput)
 
 
-main()
 
 '''
 sample JSON element from 17L request:
