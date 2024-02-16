@@ -144,7 +144,7 @@ def printArchetypesData(
 		f'{ANSI.DIM_WHITE.value}players{ANSI.RESET.value}'
 	)
 
-	validatedAlsa: str = validate(cardStats['ALSA'], '{.1f}')
+	validatedAlsa: str = validate(cardStats['ALSA'], '{:.1f}')
 	print(
 		f'{ANSI.BLUE.value}{cardName}{ANSI.RESET.value} '
 		f'→ ALSA {validatedAlsa} '
