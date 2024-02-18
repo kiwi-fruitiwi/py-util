@@ -44,6 +44,7 @@ caliberRequestMap: Dict = {
     "top": f'{baseRequestURL}&user_group=top'
 }
 
+
 # it appears that ANSI sequences always start with \033
 # colors always are in this order:
 # 	black red green yellow blue magenta cyan white
