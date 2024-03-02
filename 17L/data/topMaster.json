@@ -6,7 +6,7 @@
         "Color": "WB",
         "Rarity": "C",
         "manaCost": "WB",
-        "ALSA": 6.796197718631179,
+        "ALSA": 6.744299674267101,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -47,7 +47,7 @@
         "Color": "G",
         "Rarity": "C",
         "manaCost": "5GG",
-        "ALSA": 4.7227356746765246,
+        "ALSA": null,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5893186003683242,
@@ -133,7 +133,7 @@
         "Color": "R",
         "Rarity": "R",
         "manaCost": "R",
-        "ALSA": 5.565714285714286,
+        "ALSA": null,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -159,7 +159,7 @@
         "Color": "U",
         "Rarity": "U",
         "manaCost": "U",
-        "ALSA": 6.968388589051657,
+        "ALSA": 7.009819967266775,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -185,7 +185,7 @@
         "Color": "",
         "Rarity": "U",
         "manaCost": "",
-        "ALSA": 7.0256410256410255,
+        "ALSA": 7.023668639053255,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -211,7 +211,7 @@
         "Color": "WG",
         "Rarity": "U",
         "manaCost": "4GW",
-        "ALSA": 3.692121212121212,
+        "ALSA": null,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6351931330472103,
@@ -267,7 +267,7 @@
         "Color": "R",
         "Rarity": "C",
         "manaCost": "R",
-        "ALSA": 6.152845528455285,
+        "ALSA": 6.3068965517241375,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -293,7 +293,7 @@
         "Color": "R",
         "Rarity": "R",
         "manaCost": "1RR",
-        "ALSA": 5.408759124087592,
+        "ALSA": null,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -319,7 +319,7 @@
         "Color": "W",
         "Rarity": "U",
         "manaCost": "WW",
-        "ALSA": 4.0481220657277,
+        "ALSA": null,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -390,7 +390,7 @@
         "Color": "G",
         "Rarity": "C",
         "manaCost": "2G",
-        "ALSA": 7.895927601809955,
+        "ALSA": 7.944067796610169,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -416,7 +416,7 @@
         "Color": "BR",
         "Rarity": "U",
         "manaCost": "1BR",
-        "ALSA": 6.343434343434343,
+        "ALSA": 6.589403973509934,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -457,7 +457,7 @@
         "Color": "W",
         "Rarity": "C",
         "manaCost": "W",
-        "ALSA": 7.068094873756695,
+        "ALSA": 7.2275747508305646,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -509,7 +509,7 @@
         "Color": "",
         "Rarity": "U",
         "manaCost": "",
-        "ALSA": 7.6651617757712565,
+        "ALSA": 7.768982229402262,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -561,7 +561,7 @@
         "Color": "R",
         "Rarity": "R",
         "manaCost": "3RR",
-        "ALSA": 5.7061946902654865,
+        "ALSA": null,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -587,7 +587,7 @@
         "Color": "",
         "Rarity": "U",
         "manaCost": "2",
-        "ALSA": 7.47450110864745,
+        "ALSA": 7.5338582677165356,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -613,7 +613,7 @@
         "Color": "BG",
         "Rarity": "U",
         "manaCost": "1BG",
-        "ALSA": 5.297587131367292,
+        "ALSA": 5.235632183908046,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -654,7 +654,7 @@
         "Color": "G",
         "Rarity": "R",
         "manaCost": "1G",
-        "ALSA": 5.262867647058823,
+        "ALSA": null,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -680,7 +680,7 @@
         "Color": "",
         "Rarity": "C",
         "manaCost": "1",
-        "ALSA": 7.89245810055866,
+        "ALSA": 7.773668639053255,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -706,7 +706,7 @@
         "Color": "",
         "Rarity": "C",
         "manaCost": "2",
-        "ALSA": 6.704868913857678,
+        "ALSA": 6.768253968253968,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -788,7 +788,7 @@
         "Color": "UB",
         "Rarity": "U",
         "manaCost": "1U",
-        "ALSA": 5.416281221091582,
+        "ALSA": 5.53875236294896,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -829,7 +829,7 @@
         "Color": "B",
         "Rarity": "U",
         "manaCost": "3BB",
-        "ALSA": 6.704266088214028,
+        "ALSA": 6.636645962732919,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -855,7 +855,7 @@
         "Color": "R",
         "Rarity": "U",
         "manaCost": "1RR",
-        "ALSA": 6.7663903541823665,
+        "ALSA": 6.843354430379747,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -881,7 +881,7 @@
         "Color": "WU",
         "Rarity": "U",
         "manaCost": "1WU",
-        "ALSA": 6.9903632320237215,
+        "ALSA": 7.013888888888889,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -933,7 +933,7 @@
         "Color": "B",
         "Rarity": "U",
         "manaCost": "3BB",
-        "ALSA": 2.9386106623586428,
+        "ALSA": null,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -1060,7 +1060,7 @@
         "Color": "U",
         "Rarity": "C",
         "manaCost": "U",
-        "ALSA": 4.954710144927536,
+        "ALSA": null,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6093979441997063,
@@ -1146,7 +1146,7 @@
         "Color": "UG",
         "Rarity": "U",
         "manaCost": "GU",
-        "ALSA": 5.3212890625,
+        "ALSA": null,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -1187,7 +1187,7 @@
         "Color": "WR",
         "Rarity": "U",
         "manaCost": "3RW",
-        "ALSA": 5.288135593220339,
+        "ALSA": null,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -1213,7 +1213,7 @@
         "Color": "G",
         "Rarity": "U",
         "manaCost": "3G",
-        "ALSA": 7.4398523985239855,
+        "ALSA": 7.367647058823529,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -1239,7 +1239,7 @@
         "Color": "W",
         "Rarity": "R",
         "manaCost": "2W",
-        "ALSA": 5.084313725490196,
+        "ALSA": null,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -1265,7 +1265,7 @@
         "Color": "R",
         "Rarity": "U",
         "manaCost": "3RR",
-        "ALSA": 4.9258474576271185,
+        "ALSA": null,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -1321,7 +1321,7 @@
         "Color": "",
         "Rarity": "U",
         "manaCost": "",
-        "ALSA": 6.827113480578827,
+        "ALSA": 6.810543657331137,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -1444,7 +1444,7 @@
         "Color": "U",
         "Rarity": "M",
         "manaCost": "2U",
-        "ALSA": 4.93956043956044,
+        "ALSA": null,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -1693,7 +1693,7 @@
         "Color": "",
         "Rarity": "U",
         "manaCost": "2",
-        "ALSA": 5.801457445345799,
+        "ALSA": 5.9501334457086665,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5643564356435643,
@@ -1779,7 +1779,7 @@
         "Color": "W",
         "Rarity": "U",
         "manaCost": "4W",
-        "ALSA": 5.344794651384909,
+        "ALSA": 5.628265336072792,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5691347011596789,
@@ -1865,7 +1865,7 @@
         "Color": "W",
         "Rarity": "R",
         "manaCost": "1W",
-        "ALSA": 3.3340230564587645,
+        "ALSA": 3.5350827153451228,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5308823529411765,
@@ -1951,7 +1951,7 @@
         "Color": "W",
         "Rarity": "M",
         "manaCost": "2WW",
-        "ALSA": 1.1443661971830985,
+        "ALSA": null,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.7252612169637369,
@@ -2067,7 +2067,7 @@
         "Color": "W",
         "Rarity": "C",
         "manaCost": "1W",
-        "ALSA": 5.251313235126185,
+        "ALSA": 4.9418081918081915,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5918765743073048,
@@ -2153,7 +2153,7 @@
         "Color": "W",
         "Rarity": "U",
         "manaCost": "1W",
-        "ALSA": 4.838163490313435,
+        "ALSA": 4.98465018581354,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5854657113613101,
@@ -2239,7 +2239,7 @@
         "Color": "W",
         "Rarity": "U",
         "manaCost": "1W",
-        "ALSA": 2.770186335403727,
+        "ALSA": 2.551865799383773,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6273038441284887,
@@ -2325,7 +2325,7 @@
         "Color": "W",
         "Rarity": "U",
         "manaCost": "1W",
-        "ALSA": 4.654805543138131,
+        "ALSA": 4.869392185238785,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5284090909090909,
@@ -2411,7 +2411,7 @@
         "Color": "W",
         "Rarity": "R",
         "manaCost": "W",
-        "ALSA": 4.868495742667928,
+        "ALSA": 5.195049870705578,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -2437,7 +2437,7 @@
         "Color": "W",
         "Rarity": "C",
         "manaCost": "4WW",
-        "ALSA": 6.195347987260481,
+        "ALSA": 6.3059174809989145,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5644094488188977,
@@ -2523,7 +2523,7 @@
         "Color": "W",
         "Rarity": "M",
         "manaCost": "2W",
-        "ALSA": 1.607843137254902,
+        "ALSA": null,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5795148247978437,
@@ -2609,7 +2609,7 @@
         "Color": "W",
         "Rarity": "R",
         "manaCost": "1W",
-        "ALSA": 3.878418079096045,
+        "ALSA": 4.1534391534391535,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -2665,7 +2665,7 @@
         "Color": "W",
         "Rarity": "C",
         "manaCost": "2W",
-        "ALSA": 6.459285567222565,
+        "ALSA": 6.44845971563981,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5598164536217634,
@@ -2751,7 +2751,7 @@
         "Color": "W",
         "Rarity": "U",
         "manaCost": "3WW",
-        "ALSA": 5.642927585235277,
+        "ALSA": 5.848493421983307,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5621052631578948,
@@ -2837,7 +2837,7 @@
         "Color": "W",
         "Rarity": "U",
         "manaCost": "W",
-        "ALSA": 5.249282613494224,
+        "ALSA": 5.394551713815297,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5226438188494492,
@@ -2923,7 +2923,7 @@
         "Color": "W",
         "Rarity": "C",
         "manaCost": "3W",
-        "ALSA": 5.667148073464494,
+        "ALSA": 5.655832616795643,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5645087235996327,
@@ -3009,7 +3009,7 @@
         "Color": "W",
         "Rarity": "C",
         "manaCost": "4W",
-        "ALSA": 5.754557362733326,
+        "ALSA": 5.64487941279273,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5823087803285824,
@@ -3095,7 +3095,7 @@
         "Color": "W",
         "Rarity": "C",
         "manaCost": "2W",
-        "ALSA": 3.445212026416406,
+        "ALSA": 3.1217955213294153,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6127356589494425,
@@ -3181,7 +3181,7 @@
         "Color": "W",
         "Rarity": "U",
         "manaCost": "3W",
-        "ALSA": 3.773555919705039,
+        "ALSA": 3.7326343381389253,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5904936014625228,
@@ -3267,7 +3267,7 @@
         "Color": "W",
         "Rarity": "U",
         "manaCost": "W",
-        "ALSA": 5.274136563559017,
+        "ALSA": 5.349654462579032,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5715550309825908,
@@ -3353,7 +3353,7 @@
         "Color": "W",
         "Rarity": "C",
         "manaCost": "2W",
-        "ALSA": 5.726969663295922,
+        "ALSA": 5.751012848709341,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5669004936347103,
@@ -3439,7 +3439,7 @@
         "Color": "W",
         "Rarity": "C",
         "manaCost": "2W",
-        "ALSA": 2.7128484712230216,
+        "ALSA": 2.575719012471367,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6295035609551739,
@@ -3585,7 +3585,7 @@
         "Color": "W",
         "Rarity": "C",
         "manaCost": "1W",
-        "ALSA": 3.5457180057961275,
+        "ALSA": 3.252875785403577,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5883379888268156,
@@ -3671,7 +3671,7 @@
         "Color": "W",
         "Rarity": "C",
         "manaCost": "3W",
-        "ALSA": 4.616306420851876,
+        "ALSA": 4.4834077636551015,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5887692203481677,
@@ -3757,7 +3757,7 @@
         "Color": "W",
         "Rarity": "U",
         "manaCost": "1W",
-        "ALSA": 2.7881958978652155,
+        "ALSA": 2.429,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6322634530485622,
@@ -3843,7 +3843,7 @@
         "Color": "W",
         "Rarity": "R",
         "manaCost": "2WW",
-        "ALSA": 2.2058823529411766,
+        "ALSA": 2.2566137566137567,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5694050991501416,
@@ -3929,7 +3929,7 @@
         "Color": "W",
         "Rarity": "U",
         "manaCost": "1W",
-        "ALSA": 3.2771864877371586,
+        "ALSA": 3.334936282760279,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6125794580127133,
@@ -4015,7 +4015,7 @@
         "Color": "W",
         "Rarity": "C",
         "manaCost": "W",
-        "ALSA": 2.84990221642764,
+        "ALSA": 2.5519295519295517,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6304451064197211,
@@ -4101,7 +4101,7 @@
         "Color": "W",
         "Rarity": "C",
         "manaCost": "2WW",
-        "ALSA": 6.015486725663717,
+        "ALSA": 5.402023138893937,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5944254835039818,
@@ -4187,7 +4187,7 @@
         "Color": "W",
         "Rarity": "U",
         "manaCost": "1W",
-        "ALSA": 2.7918285138828947,
+        "ALSA": 2.674298613350532,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.609862765797014,
@@ -4273,7 +4273,7 @@
         "Color": "W",
         "Rarity": "U",
         "manaCost": "1W",
-        "ALSA": 6.369412536921562,
+        "ALSA": 6.508897276894041,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.559322033898305,
@@ -4344,7 +4344,7 @@
         "Color": "W",
         "Rarity": "C",
         "manaCost": "1W",
-        "ALSA": 4.667101039316022,
+        "ALSA": 4.23460537727667,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5891102620087336,
@@ -4430,7 +4430,7 @@
         "Color": "W",
         "Rarity": "R",
         "manaCost": "1W",
-        "ALSA": 1.444,
+        "ALSA": 1.4312865497076024,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6232420429311621,
@@ -4516,7 +4516,7 @@
         "Color": "W",
         "Rarity": "R",
         "manaCost": "1W",
-        "ALSA": 1.6645714285714286,
+        "ALSA": 1.6329723225030084,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6308607417774668,
@@ -4602,7 +4602,7 @@
         "Color": "W",
         "Rarity": "U",
         "manaCost": "W",
-        "ALSA": 6.224181028811999,
+        "ALSA": 6.4473755047106325,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5645805592543276,
@@ -4688,7 +4688,7 @@
         "Color": "U",
         "Rarity": "U",
         "manaCost": "4UU",
-        "ALSA": 6.134197664947054,
+        "ALSA": 6.304150632215503,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5620805369127517,
@@ -4774,7 +4774,7 @@
         "Color": "U",
         "Rarity": "C",
         "manaCost": "U",
-        "ALSA": 8.204283243704248,
+        "ALSA": 8.316743425939682,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -4860,7 +4860,7 @@
         "Color": "U",
         "Rarity": "C",
         "manaCost": "4U",
-        "ALSA": 7.426809874489272,
+        "ALSA": 7.555612375351573,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5796909492273731,
@@ -4946,7 +4946,7 @@
         "Color": "U",
         "Rarity": "C",
         "manaCost": "1U",
-        "ALSA": 6.324191353501518,
+        "ALSA": 6.343700203307874,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5807471264367816,
@@ -5032,7 +5032,7 @@
         "Color": "U",
         "Rarity": "U",
         "manaCost": "1U",
-        "ALSA": 5.540297424737033,
+        "ALSA": 5.788498879761016,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5800453514739229,
@@ -5118,7 +5118,7 @@
         "Color": "U",
         "Rarity": "U",
         "manaCost": "U",
-        "ALSA": 6.5682684973302825,
+        "ALSA": 6.828661666008685,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5484330484330484,
@@ -5189,7 +5189,7 @@
         "Color": "U",
         "Rarity": "U",
         "manaCost": "U",
-        "ALSA": 4.699137281179328,
+        "ALSA": 4.833069759269021,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5772480386240193,
@@ -5275,7 +5275,7 @@
         "Color": "U",
         "Rarity": "R",
         "manaCost": "2U",
-        "ALSA": 5.815555555555555,
+        "ALSA": 6.1530260269677015,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -5301,7 +5301,7 @@
         "Color": "U",
         "Rarity": "C",
         "manaCost": "3U",
-        "ALSA": 4.4181169272603675,
+        "ALSA": 4.350014421690222,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5938454310547334,
@@ -5387,7 +5387,7 @@
         "Color": "U",
         "Rarity": "M",
         "manaCost": "5UU",
-        "ALSA": 3.240802675585284,
+        "ALSA": 3.4799566630552548,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -5428,7 +5428,7 @@
         "Color": "U",
         "Rarity": "R",
         "manaCost": "1UU",
-        "ALSA": 3.123397913561848,
+        "ALSA": 3.283096926713948,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5734430082256169,
@@ -5514,7 +5514,7 @@
         "Color": "U",
         "Rarity": "C",
         "manaCost": "2U",
-        "ALSA": 4.8820509629445255,
+        "ALSA": 4.885032679738562,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5797764768493879,
@@ -5600,7 +5600,7 @@
         "Color": "U",
         "Rarity": "R",
         "manaCost": "2U",
-        "ALSA": 1.6185372005044136,
+        "ALSA": 1.490674318507891,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6718135878719821,
@@ -5731,7 +5731,7 @@
         "Color": "U",
         "Rarity": "U",
         "manaCost": "U",
-        "ALSA": 5.87463747099768,
+        "ALSA": 6.0384051597771915,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5567423230974633,
@@ -5802,7 +5802,7 @@
         "Color": "U",
         "Rarity": "C",
         "manaCost": "1U",
-        "ALSA": 5.853302611367128,
+        "ALSA": 5.718874560375147,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5985056587188221,
@@ -5888,7 +5888,7 @@
         "Color": "U",
         "Rarity": "C",
         "manaCost": "2U",
-        "ALSA": 5.227763004571394,
+        "ALSA": 5.294794452391318,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5824274203862386,
@@ -5974,7 +5974,7 @@
         "Color": "U",
         "Rarity": "U",
         "manaCost": "1U",
-        "ALSA": 5.4558429326957905,
+        "ALSA": 5.345147809936543,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5834722552988807,
@@ -6060,7 +6060,7 @@
         "Color": "U",
         "Rarity": "U",
         "manaCost": "1U",
-        "ALSA": 3.141147741147741,
+        "ALSA": 3.0828541557762676,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6241699867197875,
@@ -6161,7 +6161,7 @@
         "Color": "U",
         "Rarity": "U",
         "manaCost": "1U",
-        "ALSA": 5.390660676143478,
+        "ALSA": 5.656404865595435,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5630026809651475,
@@ -6247,7 +6247,7 @@
         "Color": "U",
         "Rarity": "R",
         "manaCost": "2U",
-        "ALSA": 2.66616484757245,
+        "ALSA": 2.7636499626028423,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5405610310841547,
@@ -6333,7 +6333,7 @@
         "Color": "U",
         "Rarity": "U",
         "manaCost": "2U",
-        "ALSA": 4.886224729666196,
+        "ALSA": 4.73656551957959,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6000449135414327,
@@ -6419,7 +6419,7 @@
         "Color": "U",
         "Rarity": "U",
         "manaCost": "2U",
-        "ALSA": 4.807742355237475,
+        "ALSA": 4.775767918088738,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5905325443786982,
@@ -6505,7 +6505,7 @@
         "Color": "U",
         "Rarity": "C",
         "manaCost": "5U",
-        "ALSA": 6.794143722602571,
+        "ALSA": 6.903698715292167,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.593939393939394,
@@ -6591,7 +6591,7 @@
         "Color": "U",
         "Rarity": "M",
         "manaCost": "3UU",
-        "ALSA": 1.9935344827586208,
+        "ALSA": null,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6274368231046932,
@@ -6677,7 +6677,7 @@
         "Color": "U",
         "Rarity": "C",
         "manaCost": "1U",
-        "ALSA": 6.666903427107379,
+        "ALSA": 6.493456924754635,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5637563295995089,
@@ -6763,7 +6763,7 @@
         "Color": "U",
         "Rarity": "U",
         "manaCost": "4U",
-        "ALSA": 6.978571870935777,
+        "ALSA": 7.1659003831417625,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5377049180327869,
@@ -6834,7 +6834,7 @@
         "Color": "U",
         "Rarity": "R",
         "manaCost": "XUU",
-        "ALSA": 2.985336308575072,
+        "ALSA": 2.9635179153094464,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6118458884416331,
@@ -6920,7 +6920,7 @@
         "Color": "U",
         "Rarity": "U",
         "manaCost": "U",
-        "ALSA": 4.282427536231884,
+        "ALSA": 4.418722786647315,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5767386091127098,
@@ -7006,7 +7006,7 @@
         "Color": "U",
         "Rarity": "C",
         "manaCost": "3U",
-        "ALSA": 5.669878096736139,
+        "ALSA": 5.438951356636519,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6029486527707169,
@@ -7092,7 +7092,7 @@
         "Color": "U",
         "Rarity": "R",
         "manaCost": "1U",
-        "ALSA": 2.4962256654747716,
+        "ALSA": 2.400336417157275,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6457925636007827,
@@ -7178,7 +7178,7 @@
         "Color": "U",
         "Rarity": "C",
         "manaCost": "2U",
-        "ALSA": 4.9338242176531155,
+        "ALSA": 4.604809091539048,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6025616019764645,
@@ -7264,7 +7264,7 @@
         "Color": "U",
         "Rarity": "C",
         "manaCost": "1U",
-        "ALSA": 6.311549429657795,
+        "ALSA": 6.20976157082749,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6050369294103403,
@@ -7350,7 +7350,7 @@
         "Color": "U",
         "Rarity": "R",
         "manaCost": "1UUU",
-        "ALSA": 5.155664359277393,
+        "ALSA": 5.391822827938671,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -7376,7 +7376,7 @@
         "Color": "U",
         "Rarity": "R",
         "manaCost": "2U",
-        "ALSA": 1.9422784810126583,
+        "ALSA": 1.9534391534391535,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6403815580286168,
@@ -7462,7 +7462,7 @@
         "Color": "U",
         "Rarity": "C",
         "manaCost": "1U",
-        "ALSA": 6.269025124584718,
+        "ALSA": 6.1492488211426695,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6029850746268657,
@@ -7548,7 +7548,7 @@
         "Color": "B",
         "Rarity": "C",
         "manaCost": "4B",
-        "ALSA": 7.792532420575616,
+        "ALSA": 8.048616720516963,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5692520775623269,
@@ -7634,7 +7634,7 @@
         "Color": "B",
         "Rarity": "C",
         "manaCost": "2B",
-        "ALSA": 6.40700104493208,
+        "ALSA": 6.644351464435147,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5763921941932413,
@@ -7720,7 +7720,7 @@
         "Color": "B",
         "Rarity": "R",
         "manaCost": "3B",
-        "ALSA": 2.4683645045762037,
+        "ALSA": 2.7021582733812948,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5712309820193637,
@@ -7806,7 +7806,7 @@
         "Color": "B",
         "Rarity": "C",
         "manaCost": "5B",
-        "ALSA": 6.165401518178186,
+        "ALSA": 6.360401865008881,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.561375235025517,
@@ -7892,7 +7892,7 @@
         "Color": "B",
         "Rarity": "R",
         "manaCost": "1B",
-        "ALSA": 2.17311971517579,
+        "ALSA": 2.2874196510560147,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5974770642201835,
@@ -7978,7 +7978,7 @@
         "Color": "B",
         "Rarity": "C",
         "manaCost": "2B",
-        "ALSA": 7.555372995242533,
+        "ALSA": 7.831666923037481,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -8064,7 +8064,7 @@
         "Color": "B",
         "Rarity": "R",
         "manaCost": "3BB",
-        "ALSA": 2.141847313854854,
+        "ALSA": 2.193973634651601,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6319107662463628,
@@ -8150,7 +8150,7 @@
         "Color": "B",
         "Rarity": "C",
         "manaCost": "1B",
-        "ALSA": 4.740407635069557,
+        "ALSA": 4.6082633053221285,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5951907131011609,
@@ -8266,7 +8266,7 @@
         "Color": "B",
         "Rarity": "U",
         "manaCost": "B",
-        "ALSA": 5.591284204430288,
+        "ALSA": 5.700817843866171,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5882352941176471,
@@ -8352,7 +8352,7 @@
         "Color": "B",
         "Rarity": "R",
         "manaCost": "1B",
-        "ALSA": 1.943142144638404,
+        "ALSA": 2.018348623853211,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6131037780966045,
@@ -8438,7 +8438,7 @@
         "Color": "B",
         "Rarity": "R",
         "manaCost": "2B",
-        "ALSA": 2.1257457549334555,
+        "ALSA": 2.0673076923076925,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6139122315592904,
@@ -8554,7 +8554,7 @@
         "Color": "B",
         "Rarity": "R",
         "manaCost": "3B",
-        "ALSA": 4.145370370370371,
+        "ALSA": 4.478732638888889,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -8625,7 +8625,7 @@
         "Color": "B",
         "Rarity": "U",
         "manaCost": "3BB",
-        "ALSA": 6.3159267183738965,
+        "ALSA": 6.678792889623812,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5547024952015355,
@@ -8696,7 +8696,7 @@
         "Color": "B",
         "Rarity": "U",
         "manaCost": "B",
-        "ALSA": 6.7977556424158365,
+        "ALSA": 7.086780634216364,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5397815912636506,
@@ -8767,7 +8767,7 @@
         "Color": "B",
         "Rarity": "U",
         "manaCost": "1B",
-        "ALSA": 3.402615122228539,
+        "ALSA": 3.4694935217903415,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5880847102629742,
@@ -8853,7 +8853,7 @@
         "Color": "B",
         "Rarity": "U",
         "manaCost": "1B",
-        "ALSA": 2.9114569358733564,
+        "ALSA": 2.983121195351411,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5946375823676437,
@@ -8939,7 +8939,7 @@
         "Color": "B",
         "Rarity": "C",
         "manaCost": "3B",
-        "ALSA": 6.880605678233438,
+        "ALSA": 7.03900353617987,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5606666666666666,
@@ -9025,7 +9025,7 @@
         "Color": "B",
         "Rarity": "M",
         "manaCost": "2BB",
-        "ALSA": 1.4085106382978723,
+        "ALSA": null,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5901639344262295,
@@ -9111,7 +9111,7 @@
         "Color": "B",
         "Rarity": "C",
         "manaCost": "1BB",
-        "ALSA": 3.699820558831069,
+        "ALSA": 3.996572479518475,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5833681571249477,
@@ -9197,7 +9197,7 @@
         "Color": "B",
         "Rarity": "U",
         "manaCost": "3B",
-        "ALSA": 4.468717231737155,
+        "ALSA": 4.6309544891092616,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5673965936739659,
@@ -9283,7 +9283,7 @@
         "Color": "B",
         "Rarity": "R",
         "manaCost": "XBB",
-        "ALSA": 2.5701619121048576,
+        "ALSA": 2.733085501858736,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.57890625,
@@ -9369,7 +9369,7 @@
         "Color": "B",
         "Rarity": "U",
         "manaCost": "4BB",
-        "ALSA": 5.7406646354425,
+        "ALSA": 5.943769875686614,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5929423459244533,
@@ -9455,7 +9455,7 @@
         "Color": "B",
         "Rarity": "U",
         "manaCost": "4B",
-        "ALSA": 6.8173623985169085,
+        "ALSA": 6.98,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5752895752895753,
@@ -9541,7 +9541,7 @@
         "Color": "B",
         "Rarity": "U",
         "manaCost": "1B",
-        "ALSA": 5.864745622501034,
+        "ALSA": 6.007525202328553,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5813953488372093,
@@ -9627,7 +9627,7 @@
         "Color": "B",
         "Rarity": "C",
         "manaCost": "1B",
-        "ALSA": 6.324281820088069,
+        "ALSA": 6.419398758305196,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5587621696801113,
@@ -9713,7 +9713,7 @@
         "Color": "B",
         "Rarity": "C",
         "manaCost": "3B",
-        "ALSA": 7.142902899943332,
+        "ALSA": 7.312955779674166,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5715751667521806,
@@ -9799,7 +9799,7 @@
         "Color": "B",
         "Rarity": "C",
         "manaCost": "XB",
-        "ALSA": 4.372457296760933,
+        "ALSA": 4.483887468030691,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5971943887775552,
@@ -9885,7 +9885,7 @@
         "Color": "B",
         "Rarity": "U",
         "manaCost": "3B",
-        "ALSA": 4.937449621151056,
+        "ALSA": 5.0310129782572055,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5707338638373121,
@@ -9971,7 +9971,7 @@
         "Color": "B",
         "Rarity": "C",
         "manaCost": "B",
-        "ALSA": 5.847504312503478,
+        "ALSA": 5.749147064104866,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5999400209926525,
@@ -10057,7 +10057,7 @@
         "Color": "B",
         "Rarity": "U",
         "manaCost": "3B",
-        "ALSA": 3.4960691823899372,
+        "ALSA": 3.6572256913470116,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5822324966974901,
@@ -10143,7 +10143,7 @@
         "Color": "B",
         "Rarity": "C",
         "manaCost": "B",
-        "ALSA": 6.801041561330772,
+        "ALSA": 6.97781875658588,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5927554980595084,
@@ -10229,7 +10229,7 @@
         "Color": "B",
         "Rarity": "U",
         "manaCost": "3BB",
-        "ALSA": 3.7694700819247124,
+        "ALSA": 4.022307073954984,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5877053524112348,
@@ -10315,7 +10315,7 @@
         "Color": "B",
         "Rarity": "C",
         "manaCost": "1B",
-        "ALSA": 5.1714698708103715,
+        "ALSA": 5.199673592367083,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5974252672921667,
@@ -10401,7 +10401,7 @@
         "Color": "B",
         "Rarity": "M",
         "manaCost": "3BBB",
-        "ALSA": 1.4974489795918366,
+        "ALSA": null,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6782690498588899,
@@ -10487,7 +10487,7 @@
         "Color": "R",
         "Rarity": "R",
         "manaCost": "3RR",
-        "ALSA": 5.781635802469136,
+        "ALSA": 6.002171889543903,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -10513,7 +10513,7 @@
         "Color": "R",
         "Rarity": "U",
         "manaCost": "4RR",
-        "ALSA": 3.9615092187796996,
+        "ALSA": 3.973775157552348,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5871812543073742,
@@ -10599,7 +10599,7 @@
         "Color": "R",
         "Rarity": "U",
         "manaCost": "1RR",
-        "ALSA": 3.4114488117001827,
+        "ALSA": 3.4994068801897984,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5932642487046632,
@@ -10685,7 +10685,7 @@
         "Color": "R",
         "Rarity": "R",
         "manaCost": "2R",
-        "ALSA": 3.0019782393669634,
+        "ALSA": 3.0589430894308944,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5837209302325581,
@@ -10771,7 +10771,7 @@
         "Color": "R",
         "Rarity": "U",
         "manaCost": "4R",
-        "ALSA": 7.170230914518979,
+        "ALSA": 7.355490221142784,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -10812,7 +10812,7 @@
         "Color": "R",
         "Rarity": "C",
         "manaCost": "2R",
-        "ALSA": 6.452343149807938,
+        "ALSA": 6.25863868593089,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5901870098532073,
@@ -10898,7 +10898,7 @@
         "Color": "R",
         "Rarity": "U",
         "manaCost": "1R",
-        "ALSA": 5.1268947921356745,
+        "ALSA": 5.169429969998421,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5552529182879378,
@@ -10984,7 +10984,7 @@
         "Color": "R",
         "Rarity": "R",
         "manaCost": "1R",
-        "ALSA": 4.19743249225321,
+        "ALSA": 4.3693333333333335,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.537940379403794,
@@ -11070,7 +11070,7 @@
         "Color": "R",
         "Rarity": "U",
         "manaCost": "R",
-        "ALSA": 5.929350791052919,
+        "ALSA": 6.139054092325121,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5768566493955095,
@@ -11156,7 +11156,7 @@
         "Color": "R",
         "Rarity": "U",
         "manaCost": "4R",
-        "ALSA": 4.409122930609369,
+        "ALSA": 4.544021739130435,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5956300508829692,
@@ -11242,7 +11242,7 @@
         "Color": "R",
         "Rarity": "U",
         "manaCost": "2R",
-        "ALSA": 5.346899816737936,
+        "ALSA": 5.425623800383877,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5506376594148538,
@@ -11313,7 +11313,7 @@
         "Color": "R",
         "Rarity": "C",
         "manaCost": "1R",
-        "ALSA": 6.826106674057091,
+        "ALSA": 6.973433636698406,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5554772807326523,
@@ -11399,7 +11399,7 @@
         "Color": "R",
         "Rarity": "M",
         "manaCost": "RR",
-        "ALSA": 5.311827956989247,
+        "ALSA": 5.5536568694463435,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -11425,7 +11425,7 @@
         "Color": "R",
         "Rarity": "U",
         "manaCost": "1R",
-        "ALSA": 7.146426786606697,
+        "ALSA": 7.422475106685633,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -11466,7 +11466,7 @@
         "Color": "R",
         "Rarity": "C",
         "manaCost": "R",
-        "ALSA": 6.6602879347687605,
+        "ALSA": 6.606803881838541,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6039648910411622,
@@ -11552,7 +11552,7 @@
         "Color": "R",
         "Rarity": "U",
         "manaCost": "R",
-        "ALSA": 4.688397425317709,
+        "ALSA": 4.646874455859307,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6031611628563365,
@@ -11638,7 +11638,7 @@
         "Color": "R",
         "Rarity": "R",
         "manaCost": "1R",
-        "ALSA": 2.08983451536643,
+        "ALSA": 2.1305637982195846,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6091655858192823,
@@ -11724,7 +11724,7 @@
         "Color": "R",
         "Rarity": "C",
         "manaCost": "1R",
-        "ALSA": 3.131384034467735,
+        "ALSA": 3.0565784029788996,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6120052770448549,
@@ -11840,7 +11840,7 @@
         "Color": "R",
         "Rarity": "C",
         "manaCost": "2R",
-        "ALSA": 5.554951588245286,
+        "ALSA": 5.57955088389871,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5876879026485325,
@@ -11926,7 +11926,7 @@
         "Color": "R",
         "Rarity": "C",
         "manaCost": "R",
-        "ALSA": 6.566290550070522,
+        "ALSA": 6.530129085416094,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5981715280801044,
@@ -12012,7 +12012,7 @@
         "Color": "R",
         "Rarity": "U",
         "manaCost": "3R",
-        "ALSA": 3.3932117293927497,
+        "ALSA": 3.3772058823529414,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5462244177840508,
@@ -12098,7 +12098,7 @@
         "Color": "R",
         "Rarity": "M",
         "manaCost": "4RR",
-        "ALSA": 1.239460370994941,
+        "ALSA": null,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6152647975077882,
@@ -12184,7 +12184,7 @@
         "Color": "R",
         "Rarity": "C",
         "manaCost": "1R",
-        "ALSA": 5.991705848169476,
+        "ALSA": 5.8318140895791135,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5744317038825186,
@@ -12270,7 +12270,7 @@
         "Color": "R",
         "Rarity": "U",
         "manaCost": "R",
-        "ALSA": 6.43011652610571,
+        "ALSA": 6.633049494411921,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5369822485207101,
@@ -12356,7 +12356,7 @@
         "Color": "R",
         "Rarity": "R",
         "manaCost": "2R",
-        "ALSA": 1.7278003482298316,
+        "ALSA": 1.7613636363636365,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6446179129005751,
@@ -12442,7 +12442,7 @@
         "Color": "R",
         "Rarity": "R",
         "manaCost": "2RR",
-        "ALSA": 1.9237246161466073,
+        "ALSA": 2.0294396961063628,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5646916565900847,
@@ -12528,7 +12528,7 @@
         "Color": "R",
         "Rarity": "R",
         "manaCost": "1RR",
-        "ALSA": 1.7454545454545454,
+        "ALSA": 1.821561338289963,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6121794871794872,
@@ -12614,7 +12614,7 @@
         "Color": "R",
         "Rarity": "C",
         "manaCost": "4R",
-        "ALSA": 6.235844629822732,
+        "ALSA": 5.958312207762943,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5916404494382023,
@@ -12700,7 +12700,7 @@
         "Color": "R",
         "Rarity": "C",
         "manaCost": "3R",
-        "ALSA": 4.582024691358025,
+        "ALSA": 4.318098720292505,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6192095696024393,
@@ -12786,7 +12786,7 @@
         "Color": "R",
         "Rarity": "R",
         "manaCost": "1R",
-        "ALSA": 1.7578947368421052,
+        "ALSA": 1.7530413625304135,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6445479239425689,
@@ -12872,7 +12872,7 @@
         "Color": "R",
         "Rarity": "U",
         "manaCost": "1R",
-        "ALSA": 3.3376996438009883,
+        "ALSA": 3.0002712232167075,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6227823320690077,
@@ -12958,7 +12958,7 @@
         "Color": "R",
         "Rarity": "C",
         "manaCost": "1R",
-        "ALSA": 4.786132315521629,
+        "ALSA": 4.516743038420867,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5989653319000269,
@@ -13044,7 +13044,7 @@
         "Color": "R",
         "Rarity": "C",
         "manaCost": "4R",
-        "ALSA": 7.081266977346924,
+        "ALSA": 7.168942422511812,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5518324607329843,
@@ -13130,7 +13130,7 @@
         "Color": "R",
         "Rarity": "C",
         "manaCost": "R",
-        "ALSA": 3.2669079287493537,
+        "ALSA": 3.224039247751431,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6146417445482866,
@@ -13216,7 +13216,7 @@
         "Color": "R",
         "Rarity": "C",
         "manaCost": "4R",
-        "ALSA": 5.667052852256427,
+        "ALSA": 5.85288124080154,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5633378932968536,
@@ -13302,7 +13302,7 @@
         "Color": "R",
         "Rarity": "U",
         "manaCost": "1R",
-        "ALSA": 4.265489035851027,
+        "ALSA": 4.1934164031988095,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5805549079039403,
@@ -13388,7 +13388,7 @@
         "Color": "G",
         "Rarity": "U",
         "manaCost": "1G",
-        "ALSA": 5.558920625807378,
+        "ALSA": 5.402531254823275,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.593108504398827,
@@ -13474,7 +13474,7 @@
         "Color": "G",
         "Rarity": "C",
         "manaCost": "2G",
-        "ALSA": 7.1486493160156055,
+        "ALSA": 7.083731931668857,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5802469135802469,
@@ -13560,7 +13560,7 @@
         "Color": "G",
         "Rarity": "R",
         "manaCost": "G",
-        "ALSA": 3.6815060383613547,
+        "ALSA": 3.711177052423343,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6028475084301237,
@@ -13646,7 +13646,7 @@
         "Color": "G",
         "Rarity": "R",
         "manaCost": "GGG",
-        "ALSA": 3.2389502762430937,
+        "ALSA": 3.3159371492704826,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6356332703213611,
@@ -13732,7 +13732,7 @@
         "Color": "G",
         "Rarity": "R",
         "manaCost": "2G",
-        "ALSA": 5.197166061862796,
+        "ALSA": 5.37076768354006,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -13773,7 +13773,7 @@
         "Color": "G",
         "Rarity": "R",
         "manaCost": "2GG",
-        "ALSA": 1.7827777777777778,
+        "ALSA": 1.8038277511961722,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6311416184971098,
@@ -13859,7 +13859,7 @@
         "Color": "G",
         "Rarity": "C",
         "manaCost": "3G",
-        "ALSA": 4.741529400343031,
+        "ALSA": 4.357158438158947,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6111276052490945,
@@ -13945,7 +13945,7 @@
         "Color": "G",
         "Rarity": "R",
         "manaCost": "3G",
-        "ALSA": 2.9004660452729696,
+        "ALSA": 2.8787023977433006,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5969534787978592,
@@ -14031,7 +14031,7 @@
         "Color": "G",
         "Rarity": "U",
         "manaCost": "2G",
-        "ALSA": 4.1038999409099866,
+        "ALSA": 4.102811409809153,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.58777487886694,
@@ -14117,7 +14117,7 @@
         "Color": "G",
         "Rarity": "U",
         "manaCost": "3G",
-        "ALSA": 5.909884959522795,
+        "ALSA": 5.74550853749072,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5618830675778284,
@@ -14188,7 +14188,7 @@
         "Color": "G",
         "Rarity": "U",
         "manaCost": "3GG",
-        "ALSA": 4.735663659793815,
+        "ALSA": 4.737061075054085,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5795373241116146,
@@ -14274,7 +14274,7 @@
         "Color": "G",
         "Rarity": "C",
         "manaCost": "1G",
-        "ALSA": 6.57445116947066,
+        "ALSA": 6.281056156337487,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6001181334908446,
@@ -14360,7 +14360,7 @@
         "Color": "G",
         "Rarity": "U",
         "manaCost": "1G",
-        "ALSA": 3.5853316050982933,
+        "ALSA": 3.3703972868217056,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6339148281169831,
@@ -14446,7 +14446,7 @@
         "Color": "G",
         "Rarity": "U",
         "manaCost": "G",
-        "ALSA": 5.697872635299009,
+        "ALSA": 5.177224851167761,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6147294589178357,
@@ -14532,7 +14532,7 @@
         "Color": "G",
         "Rarity": "U",
         "manaCost": "5GG",
-        "ALSA": 4.498218225012727,
+        "ALSA": 4.264974808732973,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6054449972360421,
@@ -14618,7 +14618,7 @@
         "Color": "G",
         "Rarity": "U",
         "manaCost": "3G",
-        "ALSA": 3.6460149112674576,
+        "ALSA": 3.4954066771230115,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6198143313025819,
@@ -14704,7 +14704,7 @@
         "Color": "G",
         "Rarity": "U",
         "manaCost": "G",
-        "ALSA": 3.6108327113764793,
+        "ALSA": 3.50385423966363,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6110694465276736,
@@ -14790,7 +14790,7 @@
         "Color": "G",
         "Rarity": "U",
         "manaCost": "G",
-        "ALSA": 5.3504198612632345,
+        "ALSA": 5.286177105831533,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.581913499344692,
@@ -14876,7 +14876,7 @@
         "Color": "G",
         "Rarity": "R",
         "manaCost": "3G",
-        "ALSA": 2.1108534322820036,
+        "ALSA": 1.9383350462487152,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6837333333333333,
@@ -14962,7 +14962,7 @@
         "Color": "G",
         "Rarity": "U",
         "manaCost": "4G",
-        "ALSA": 4.015098039215686,
+        "ALSA": 3.36244019138756,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6396975425330813,
@@ -15063,7 +15063,7 @@
         "Color": "G",
         "Rarity": "C",
         "manaCost": "3G",
-        "ALSA": 4.798380720452892,
+        "ALSA": 4.306515336541915,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6062304014804915,
@@ -15149,7 +15149,7 @@
         "Color": "G",
         "Rarity": "C",
         "manaCost": "1G",
-        "ALSA": 4.019281790665521,
+        "ALSA": 3.70314220377742,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.60880015697047,
@@ -15235,7 +15235,7 @@
         "Color": "G",
         "Rarity": "C",
         "manaCost": "G",
-        "ALSA": 7.650886998784933,
+        "ALSA": 7.720603219889953,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5667244367417678,
@@ -15306,7 +15306,7 @@
         "Color": "G",
         "Rarity": "U",
         "manaCost": "2G",
-        "ALSA": 5.910979430595287,
+        "ALSA": 5.9347147317627025,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.559322033898305,
@@ -15392,7 +15392,7 @@
         "Color": "G",
         "Rarity": "M",
         "manaCost": "10G",
-        "ALSA": 3.17606943583385,
+        "ALSA": 3.4051522248243558,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -15433,7 +15433,7 @@
         "Color": "G",
         "Rarity": "U",
         "manaCost": "G",
-        "ALSA": 7.097868453105968,
+        "ALSA": 7.279949077021006,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -15474,7 +15474,7 @@
         "Color": "G",
         "Rarity": "C",
         "manaCost": "G",
-        "ALSA": 5.771237830319889,
+        "ALSA": 5.470705484416526,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6016317220808843,
@@ -15560,7 +15560,7 @@
         "Color": "G",
         "Rarity": "U",
         "manaCost": "2G",
-        "ALSA": 4.525113777410012,
+        "ALSA": 4.427186177715091,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5812591508052709,
@@ -15646,7 +15646,7 @@
         "Color": "G",
         "Rarity": "R",
         "manaCost": "1G",
-        "ALSA": 1.7875,
+        "ALSA": 1.7580466148723641,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6327212020033389,
@@ -15732,7 +15732,7 @@
         "Color": "G",
         "Rarity": "C",
         "manaCost": "2G",
-        "ALSA": 7.491845299424522,
+        "ALSA": 7.754385964912281,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.4807692307692308,
@@ -15818,7 +15818,7 @@
         "Color": "G",
         "Rarity": "C",
         "manaCost": "2G",
-        "ALSA": 6.3459114500582565,
+        "ALSA": 6.28066037735849,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5930626057529611,
@@ -15904,7 +15904,7 @@
         "Color": "G",
         "Rarity": "C",
         "manaCost": "4GG",
-        "ALSA": 4.701979307242465,
+        "ALSA": 4.430892608089261,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6022889842632332,
@@ -15990,7 +15990,7 @@
         "Color": "G",
         "Rarity": "C",
         "manaCost": "1G",
-        "ALSA": 3.79974800845391,
+        "ALSA": 3.5459289248762933,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6058614564831261,
@@ -16076,7 +16076,7 @@
         "Color": "G",
         "Rarity": "M",
         "manaCost": "1GG",
-        "ALSA": 4.908230152949745,
+        "ALSA": 5.162941600576785,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -16102,7 +16102,7 @@
         "Color": "G",
         "Rarity": "C",
         "manaCost": "4G",
-        "ALSA": 5.867341675941258,
+        "ALSA": 5.610720715488704,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5998008578431373,
@@ -16188,7 +16188,7 @@
         "Color": "G",
         "Rarity": "C",
         "manaCost": "1G",
-        "ALSA": 5.960591929701609,
+        "ALSA": 5.6049710709646945,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6079982093561143,
@@ -16274,7 +16274,7 @@
         "Color": "WR",
         "Rarity": "M",
         "manaCost": "2RW",
-        "ALSA": 1.505730659025788,
+        "ALSA": null,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6755162241887905,
@@ -16375,7 +16375,7 @@
         "Color": "WU",
         "Rarity": "M",
         "manaCost": "1WU",
-        "ALSA": 1.8241150442477876,
+        "ALSA": null,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6135310472659871,
@@ -16461,7 +16461,7 @@
         "Color": "RG",
         "Rarity": "M",
         "manaCost": "2RG",
-        "ALSA": 1.8205128205128205,
+        "ALSA": null,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6385836385836385,
@@ -16547,7 +16547,7 @@
         "Color": "BG",
         "Rarity": "R",
         "manaCost": "BG",
-        "ALSA": 3.62747979426892,
+        "ALSA": 3.9349976448422046,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6254416961130742,
@@ -16588,7 +16588,7 @@
         "Color": "WR",
         "Rarity": "R",
         "manaCost": "3RW",
-        "ALSA": 1.47677793904209,
+        "ALSA": 1.4608294930875576,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6428018575851393,
@@ -16719,7 +16719,7 @@
         "Color": "BR",
         "Rarity": "R",
         "manaCost": "BR",
-        "ALSA": 3.566872152238006,
+        "ALSA": 3.75,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5899403239556692,
@@ -16760,7 +16760,7 @@
         "Color": "WG",
         "Rarity": "U",
         "manaCost": "2GW",
-        "ALSA": 3.3324289253273562,
+        "ALSA": 3.1236306729264474,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6415327564894932,
@@ -16861,7 +16861,7 @@
         "Color": "UB",
         "Rarity": "U",
         "manaCost": "3UB",
-        "ALSA": 3.987184621545855,
+        "ALSA": 3.847254860072634,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6140670001515841,
@@ -16992,7 +16992,7 @@
         "Color": "WG",
         "Rarity": "C",
         "manaCost": "3GW",
-        "ALSA": 5.034971531315553,
+        "ALSA": 4.857514267596702,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5974114441416893,
@@ -17123,7 +17123,7 @@
         "Color": "UB",
         "Rarity": "U",
         "manaCost": "2UB",
-        "ALSA": 5.5101043748612035,
+        "ALSA": 5.608214610488027,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5459401709401709,
@@ -17194,7 +17194,7 @@
         "Color": "BR",
         "Rarity": "U",
         "manaCost": "1BR",
-        "ALSA": 4.604479533167424,
+        "ALSA": 4.810508182601206,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6005917159763313,
@@ -17235,7 +17235,7 @@
         "Color": "UR",
         "Rarity": "U",
         "manaCost": "2UR",
-        "ALSA": 4.3863279445727485,
+        "ALSA": 4.160815640109313,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6302027748132337,
@@ -17321,7 +17321,7 @@
         "Color": "WR",
         "Rarity": "C",
         "manaCost": "RW",
-        "ALSA": 3.585816021238043,
+        "ALSA": 3.3281592229311494,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.619606627093116,
@@ -17452,7 +17452,7 @@
         "Color": "UG",
         "Rarity": "R",
         "manaCost": "XXXGU",
-        "ALSA": 2.809557774607703,
+        "ALSA": 2.3979871912168345,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6837280366692131,
@@ -17583,7 +17583,7 @@
         "Color": "UB",
         "Rarity": "R",
         "manaCost": "UB",
-        "ALSA": 3.5239481344270973,
+        "ALSA": 3.6657579062159216,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6215360253365004,
@@ -17639,7 +17639,7 @@
         "Color": "UB",
         "Rarity": "M",
         "manaCost": "1UB",
-        "ALSA": 2.117531831537708,
+        "ALSA": null,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6184615384615385,
@@ -17710,7 +17710,7 @@
         "Color": "UG",
         "Rarity": "U",
         "manaCost": "GU",
-        "ALSA": 5.202210114342721,
+        "ALSA": 4.696490020646937,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6160180849346036,
@@ -17781,7 +17781,7 @@
         "Color": "WU",
         "Rarity": "R",
         "manaCost": "1WWUU",
-        "ALSA": 1.8628944504896627,
+        "ALSA": 1.847629796839729,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6773694390715668,
@@ -17852,7 +17852,7 @@
         "Color": "UB",
         "Rarity": "C",
         "manaCost": "1UB",
-        "ALSA": 5.588029057863293,
+        "ALSA": 5.833113191293861,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5870767104353836,
@@ -17983,7 +17983,7 @@
         "Color": "UR",
         "Rarity": "C",
         "manaCost": "2UR",
-        "ALSA": 4.785071830106183,
+        "ALSA": 4.693954659949622,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5929572131768269,
@@ -18114,7 +18114,7 @@
         "Color": "UR",
         "Rarity": "U",
         "manaCost": "UR",
-        "ALSA": 4.09658154859967,
+        "ALSA": 3.971004720161834,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6380970011106998,
@@ -18185,7 +18185,7 @@
         "Color": "WU",
         "Rarity": "C",
         "manaCost": "2WU",
-        "ALSA": 4.249644060145154,
+        "ALSA": 4.171246101292144,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6001376462491397,
@@ -18316,7 +18316,7 @@
         "Color": "UR",
         "Rarity": "R",
         "manaCost": "2UR",
-        "ALSA": 2.921277997364954,
+        "ALSA": 2.791842475386779,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6560420315236427,
@@ -18417,7 +18417,7 @@
         "Color": "BG",
         "Rarity": "U",
         "manaCost": "BG",
-        "ALSA": 5.745707519242155,
+        "ALSA": 5.663071065989848,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5741478530323152,
@@ -18473,7 +18473,7 @@
         "Color": "BG",
         "Rarity": "R",
         "manaCost": "4BG",
-        "ALSA": 1.796875,
+        "ALSA": 1.65679012345679,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6931580519868539,
@@ -18604,7 +18604,7 @@
         "Color": "BR",
         "Rarity": "R",
         "manaCost": "3BR",
-        "ALSA": 2.477037649979313,
+        "ALSA": 2.6206611570247933,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.53470715835141,
@@ -18660,7 +18660,7 @@
         "Color": "WB",
         "Rarity": "M",
         "manaCost": "2WB",
-        "ALSA": 1.3068181818181819,
+        "ALSA": null,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6556564822460776,
@@ -18746,7 +18746,7 @@
         "Color": "UG",
         "Rarity": "R",
         "manaCost": "2GU",
-        "ALSA": 2.251231527093596,
+        "ALSA": 2.186588921282799,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6567111735769501,
@@ -18862,7 +18862,7 @@
         "Color": "UR",
         "Rarity": "R",
         "manaCost": "5UR",
-        "ALSA": 5.0131578947368425,
+        "ALSA": 5.335378323108385,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -18888,7 +18888,7 @@
         "Color": "UR",
         "Rarity": "M",
         "manaCost": "1UR",
-        "ALSA": 3.095520421607378,
+        "ALSA": 3.222509702457956,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.611764705882353,
@@ -18929,7 +18929,7 @@
         "Color": "UB",
         "Rarity": "R",
         "manaCost": "UB",
-        "ALSA": 2.6828177413343273,
+        "ALSA": 2.715049656226127,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.60900354071826,
@@ -19000,7 +19000,7 @@
         "Color": "WUBRG",
         "Rarity": "R",
         "manaCost": "G/WG/UB/GR/G",
-        "ALSA": 4.518053678316277,
+        "ALSA": 4.7110514198004605,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -19026,7 +19026,7 @@
         "Color": "WR",
         "Rarity": "U",
         "manaCost": "RW",
-        "ALSA": 3.2155086848635235,
+        "ALSA": 3.183478951548848,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6370273305877948,
@@ -19127,7 +19127,7 @@
         "Color": "WR",
         "Rarity": "U",
         "manaCost": "3RW",
-        "ALSA": 4.630478420876547,
+        "ALSA": 4.629160063391442,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5901940220241216,
@@ -19168,7 +19168,7 @@
         "Color": "WUBRG",
         "Rarity": "R",
         "manaCost": "WUBRG",
-        "ALSA": 3.964103700421006,
+        "ALSA": 4.114310270734852,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5851063829787234,
@@ -19194,7 +19194,7 @@
         "Color": "WU",
         "Rarity": "U",
         "manaCost": "WU",
-        "ALSA": 5.699719691660827,
+        "ALSA": 5.778661951075744,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.612876254180602,
@@ -19235,7 +19235,7 @@
         "Color": "WU",
         "Rarity": "R",
         "manaCost": "WU",
-        "ALSA": 4.55464799688837,
+        "ALSA": 4.817904761904762,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -19276,7 +19276,7 @@
         "Color": "WU",
         "Rarity": "U",
         "manaCost": "1WU",
-        "ALSA": 3.495382031905961,
+        "ALSA": 3.4583547557840615,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6325982742090125,
@@ -19347,7 +19347,7 @@
         "Color": "BR",
         "Rarity": "M",
         "manaCost": "4BR",
-        "ALSA": 1.36864406779661,
+        "ALSA": null,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6358695652173914,
@@ -19463,7 +19463,7 @@
         "Color": "BG",
         "Rarity": "C",
         "manaCost": "2BG",
-        "ALSA": 6.6033794162826425,
+        "ALSA": 6.83905476608654,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5712864721485411,
@@ -19594,7 +19594,7 @@
         "Color": "WG",
         "Rarity": "R",
         "manaCost": "5GW",
-        "ALSA": 5.080592388496642,
+        "ALSA": 5.336432506887053,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -19635,7 +19635,7 @@
         "Color": "UG",
         "Rarity": "U",
         "manaCost": "XGU",
-        "ALSA": 4.964347146207975,
+        "ALSA": 4.563005983808518,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6484631453297524,
@@ -19751,7 +19751,7 @@
         "Color": "RG",
         "Rarity": "C",
         "manaCost": "5RG",
-        "ALSA": 5.816199972681328,
+        "ALSA": 5.74319314100336,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5814079913019843,
@@ -19882,7 +19882,7 @@
         "Color": "BR",
         "Rarity": "U",
         "manaCost": "BR",
-        "ALSA": 5.427305228660807,
+        "ALSA": 5.5986892242036275,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6058252427184466,
@@ -19923,7 +19923,7 @@
         "Color": "WB",
         "Rarity": "C",
         "manaCost": "1WB",
-        "ALSA": 4.843887477538881,
+        "ALSA": 4.987323225888648,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5839542970690512,
@@ -20054,7 +20054,7 @@
         "Color": "BR",
         "Rarity": "C",
         "manaCost": "3BR",
-        "ALSA": 6.493048238287374,
+        "ALSA": 6.679643276727544,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5540964887239509,
@@ -20185,7 +20185,7 @@
         "Color": "WB",
         "Rarity": "U",
         "manaCost": "WB",
-        "ALSA": 6.808244294113928,
+        "ALSA": 7.031878306878307,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -20226,7 +20226,7 @@
         "Color": "WG",
         "Rarity": "U",
         "manaCost": "GW",
-        "ALSA": 4.285979400575299,
+        "ALSA": 4.1230340434003585,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6199583412232532,
@@ -20282,7 +20282,7 @@
         "Color": "WB",
         "Rarity": "R",
         "manaCost": "1WB",
-        "ALSA": 1.8149010477299186,
+        "ALSA": 1.7503075030750308,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6566611842105263,
@@ -20413,7 +20413,7 @@
         "Color": "RG",
         "Rarity": "U",
         "manaCost": "2RG",
-        "ALSA": 5.134070940449073,
+        "ALSA": 5.13813969571231,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5850668647845468,
@@ -20454,7 +20454,7 @@
         "Color": "WG",
         "Rarity": "R",
         "manaCost": "2GWW",
-        "ALSA": 1.9558902635825712,
+        "ALSA": 1.812720848056537,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6697183098591549,
@@ -20555,7 +20555,7 @@
         "Color": "WB",
         "Rarity": "R",
         "manaCost": "1WB",
-        "ALSA": 3.9594272076372317,
+        "ALSA": 4.280542986425339,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -20596,7 +20596,7 @@
         "Color": "WG",
         "Rarity": "M",
         "manaCost": "GG/WW",
-        "ALSA": 1.601010101010101,
+        "ALSA": null,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6642913697545526,
@@ -20682,7 +20682,7 @@
         "Color": "BG",
         "Rarity": "M",
         "manaCost": "2BG",
-        "ALSA": 3.2228506787330318,
+        "ALSA": 3.275028768699655,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6486772486772486,
@@ -20753,7 +20753,7 @@
         "Color": "UG",
         "Rarity": "M",
         "manaCost": "2GU",
-        "ALSA": 1.7846153846153847,
+        "ALSA": null,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6423017107309487,
@@ -20839,7 +20839,7 @@
         "Color": "WR",
         "Rarity": "R",
         "manaCost": "1RW",
-        "ALSA": 1.86,
+        "ALSA": 1.8270858524788391,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6366471734892788,
@@ -20955,7 +20955,7 @@
         "Color": "WB",
         "Rarity": "U",
         "manaCost": "2WB",
-        "ALSA": 3.9899244332493704,
+        "ALSA": 4.001472754050074,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6069204152249135,
@@ -21026,7 +21026,7 @@
         "Color": "RG",
         "Rarity": "R",
         "manaCost": "XRG",
-        "ALSA": 3.9591603924252796,
+        "ALSA": 4.1017964071856285,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5900692840646651,
@@ -21082,7 +21082,7 @@
         "Color": "RG",
         "Rarity": "R",
         "manaCost": "2RG",
-        "ALSA": 2.043944813490036,
+        "ALSA": 2.092274678111588,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6079188797682279,
@@ -21183,7 +21183,7 @@
         "Color": "WBG",
         "Rarity": "U",
         "manaCost": "1B/G",
-        "ALSA": 6.127671719413966,
+        "ALSA": 6.292689329308308,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5812892184826013,
@@ -21284,7 +21284,7 @@
         "Color": "UBG",
         "Rarity": "U",
         "manaCost": "1G/U",
-        "ALSA": 5.467091599226527,
+        "ALSA": 5.639235004346566,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5629489603024574,
@@ -21385,7 +21385,7 @@
         "Color": "WUR",
         "Rarity": "U",
         "manaCost": "2R/W",
-        "ALSA": 3.5976003226456945,
+        "ALSA": 3.4378232516303124,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6247739602169982,
@@ -21531,7 +21531,7 @@
         "Color": "URG",
         "Rarity": "U",
         "manaCost": "U/R",
-        "ALSA": 5.618585582507687,
+        "ALSA": 5.750594488739684,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.564963503649635,
@@ -21647,7 +21647,7 @@
         "Color": "WBR",
         "Rarity": "U",
         "manaCost": "1W/B",
-        "ALSA": 3.1059891535015325,
+        "ALSA": 3.16715045960329,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6111630079402148,
@@ -21778,7 +21778,7 @@
         "Color": "",
         "Rarity": "R",
         "manaCost": "2",
-        "ALSA": 5.237963114085197,
+        "ALSA": 5.42136695421367,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -21819,7 +21819,7 @@
         "Color": "",
         "Rarity": "C",
         "manaCost": "2",
-        "ALSA": 6.07306545283315,
+        "ALSA": 5.744139961499264,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5803628407329747,
@@ -21995,7 +21995,7 @@
         "Color": "",
         "Rarity": "U",
         "manaCost": "5",
-        "ALSA": 7.249109475184042,
+        "ALSA": 7.381249220795412,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5244755244755245,
@@ -22066,7 +22066,7 @@
         "Color": "",
         "Rarity": "U",
         "manaCost": "5",
-        "ALSA": 6.747859535922571,
+        "ALSA": 7.012501627816122,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -22122,7 +22122,7 @@
         "Color": "",
         "Rarity": "C",
         "manaCost": "3",
-        "ALSA": 7.639275026546964,
+        "ALSA": 7.781264211005002,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.49929676511954996,
@@ -22208,7 +22208,7 @@
         "Color": "",
         "Rarity": "C",
         "manaCost": "2",
-        "ALSA": 5.789520871239089,
+        "ALSA": 5.369053781995974,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5758473657584736,
@@ -22384,7 +22384,7 @@
         "Color": "",
         "Rarity": "C",
         "manaCost": "1",
-        "ALSA": 6.983330852805477,
+        "ALSA": 6.996106727574751,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5485865724381626,
@@ -22515,7 +22515,7 @@
         "Color": "",
         "Rarity": "U",
         "manaCost": "",
-        "ALSA": 5.721852559457145,
+        "ALSA": 5.936890574214518,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5623987034035657,
@@ -22691,7 +22691,7 @@
         "Color": "",
         "Rarity": "R",
         "manaCost": "",
-        "ALSA": 3.41120218579235,
+        "ALSA": 3.4725995316159253,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6029983342587452,
@@ -22807,7 +22807,7 @@
         "Color": "",
         "Rarity": "R",
         "manaCost": "",
-        "ALSA": 3.172521467603435,
+        "ALSA": 3.2572523262178437,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6062367864693446,
@@ -22908,7 +22908,7 @@
         "Color": "",
         "Rarity": "C",
         "manaCost": "",
-        "ALSA": 4.1972350230414746,
+        "ALSA": 4.079458882164471,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5992540066401607,
@@ -23084,7 +23084,7 @@
         "Color": "",
         "Rarity": "R",
         "manaCost": "",
-        "ALSA": 3.4111627906976745,
+        "ALSA": 3.3754249635745506,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5873850197109067,
@@ -23215,7 +23215,7 @@
         "Color": "",
         "Rarity": "R",
         "manaCost": "",
-        "ALSA": 3.259617654000472,
+        "ALSA": 3.3284241531664214,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6272930648769575,
@@ -23331,7 +23331,7 @@
         "Color": "",
         "Rarity": "R",
         "manaCost": "",
-        "ALSA": 3.17999492256918,
+        "ALSA": 3.1818675352877306,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5894472361809046,
@@ -23447,7 +23447,7 @@
         "Color": "",
         "Rarity": "C",
         "manaCost": "",
-        "ALSA": 5.4961453897748465,
+        "ALSA": 5.471607540100691,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5772930648769575,
@@ -23623,7 +23623,7 @@
         "Color": "",
         "Rarity": "R",
         "manaCost": "",
-        "ALSA": 3.4156416802042235,
+        "ALSA": 3.524629363940698,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6048442906574395,
@@ -23754,7 +23754,7 @@
         "Color": "",
         "Rarity": "U",
         "manaCost": "",
-        "ALSA": 4.855641154870761,
+        "ALSA": 4.904942965779468,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5941402497598463,
@@ -23930,7 +23930,7 @@
         "Color": "",
         "Rarity": "R",
         "manaCost": "",
-        "ALSA": 3.2465618860510808,
+        "ALSA": 3.3762123532414496,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6001344086021505,
@@ -24046,7 +24046,7 @@
         "Color": "",
         "Rarity": "R",
         "manaCost": "",
-        "ALSA": 3.403133903133903,
+        "ALSA": 3.432791728212703,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.60326364099949,
@@ -24177,7 +24177,7 @@
         "Color": "",
         "Rarity": "R",
         "manaCost": "",
-        "ALSA": 3.363399621212121,
+        "ALSA": 3.3734583127775037,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6124401913875598,
@@ -24293,7 +24293,7 @@
         "Color": "",
         "Rarity": "R",
         "manaCost": "",
-        "ALSA": 3.3831508805330794,
+        "ALSA": 3.34769833496572,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5943041375604514,
@@ -24409,7 +24409,7 @@
         "Color": "W",
         "Rarity": "U",
         "manaCost": "2W",
-        "ALSA": 5.368709701326614,
+        "ALSA": 5.464678178963894,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5770816158285244,
@@ -24495,7 +24495,7 @@
         "Color": "W",
         "Rarity": "R",
         "manaCost": "2W",
-        "ALSA": 1.4472430224642614,
+        "ALSA": 1.434074074074074,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6535087719298246,
@@ -24596,7 +24596,7 @@
         "Color": "U",
         "Rarity": "U",
         "manaCost": "2UU",
-        "ALSA": 6.164838018567812,
+        "ALSA": 6.464228510411105,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5786637931034483,
@@ -24682,7 +24682,7 @@
         "Color": "U",
         "Rarity": "U",
         "manaCost": "3U",
-        "ALSA": 3.811403958568352,
+        "ALSA": 3.718839305341833,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5937971500419111,
@@ -24783,7 +24783,7 @@
         "Color": "B",
         "Rarity": "U",
         "manaCost": "B",
-        "ALSA": 5.919225352112676,
+        "ALSA": 6.35376827896513,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5596816976127321,
@@ -24869,7 +24869,7 @@
         "Color": "B",
         "Rarity": "U",
         "manaCost": "2B",
-        "ALSA": 4.6418430884184305,
+        "ALSA": 4.83112582781457,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5627376425855514,
@@ -24955,7 +24955,7 @@
         "Color": "R",
         "Rarity": "U",
         "manaCost": "XR",
-        "ALSA": 2.695442966317577,
+        "ALSA": 2.592154420921544,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.636761746952302,
@@ -25086,7 +25086,7 @@
         "Color": "RG",
         "Rarity": "U",
         "manaCost": "RG",
-        "ALSA": 7.142777225261064,
+        "ALSA": 7.325605491516643,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -25127,7 +25127,7 @@
         "Color": "BG",
         "Rarity": "U",
         "manaCost": "BG",
-        "ALSA": 5.185503210334958,
+        "ALSA": 5.163489976996385,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6116176087522792,
@@ -25198,7 +25198,7 @@
         "Color": "UG",
         "Rarity": "C",
         "manaCost": "4GU",
-        "ALSA": 5.709465512093162,
+        "ALSA": 5.6281043877258385,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.5794930875576036,
@@ -25329,7 +25329,7 @@
         "Color": "UR",
         "Rarity": "U",
         "manaCost": "3UR",
-        "ALSA": 4.050561797752809,
+        "ALSA": null,
         "filteredStats": {
             "all": {
                 "GIH WR": 0.6639072847682119,
@@ -25370,7 +25370,7 @@
         "Color": "RG",
         "Rarity": "U",
         "manaCost": "6RG",
-        "ALSA": 5.583979328165374,
+        "ALSA": 5.402621722846442,
         "filteredStats": {
             "all": {
                 "GIH WR": null,
@@ -25396,7 +25396,7 @@
         "Color": "U",
         "Rarity": "U",
         "manaCost": "1U",
-        "ALSA": 5.5566218809980805,
+        "ALSA": 5.667961165048544,
         "filteredStats": {
             "all": {
                 "GIH WR": null,

@@ -15,13 +15,33 @@
 
 import json
 import requests
+
+from datetime import datetime, timedelta
 from typing import Dict
 from constants import caliberRequestMap, colorPairs
 
 
+def twoWeeksPrior():
+	"""
+	output a string in the format '2024-03-02' that's exactly 2 weeks before
+	the current date
+	"""
+
+	# grab the current date. note datetime.today() gives the date, but now()
+	# also adds the time. datetime.today() equivalent to datetime.now().date()
+	currentDate = datetime.now()
+
+	# Calculate the date exactly 2 weeks before the current date
+	twoWeeksBefore = currentDate - timedelta(days=15)
+
+	# Format the date to match the specified format "YYYY-MM-DD"
+	formattedDate = twoWeeksBefore.strftime("%Y-%m-%d")
+	return formattedDate
+
+
 def getRecentAlsaMaps():
 	for dataSetName, dataSetURL in caliberRequestMap.items():
-		dataSetURL += f'&start_date=2024-02-21'
+		dataSetURL += f'&start_date={twoWeeksPrior()}'
 		print(f'🫐 processing {dataSetName} → {dataSetURL}')
 
 		# query 17L for data for 'all' users, usually within last two weeks
@@ -105,7 +125,7 @@ def getRawRequestsFrom17L():
 
 # get requested json data from 17lands.com for all data sets
 def fetch():
-	getRawRequestsFrom17L()
+	# getRawRequestsFrom17L()
 
 	# enable this when we don't restrict startDate so ALSAs are more accurate
 	# TODO explain what happens when this isn't run

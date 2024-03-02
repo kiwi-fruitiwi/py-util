@@ -22,7 +22,7 @@ def twoWeeksPrior():
 
 	# Format the date to match the specified format "YYYY-MM-DD"
 	formattedDate = twoWeeksBefore.strftime("%Y-%m-%d")
-	print(f'{formattedDate}')
+	return formattedDate
 
 
 twoWeeksPrior()
