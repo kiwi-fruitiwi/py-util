@@ -80,4 +80,4 @@ if __name__ == '__main__':
         hitsDesired: int = int(inputs[3])
 
         totalChances: str = f'{hypergeoCDF(deckSize, drawSteps, totalHits, hitsDesired) * 100:>5.1f}%'
-        print(f'draw 1+ → {totalChances}\n')
+        print(f'draw 1 to max → {totalChances}\n')
