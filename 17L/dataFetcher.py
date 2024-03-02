@@ -21,7 +21,7 @@ from constants import caliberRequestMap, colorPairs
 
 def getRecentAlsaMaps():
 	for dataSetName, dataSetURL in caliberRequestMap.items():
-		dataSetURL += f'&start_date=2024-02-05'
+		dataSetURL += f'&start_date=2024-02-21'
 		print(f'🫐 processing {dataSetName} → {dataSetURL}')
 
 		# query 17L for data for 'all' users, usually within last two weeks

@@ -4,6 +4,28 @@
 import json
 import statistics
 from typing import Dict, List
+from datetime import datetime, timedelta
+
+
+def twoWeeksPrior():
+	"""
+	output a string in the format '2024-03-02' that's exactly 2 weeks before
+	the current date
+	"""
+
+	# grab the current date. note datetime.today() gives the date, but now()
+	# also adds the time. datetime.today() equivalent to datetime.now().date()
+	currentDate = datetime.now()
+
+	# Calculate the date exactly 2 weeks before the current date
+	twoWeeksBefore = currentDate - timedelta(days=15)
+
+	# Format the date to match the specified format "YYYY-MM-DD"
+	formattedDate = twoWeeksBefore.strftime("%Y-%m-%d")
+	print(f'{formattedDate}')
+
+
+twoWeeksPrior()
 
 
 # find cards with the highest ratio of:
@@ -12,8 +34,6 @@ from typing import Dict, List
 # the goal is to find severely under-drafted cards in the current meta: deceive
 # TODO figure out how to address the ATA z-score being negative means it's a
 # 	high pick :P
-
-
 def computeAvgAlsa():
 	currentJsonPath: str = f'data/master.json'
 	with open(currentJsonPath, 'r', encoding='utf-8') as jsonFileHandler:
@@ -85,5 +105,5 @@ def ansiExperiments():
 	)
 
 
-ansiExperiments()
+# ansiExperiments()
 # computeAvgAlsa()
