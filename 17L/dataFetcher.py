@@ -94,7 +94,7 @@ def getRecentAlsaMaps():
 
 def getRawRequestsFrom17L():
 	for dataSetName, dataSetURL in caliberRequestMap.items():
-		print(f'🫐 processing {dataSetName} → {dataSetURL}')
+		print(f'fetching {dataSetName} → {dataSetURL}')
 
 		# iterate through colorPairs, making a request for each pair
 		# then dump into 📂requests as 'all.json' or the colorPair name
@@ -125,7 +125,7 @@ def getRawRequestsFrom17L():
 
 # get requested json data from 17lands.com for all data sets
 def fetch():
-	# getRawRequestsFrom17L()
+	getRawRequestsFrom17L()
 
 	# enable this when we don't restrict startDate so ALSAs are more accurate
 	# TODO explain what happens when this isn't run
