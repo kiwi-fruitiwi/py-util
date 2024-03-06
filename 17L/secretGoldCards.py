@@ -19,7 +19,10 @@ def displayArchetypeDiffs(rarityList: List[str], caliber: str, diff: float = 0.5
 	# 	for each colorPair, check the difference between the win rate in that
 	# 	pair vs the win rate in all
 	for name, value in masterJson.items():
-		print(f'{namesToColorIdentity}')
+		# print(f'{namesToColorIdentity}')
+
+		if '//' in name:
+			name = name.split(' // ')[0]
 		colorIdentityList: List[str] = namesToColorIdentity[name]
 
 		# skip cards not of the correct rarity
@@ -54,7 +57,7 @@ def displayArchetypeDiffs(rarityList: List[str], caliber: str, diff: float = 0.5
 
 			for colorPairID, zScoreValue in successfulColorPairZScores.items():
 				archetypeDescription += f'{ANSI.WHITE.value}{colorPairID}{ANSI.RESET.value} +{zScoreValue:.2f} '
-				archetypeDescription += f'over {getGrade(allGIHWRz)}'
+				archetypeDescription += f'over {getGrade(allGIHWRz)} '
 
 			printArchetypesData(name, masterJson, statsJson, caliber, archetypeDescription)
 			print(f'')
@@ -70,6 +73,10 @@ def generateNameColorIdentityDict() -> Dict[str, List[str]]:
 		# truncate so we only get the main card's name
 		# not MDFC backsides or adventures
 		name: str = card['name']
+
+		# don't do this for split cards: consign to oblivion
+		# but do this for adventures and battles
+		# 🌟 how do we differentiate?
 		if '//' in card['name']:
 			name = card['name'].split(' // ')[0]
 

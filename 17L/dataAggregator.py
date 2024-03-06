@@ -107,6 +107,8 @@ def createMasterJson(caliber: str):
 	for name, masterCardData in master.items():
 		# update with recent ALSA numbers, not ALSA for the entire format
 
+		# the nameManaCostDict uses front faces only as keys
+		# so split cards like consign // oblivion would throw a keyError here
 		if '//' in name:
 			masterCardData['manaCost'] = nameManacostDict[name.split(' // ')[0]]
 		else:
@@ -119,18 +121,10 @@ def createMasterJson(caliber: str):
 
 		masterCardData['ALSA'] = alsas[name]
 
-
-
 		# grab the mana cost from our collapsed scryfall dictionary:
 		# format is [cardName, mana cost] where latter is formatted
 		# 1UUU instead of {1}{U}{U}{U}
 		# TODO make this work for double faced cards: adventures multiple costs
-
-		# nameManacostDict[name] relies on front faces only
-		if '//' in name:
-			masterCardData['manaCost'] = nameManacostDict[name.split(' // ')[0]]
-		else:
-			masterCardData['manaCost'] = nameManacostDict[name]
 
 		# stats we want z-scores for
 		stats: List[str] = ['GIH WR', 'OH WR', 'GD WR', 'IWD']
