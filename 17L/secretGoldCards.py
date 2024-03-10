@@ -19,8 +19,11 @@ def displayArchetypeDiffs(rarityList: List[str], caliber: str, diff: float = 0.5
 	# 	for each colorPair, check the difference between the win rate in that
 	# 	pair vs the win rate in all
 	for name, value in masterJson.items():
-		# print(f'{namesToColorIdentity}')
 
+		# scryfall json has full names e.g.  hustle // bustle, kellan // tail
+		# 17L is inconsistent: front face only for adventures, but split cards
+		# have their full name. thus, we standardize to 🔑front face only in our
+		# namesToColorIdentity dictionary. so far, front face names are unique
 		if '//' in name:
 			name = name.split(' // ')[0]
 		colorIdentityList: List[str] = namesToColorIdentity[name]
