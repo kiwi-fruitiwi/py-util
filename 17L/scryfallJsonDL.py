@@ -9,7 +9,7 @@ from constants import extraCardsForEachSet
 
 # makes a scryfall API request and saves the file to setName.json
 def getScryfallJson():
-	setName: str = 'big'
+	setName: str = 'otj'
 
 	# 'the list' and 'special guests' are part of 🗡️mkm but require large
 	# queries of individual cards
