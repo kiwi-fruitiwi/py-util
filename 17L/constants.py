@@ -3,6 +3,9 @@ from typing import List, Dict
 from enum import Enum
 
 
+# current set name
+setName: str = 'otj'
+
 # sample size threshold for being included in mean and stdev calculations
 # generally if # GIH is 50000, # OH floats around 20000. # GD is 30000
 # this makes sense because GIH is OH+GD
@@ -32,10 +35,10 @@ extraCardsForEachSet: Dict[str, str] = {
 
 # it's possible to leave out start and end date. defaults to entire format!
 baseRequestURL: str = \
-    "https://www.17lands.com/card_ratings/data" \
-    "?expansion=MKM" \
-    "&format=PremierDraft" \
-    # "&start_date=2023-09-25" # recent data only, typically last 2 weeks
+    f'https://www.17lands.com/card_ratings/data' \
+    f'?expansion={setName}' \
+    f'&format=PremierDraft' \
+    # f'&start_date=2023-09-25' # recent data only, typically last 2 weeks
 
 # a map between player caliber set, e.g. 'all', 'top', 'bottom', 'middle', and
 # their 17lands json request URLs

@@ -167,27 +167,33 @@ def createMasterJson(caliber: str):
 				coloredDataJson: Dict = json.load(jsonFileHandler)
 
 			dataSetID: str = colorPair  # e.g. 'WU', 'UG'
-			dataSetCardData: Dict = coloredDataJson[name]
-			zScores: Dict = createZscoreDict(
-				dataSetCardData, stats, dataSetID, caliber)
 
-			# don't add colorStats data at all if '# GIH' doesn't meet sample
-			# size requirement
-			if dataSetCardData['# GIH'] < minJsonInclusionSampleSize:
-				pass
+			# check if card name exists in the colorPair json. skip if not
+			if name in coloredDataJson:
+				dataSetCardData: Dict = coloredDataJson[name]
+				zScores: Dict = createZscoreDict(
+					dataSetCardData, stats, dataSetID, caliber)
+
+				# don't add colorStats data at all if '# GIH' doesn't meet sample
+				# size requirement
+				if dataSetCardData['# GIH'] < minJsonInclusionSampleSize:
+					pass
+				else:
+					colorPairStats: Dict = {
+						'GIH WR': dataSetCardData['GIH WR'],
+						'# GIH': dataSetCardData['# GIH'],
+						'OH WR': dataSetCardData['OH WR'],
+						'# OH': dataSetCardData['# OH'],
+						'GD WR': dataSetCardData['GD WR'],
+						'# GD': dataSetCardData['# GD'],
+						'IWD': dataSetCardData['IWD'],
+						'z-scores': zScores
+					}
+
+					masterCardData['filteredStats'][dataSetID] = colorPairStats
 			else:
-				colorPairStats: Dict = {
-					'GIH WR': dataSetCardData['GIH WR'],
-					'# GIH': dataSetCardData['# GIH'],
-					'OH WR': dataSetCardData['OH WR'],
-					'# OH': dataSetCardData['# OH'],
-					'GD WR': dataSetCardData['GD WR'],
-					'# GD': dataSetCardData['# GD'],
-					'IWD': dataSetCardData['IWD'],
-					'z-scores': zScores
-				}
-
-				masterCardData['filteredStats'][dataSetID] = colorPairStats
+				print(f'🐬 {name} not found in {colorPair}')
+				pass
 
 	# save the final master.json file
 	with open(f'data/{caliber}Master.json', 'w', encoding='utf-8') as jsonSaver:
@@ -391,7 +397,7 @@ def calculateStats(
 		# add another print statement to calculateAndAddStatsKeyValuePairs to
 		# find the source of this empty list
 		print(
-			f'[ ERROR ] '
+			f'[ WARNING ] '
 			f'🪶 data after removing None values: {validData}\n'
 			f'"{stat}" for {dataSetID}: {dataSetPath} '
 			f'only {len(validData)} cards in this archetype meet '
