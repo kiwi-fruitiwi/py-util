@@ -27,7 +27,8 @@ def statSortingKey(item, stat: str):
 
 
 # displays top n cards of each colorPair by rarity: 'C', 'U', 'R', 'M'
-def displayTopCardsInEachColorByRarity(rarityList: List[str], n: int):
+def displayTopCardsInEachColorByRarity(
+		rarityList: List[str], cardsToDisplay: int, includeMulticolor=True):
 
 	# go through colors and iterate through calibers in each
 	for color in 'WUBRG':
@@ -37,8 +38,8 @@ def displayTopCardsInEachColorByRarity(rarityList: List[str], n: int):
 			master: Dict = loadJson(f'data/{caliber}Master.json')
 
 			# sorting the data must come before iterating because we take the
-			# -first- n entries that satisfy our color and rarity requirements below
-			# not sorting thus misses possibilities at the end of the json
+			# -first- n entries that satisfy our color and rarity requirements
+			# below. not sorting misses possibilities at the end of the json
 			sortingStat: str = 'OH WR'
 			sortedData = dict(
 				sorted(
@@ -49,7 +50,7 @@ def displayTopCardsInEachColorByRarity(rarityList: List[str], n: int):
 			)
 
 			# take the first n sorted-by-stat items of a rarity and display them
-			maxCount: int = n
+			maxCount: int = cardsToDisplay
 			count: int = 0
 			cardFetchList: List[str] = []
 
@@ -58,7 +59,13 @@ def displayTopCardsInEachColorByRarity(rarityList: List[str], n: int):
 
 					# we can either use 'color in' to include multicolor cards
 					# or 'color ==' to restrict only monocolor ones
-					if color in cardData.get("Color"):
+					filterClause: bool
+					if includeMulticolor:
+						filterClause = color in cardData.get("Color")
+					else:
+						filterClause = (color == cardData.get("Color"))
+
+					if filterClause:
 						nGih: int = cardData['filteredStats']['all']['# GIH']
 						if nGih > minGihSampleSize:
 							cardFetchList.append(name)
@@ -73,10 +80,13 @@ def displayTopCardsInEachColorByRarity(rarityList: List[str], n: int):
 
 # don't run this on imports
 if __name__ == '__main__':
-	print(f'be aware lack of sample size for top caliber players will put commons and uncommons at the top of the list')
+	# display default setting: top 12 commons + uncommons
+	displayTopCardsInEachColorByRarity(['C', 'U'], 10, includeMulticolor=False)
+
+	# ask user what settings they want
+	print(f'lack of sample size for top caliber players will put commons and uncommons at the top of the list')
 	userInput: str = input('n rarityList: ')
 	inputs: List[str] = userInput.split(' ')
 	n: int = int(inputs[0])
-	colors: List[str] = list(inputs[1].upper())
-
-	displayTopCardsInEachColorByRarity(colors, n)
+	rarity: List[str] = list(inputs[1].upper())
+	displayTopCardsInEachColorByRarity(rarity, n, includeMulticolor=True)
