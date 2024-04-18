@@ -192,7 +192,6 @@ def createMasterJson(caliber: str):
 
 					masterCardData['filteredStats'][dataSetID] = colorPairStats
 			else:
-				print(f'🐬 {name} not found in {colorPair}')
 				pass
 
 	# save the final master.json file
