@@ -85,7 +85,7 @@ class Player:
 team: List = [
     Player('Kiwi', Job.SGE),
     Player('Aerry', Job.WAR),
-    Player('Winry', Job.DRG),
+    Player('Winry', Job.MCH),
     Player('Cody', Job.RDM)
 ]
 
@@ -157,5 +157,22 @@ def mokoScarletAuspice():
     print(f'\tcleave direction: {random.choice(list(Direction)).value.lower()}')
 
 
+# each player gets 🟥red or 🟦blue (clockwise or counterclockwise) rotation for
+# their personal portal, which faces either West or East
+#
+# "red north, blue south"
+# "west out, east in" or "left out, right in" when facing north
+# one of these portals is your friend. the other one kills you.
+#   players on the outside (west / left personal teleporters) stand directly on
+#   spinny part of outside portal. inner partner stands where that portal
+#   rotates to
+def zelessInfernBrand3():
+    print(f'🫂 zeless gah mechanic: infern brand 3')
+    print(f'personal portal → {random.choice(["East", "West"])}')
+    print(f'debuff color → {random.choice(["🟥", "🟦"])}')
+    print(f'end')
+
+
 # mokoScarletAuspice()
-mokoShadowTwin()
+# mokoShadowTwin()
+zelessInfernBrand3()
