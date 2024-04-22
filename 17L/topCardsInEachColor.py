@@ -40,7 +40,7 @@ def displayTopCardsInEachColorByRarity(
 			# sorting the data must come before iterating because we take the
 			# -first- n entries that satisfy our color and rarity requirements
 			# below. not sorting misses possibilities at the end of the json
-			sortingStat: str = 'OH WR'
+			sortingStat: str = 'GIH WR'
 			sortedData = dict(
 				sorted(
 					master.items(),
@@ -81,7 +81,7 @@ def displayTopCardsInEachColorByRarity(
 # don't run this on imports
 if __name__ == '__main__':
 	# display default setting: top 12 commons + uncommons
-	displayTopCardsInEachColorByRarity(['C', 'U'], 10, includeMulticolor=False)
+	displayTopCardsInEachColorByRarity(['C'], 10, includeMulticolor=False)
 
 	# ask user what settings they want
 	print(f'lack of sample size for top caliber players will put commons and uncommons at the top of the list')

@@ -56,7 +56,7 @@ def displayTopCardsByRarity(rarityList: List[str], caliber: str = 'all', maxCard
 		print(f'\n🌊 colors: {colorPair}')
 
 		# sort the data per colorPair
-		sortingStat: str = 'OH WR'
+		sortingStat: str = 'GIH WR'
 		sortedData = dict(
 			sorted(
 				master.items(),
