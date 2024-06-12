@@ -69,7 +69,7 @@ def displayArchetypeDiffs(rarityList: List[str], caliber: str, diff: float = 0.5
 # helper method because scryfall json is not keyed by name. generates a dict
 # with 🔑cardName, value: colorIdentity. e.g. Restless Anchorage ["U","W"]
 def generateNameColorIdentityDict() -> Dict[str, List[str]]:
-	scryfallData: Dict = loadJson('data/scryfall.json')
+	scryfallData: Dict = loadJson('data/otj-intermediate/scryfall.json')
 	results: Dict[str, List[str]] = {}
 
 	for card in scryfallData:

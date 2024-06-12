@@ -4,13 +4,12 @@ from typing import Dict
 
 import requests
 import json
-from constants import extraCardsForEachSet
+from constants import extraCardsForEachSet, setName
 
 
 # makes a scryfall API request and saves the file to setName.json
+# setName is set in constants.py → setName
 def getScryfallJson():
-	setName: str = 'mh3'
-
 	# 'the list' and 'special guests' are part of 🗡️mkm but require large
 	# queries of individual cards
 
@@ -23,6 +22,7 @@ def getScryfallJson():
 		requestURL += f'+OR+{extraCardsForEachSet[setName]}'
 
 	data = requests.get(requestURL).json()
+	print(f'request URL → {requestURL}')
 
 	# final result json ← concatenation of all 🔑:data pages
 	result = data['data']
@@ -39,7 +39,8 @@ def getScryfallJson():
 	print(f'{len(result)} cards found in {setName}')
 
 
-	with open(f'scryfall-{setName}.json', 'w', encoding='utf-8') as json_file_handler:
+	# with open(f'scryfall-{setName}.json', 'w', encoding='utf-8') as json_file_handler:
+	with open(f'scryfall.json', 'w', encoding='utf-8') as json_file_handler:
 		json_file_handler.write(json.dumps(result, indent=2))
 
 
