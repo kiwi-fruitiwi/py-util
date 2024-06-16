@@ -27,8 +27,8 @@ def hypergeoCDF(deckSize, drawSteps, hits, k):
     :return: probability of 1 to k successes in sample
     """
 
-    # note this does not include 0 successes; we start at 1. otherwise we
-    # return 1 all the time
+    # note this does not include 0 successes; we start at 1.
+    # otherwise we return 1 all the time
     partialProbabilities: List[float] = \
         [hypergeoPMF(deckSize, drawSteps, hits, x) for x
          in range(1, k + 1)]
