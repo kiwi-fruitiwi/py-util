@@ -72,12 +72,12 @@ if __name__ == '__main__':
     done: bool = False
 
     while not done:
-        userInput: str = input('library draws successPop hitsDesired: ')
+        userInput: str = input('library draws successPop: ')
         inputs: List[str] = userInput.split(' ')
         deckSize: int = int(inputs[0])
         drawSteps: int = int(inputs[1])
         totalHits: int = int(inputs[2])
-        hitsDesired: int = int(inputs[3])
+        hitsDesired: int = int(inputs[2]) # always use max successes as ceiling
 
         totalChances: str = f'{hypergeoCDF(deckSize, drawSteps, totalHits, hitsDesired) * 100:>5.1f}%'
         print(f'draw 1 to max → {totalChances}\n')
