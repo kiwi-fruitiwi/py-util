@@ -4,7 +4,7 @@ from enum import Enum
 
 
 # current set name
-setName: str = 'mh3'
+setName: str = 'blb'
 
 # sample size threshold for being included in mean and stdev calculations
 # generally if # GIH is 50000, # OH floats around 20000. # GD is 30000
