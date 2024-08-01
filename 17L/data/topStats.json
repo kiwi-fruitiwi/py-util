@@ -1,20 +1,20 @@
 {
     "all": {
         "GIH WR": {
-            "mean": null,
-            "stdev": null
+            "mean": 0.5994101530057647,
+            "stdev": 0.031762628404994546
         },
         "OH WR": {
-            "mean": null,
-            "stdev": null
+            "mean": 0.5993709639830087,
+            "stdev": 0.028344876855024785
         },
         "GD WR": {
-            "mean": null,
-            "stdev": null
+            "mean": 0.6141391375429678,
+            "stdev": 0.02776549651659057
         },
         "IWD": {
-            "mean": null,
-            "stdev": null
+            "mean": 0.017555846850838275,
+            "stdev": 0.035161838034781435
         }
     },
     "WU": {
@@ -73,8 +73,8 @@
     },
     "WG": {
         "GIH WR": {
-            "mean": null,
-            "stdev": null
+            "mean": 0.6151605073424239,
+            "stdev": 0.02237092362027331
         },
         "OH WR": {
             "mean": null,
@@ -85,8 +85,8 @@
             "stdev": null
         },
         "IWD": {
-            "mean": null,
-            "stdev": null
+            "mean": -0.0012555489532451686,
+            "stdev": 0.034035992577990705
         }
     },
     "UB": {
@@ -127,8 +127,8 @@
     },
     "UG": {
         "GIH WR": {
-            "mean": null,
-            "stdev": null
+            "mean": 0.627907349727675,
+            "stdev": 0.021868583545363904
         },
         "OH WR": {
             "mean": null,
@@ -139,8 +139,8 @@
             "stdev": null
         },
         "IWD": {
-            "mean": null,
-            "stdev": null
+            "mean": 0.04772316067823404,
+            "stdev": 0.032737455033487795
         }
     },
     "BR": {
@@ -163,8 +163,8 @@
     },
     "BG": {
         "GIH WR": {
-            "mean": null,
-            "stdev": null
+            "mean": 0.6249388062958766,
+            "stdev": 0.030739446425205166
         },
         "OH WR": {
             "mean": null,
@@ -175,8 +175,8 @@
             "stdev": null
         },
         "IWD": {
-            "mean": null,
-            "stdev": null
+            "mean": 0.021233634439293825,
+            "stdev": 0.03024085350777488
         }
     },
     "RG": {
