@@ -173,6 +173,34 @@ def zelessInfernBrand3():
     print(f'end')
 
 
+# widening or narrowing first, then alternate for 3 more
+# near or far first, then alternate for 3 more
+# permutations
+#   widening far: healers out
+#   narrowing near: tanks in → healers out
+#   narrowing far: bait on waymarks → healers first
+#   widening near: bait on waymarks → tanks first
+def witchHunt():
+    print(f'\n')
+    print(f'M4S.⚡: widening or narrowing witch hunt')
+    print(f'AoE: {random.choice(["widening", "narrowing"])}')
+    print(f'bait: {random.choice(["near", "far"])}')
+    pass
+
+
+# electrope edge 2: cage, spark, cage
+# variables: 2 or 3 count, long vs short, spread or stack
+def electropeEdge2():
+    print(f'\n')
+    print(f'M4S.⚡: EE2')
+    print(f'number of hits: {random.choice(["2", "3"])}')
+    print(f'timer: {random.choice(["short", "long"])}')
+    print(f'ss: {random.choice(["stack", "spread"])}')
+    pass
+
+
+witchHunt()
+electropeEdge2()
 # mokoScarletAuspice()
 # mokoShadowTwin()
-zelessInfernBrand3()
+# zelessInfernBrand3()
