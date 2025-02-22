@@ -199,8 +199,35 @@ def electropeEdge2():
     pass
 
 
-witchHunt()
-electropeEdge2()
+#
+def diamondDust():
+    print(f'\n')
+    print(f'🪽FRU.P2: Diamond Dust')
+    print(f'  speech: {random.choice(["cleave", "reap"])}')
+    print(f'  first circle spawn: {random.choice(["cardinals", "intercards"])}')
+    print(f'  {random.choice(["marked", "unmarked"])}')
+
+
+diamondDust()
+# witchHunt()
+# electropeEdge2()
 # mokoScarletAuspice()
 # mokoShadowTwin()
 # zelessInfernBrand3()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
