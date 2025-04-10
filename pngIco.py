@@ -5,10 +5,10 @@ import os
 def scanDirConvert() -> None:
     """
     converts all files in /img to .ico format onto the user's desktop,
-    then removes the files
+    then *removes* the files
     :return:
     """
-    directory = 'img'
+    directory = 'icoConvert'
 
     for filename in os.scandir(directory):
         if filename.is_file():
