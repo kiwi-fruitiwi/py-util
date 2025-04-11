@@ -40,6 +40,7 @@ def applyTimestampOffsets(filePath, offsetSeconds, outputPath=None):
 
     with open(outputPath, 'w', encoding='utf-8') as outputFile:
         outputFile.write(adjustedContent)
+        # print(adjustedContent, file=outputFile)
 
     print(f"Updated file saved to: {outputPath}")
 

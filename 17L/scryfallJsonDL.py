@@ -9,6 +9,7 @@ from constants import extraCardsForEachSet, setName
 
 # makes a scryfall API request and saves the file to setName.json
 # setName is set in constants.py → setName
+# constants.py also include what extra cards are in the set
 def getScryfallJson():
 	# 'the list' and 'special guests' are part of 🗡️mkm but require large
 	# queries of individual cards
