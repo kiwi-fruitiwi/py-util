@@ -1,200 +1,200 @@
 {
     "all": {
         "GIH WR": {
-            "mean": 0.5523870927331092,
-            "stdev": 0.035232972091322985
+            "mean": null,
+            "stdev": null
         },
         "OH WR": {
-            "mean": 0.5452674027730823,
-            "stdev": 0.04131229357614022
+            "mean": null,
+            "stdev": null
         },
         "GD WR": {
-            "mean": 0.5577382590531639,
-            "stdev": 0.03537817222856953
+            "mean": null,
+            "stdev": null
         },
         "IWD": {
-            "mean": 0.017677764107348577,
-            "stdev": 0.03414219311696428
+            "mean": null,
+            "stdev": null
         }
     },
     "WU": {
         "GIH WR": {
-            "mean": 0.5506408009985899,
-            "stdev": 0.03482609779288868
+            "mean": null,
+            "stdev": null
         },
         "OH WR": {
-            "mean": 0.5386642262979722,
-            "stdev": 0.03926295616293722
+            "mean": null,
+            "stdev": null
         },
         "GD WR": {
-            "mean": 0.5589190722278821,
-            "stdev": 0.035678396769302095
+            "mean": null,
+            "stdev": null
         },
         "IWD": {
-            "mean": 0.031822505461019446,
-            "stdev": 0.037130884219864685
+            "mean": null,
+            "stdev": null
         }
     },
     "WB": {
         "GIH WR": {
-            "mean": 0.5572079800419955,
-            "stdev": 0.03127656449496953
+            "mean": null,
+            "stdev": null
         },
         "OH WR": {
-            "mean": 0.5513027879514857,
-            "stdev": 0.03827941699412491
+            "mean": null,
+            "stdev": null
         },
         "GD WR": {
-            "mean": 0.5651810227457231,
-            "stdev": 0.031166860455481577
+            "mean": null,
+            "stdev": null
         },
         "IWD": {
-            "mean": 0.013328592112805425,
-            "stdev": 0.030299091394417336
+            "mean": null,
+            "stdev": null
         }
     },
     "WR": {
         "GIH WR": {
-            "mean": 0.511019360421294,
-            "stdev": 0.03678861183050887
+            "mean": null,
+            "stdev": null
         },
         "OH WR": {
-            "mean": 0.5217857283779384,
-            "stdev": 0.04236148741517191
+            "mean": null,
+            "stdev": null
         },
         "GD WR": {
-            "mean": 0.5104349422030464,
-            "stdev": 0.03673489616586791
+            "mean": null,
+            "stdev": null
         },
         "IWD": {
-            "mean": -0.007753267477821715,
-            "stdev": 0.039117061290349926
+            "mean": null,
+            "stdev": null
         }
     },
     "WG": {
         "GIH WR": {
-            "mean": 0.5520486791982387,
-            "stdev": 0.03756997782533455
+            "mean": null,
+            "stdev": null
         },
         "OH WR": {
-            "mean": 0.5596560989317091,
-            "stdev": 0.04292798528194246
+            "mean": null,
+            "stdev": null
         },
         "GD WR": {
-            "mean": 0.5495228967402492,
-            "stdev": 0.03725084492765734
+            "mean": null,
+            "stdev": null
         },
         "IWD": {
-            "mean": -0.007376430210771741,
-            "stdev": 0.03525206823478752
+            "mean": null,
+            "stdev": null
         }
     },
     "UB": {
         "GIH WR": {
-            "mean": 0.5559344250472436,
-            "stdev": 0.03350797895533543
+            "mean": null,
+            "stdev": null
         },
         "OH WR": {
-            "mean": 0.5411008915385129,
-            "stdev": 0.03494714100606367
+            "mean": null,
+            "stdev": null
         },
         "GD WR": {
-            "mean": 0.5687548497840987,
-            "stdev": 0.031509187832182185
+            "mean": null,
+            "stdev": null
         },
         "IWD": {
-            "mean": 0.033211572399008515,
-            "stdev": 0.032714405178704276
+            "mean": null,
+            "stdev": null
         }
     },
     "UR": {
         "GIH WR": {
-            "mean": 0.5444596246115576,
-            "stdev": 0.033617846882157854
+            "mean": null,
+            "stdev": null
         },
         "OH WR": {
-            "mean": 0.5313941535525849,
-            "stdev": 0.04506849304741769
+            "mean": null,
+            "stdev": null
         },
         "GD WR": {
-            "mean": 0.5547915299440106,
-            "stdev": 0.030744841108753005
+            "mean": null,
+            "stdev": null
         },
         "IWD": {
-            "mean": 0.034074721619650576,
-            "stdev": 0.03177385654394972
+            "mean": null,
+            "stdev": null
         }
     },
     "UG": {
         "GIH WR": {
-            "mean": 0.5687298704322702,
-            "stdev": 0.037379240302408696
+            "mean": null,
+            "stdev": null
         },
         "OH WR": {
-            "mean": 0.5648493210965574,
-            "stdev": 0.04335816369427384
+            "mean": null,
+            "stdev": null
         },
         "GD WR": {
-            "mean": 0.5779535484182393,
-            "stdev": 0.034742193971915906
+            "mean": null,
+            "stdev": null
         },
         "IWD": {
-            "mean": 0.0170588946852334,
-            "stdev": 0.03536441541254559
+            "mean": null,
+            "stdev": null
         }
     },
     "BR": {
         "GIH WR": {
-            "mean": 0.5489241408569014,
-            "stdev": 0.03251700572149564
+            "mean": null,
+            "stdev": null
         },
         "OH WR": {
-            "mean": 0.5466396558719908,
-            "stdev": 0.0432587418121142
+            "mean": null,
+            "stdev": null
         },
         "GD WR": {
-            "mean": 0.5546679835093,
-            "stdev": 0.031590225340555333
+            "mean": null,
+            "stdev": null
         },
         "IWD": {
-            "mean": 0.005444331665205259,
-            "stdev": 0.031240079894959534
+            "mean": null,
+            "stdev": null
         }
     },
     "BG": {
         "GIH WR": {
-            "mean": 0.5639728989211543,
-            "stdev": 0.035895306930921606
+            "mean": null,
+            "stdev": null
         },
         "OH WR": {
-            "mean": 0.5619798959707502,
-            "stdev": 0.038747314345336646
+            "mean": null,
+            "stdev": null
         },
         "GD WR": {
-            "mean": 0.5722168472440586,
-            "stdev": 0.0339139445339967
+            "mean": null,
+            "stdev": null
         },
         "IWD": {
-            "mean": 0.012314513277002203,
-            "stdev": 0.0318796753046507
+            "mean": null,
+            "stdev": null
         }
     },
     "RG": {
         "GIH WR": {
-            "mean": 0.5424323950771719,
-            "stdev": 0.03840090352734155
+            "mean": null,
+            "stdev": null
         },
         "OH WR": {
-            "mean": 0.5522368959262814,
-            "stdev": 0.043563821225906976
+            "mean": null,
+            "stdev": null
         },
         "GD WR": {
-            "mean": 0.537178289795164,
-            "stdev": 0.03899465763466022
+            "mean": null,
+            "stdev": null
         },
         "IWD": {
-            "mean": -0.007131265377161284,
-            "stdev": 0.03828756490833547
+            "mean": null,
+            "stdev": null
         }
     }
 }
