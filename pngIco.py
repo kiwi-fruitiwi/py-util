@@ -4,7 +4,7 @@ import os
 
 def scanDirConvert() -> None:
     """
-    converts all files in /img to .ico format onto the user's desktop,
+    converts all files in /icoConvert to .ico format onto the user's desktop,
     then *removes* the files
     :return:
     """

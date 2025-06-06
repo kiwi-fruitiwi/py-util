@@ -4,7 +4,7 @@ from enum import Enum
 
 
 # current set name
-setName: str = 'tdm'
+setName: str = 'fin'
 
 # sample size threshold for being included in mean and stdev calculations
 # generally if # GIH is 50000, # OH floats around 20000. # GD is 30000
@@ -34,7 +34,8 @@ extraCardsForEachSet: Dict[str, str] = {
     'mh3': '(e:spg cn≥39 cn≤53) OR (e:m3c cn≤8)',
     'blb': '(e:spg cn≥54 cn≤63)',
     'dft': '(e:spg cn≥84 cn≤103)',
-    'tdm': '(e:spg cn≥104 cn≤113)'
+    'tdm': '(e:spg cn≥104 cn≤113)',
+    'fin': '(e:fca)'
 }
 
 # it's possible to leave out start and end date. defaults to entire format!
