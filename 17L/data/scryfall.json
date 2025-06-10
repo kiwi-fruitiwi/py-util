@@ -23427,7 +23427,7 @@
       {
         "object": "card_face",
         "name": "Lindblum, Industrial Regency",
-        "mana_cost": "{2}{R}",
+        "mana_cost": "!zidane",
         "type_line": "Land \u2014 Town",
         "oracle_text": "This land enters tapped.\n{T}: Add {R}.",
         "flavor_text": "A city encircled by the ramparts of a massive castle.",
@@ -23438,7 +23438,7 @@
       {
         "object": "card_face",
         "name": "Mage Siege",
-        "mana_cost": "",
+        "mana_cost": "{2}{R}",
         "type_line": "Instant \u2014 Adventure",
         "oracle_text": "Create a 0/1 black Wizard creature token with \"Whenever you cast a noncreature spell, this token deals 1 damage to each opponent.\"",
         "artist": "Piotr Dura",

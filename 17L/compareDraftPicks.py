@@ -212,7 +212,6 @@ def main():
 
 			# process always returns a list even if its length is 1
 			printCardText(bestMatch[0], scryfallJson)
-			print(f'🍑')
 
 			# stop here! no need to print data if we're just checking oracleText
 			continue
