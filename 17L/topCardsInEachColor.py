@@ -81,7 +81,7 @@ def displayTopCardsInEachColorByRarity(
 # don't run this on imports
 if __name__ == '__main__':
 	# display default setting: top 12 commons + uncommons
-	displayTopCardsInEachColorByRarity(['C'], 10, includeMulticolor=True)
+	displayTopCardsInEachColorByRarity(['C', 'U'], 10, includeMulticolor=True)
 
 	# ask user what settings they want
 	print(f'lack of sample size for top caliber players will put commons and uncommons at the top of the list')
