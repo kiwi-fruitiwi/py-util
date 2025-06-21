@@ -15,10 +15,10 @@ from cardDisplay import getGrade, gradeBounds, printCaliberDifferences
 def displayCaliberDiffsByRarity(rarityList: List[str]):
 	# assume there's only top and allUsers data. no need to parameterize by
 	# caliberRequestMap
-	topMaster: Dict = loadJson('data/otj-intermediate/topMaster.json')
-	topStats: Dict = loadJson('data/otj-intermediate/topStats.json')
-	allMaster: Dict = loadJson('data/otj-intermediate/allMaster.json')
-	allStats: Dict = loadJson('data/otj-intermediate/allStats.json')
+	topMaster: Dict = loadJson('data/topMaster.json')
+	topStats: Dict = loadJson('data/topStats.json')
+	allMaster: Dict = loadJson('data/allMaster.json')
+	allStats: Dict = loadJson('data/allStats.json')
 
 	# assume the keys are identical in both topMaster and allMaster json files
 	for key, value in allMaster.items():
