@@ -43,15 +43,15 @@ def getColorFilterPrefix(s: str) -> str:
 	return colorFilter
 
 
-# main input loop to ask for user input → return list of card stats
+# main input loop to ask for user input → return a list of card stats
 # main includes
 # 	the input logic: `!` and `colorPair: ` prefixes
 # 	performs fuzzy matching on card names
-# 	calls **printCardData** using the selected colorPair json file
+# 	calls **printCardData** using the selected colorPair JSON file
 # 	(or the default all colors file)
 def main():
 	previousUserInput: str = ''
-	previousCardFetchList: List[str] = []
+	# previousCardFetchList: List[str] = []
 
 	# extract data start date from constants.baseRequestURL
 	# regex pattern to match 'start_date=YYYY-MM-DD'
@@ -191,7 +191,7 @@ def main():
 			# remove special command flag but preserve first token
 			firstElement = firstElement[1:].strip()
 		else:
-			# default to all players data instead of top
+			# default to all-players data instead of top
 			caliber = list(caliberRequestMap.keys())[0]
 
 		# load the data
@@ -216,7 +216,7 @@ def main():
 			# stop here! no need to print data if we're just checking oracleText
 			continue
 
-		# dataset we'll be loading from json. default is 'all'
+		# dataset we'll be loading from JSON. default is 'all'
 		# this is not to be confused with caliber: 'top' vs 'all'
 		# instead, this is 'all colors' vs 'wu', 'wg', 'ur', 'ug', etc.
 		dataSetID: str = f'all'
@@ -237,7 +237,7 @@ def main():
 			dataSetID = tokens[0].upper().strip()
 			strippedCardNames[0] = tokens[1].strip()
 
-		# set up list of card names matched to our input
+		# set up a list of card names matched to our input
 		cardFetchList: List[str] = \
 			getBestCardNameMatches(masterJson.keys(), strippedCardNames)
 
@@ -255,7 +255,11 @@ def main():
 			# remove all cards pending deletion from cardFetchList
 			# 🐛 note this does not modify previousUserInput
 			cardFetchList = [name for name in cardFetchList if name not in cardsPendingDeletion]
+			print(f'<UNK> cardFetchList: {cardFetchList}')
 
+			# reconstruct userInput after sanitizing non-alphanumeric special characters
+			#   e.g. "Jill, Shiva's Dominant" would throw an error on the comma
+			userInput = ', '.join(re.sub(r'[^a-z0-9 ]+', '', item.lower()) for item in cardFetchList)
 
 		# if there's only one card, we will show an archetype analysis!
 		if len(cardFetchList) == 1:
@@ -281,7 +285,7 @@ def main():
 
 		# save our old userInput
 		previousUserInput = userInput
-		# print(f'[ DEBUG ] previous user input saved: {previousUserInput}')
+		# print(f'[ 🫐DEBUG ] previous user input saved: {previousUserInput}')
 
 
 def getBestCardNameMatches(

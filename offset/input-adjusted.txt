@@ -1,10 +1,34 @@
-7:46 quake III
-7:57 ultraviolent ray
+7:46 quake 3
+7:57 UVR¹
 8:09 twinbite
 8:20 hero's blow
-8:31 UVR 2
-8:42 quake III
-8:50 mooncleaver starts casting
-9:08 elemental purge: all 3 hits go off
-9:14 prowling gale - towers appear
-9:33 howling tempest first hit
+8:31 UVR²
+8:43 quake 3
+8:50 mooncleaver starts → 8:55 platform destroyed
+9:07 elemental purge
+9:14 prowling gale towers appear
+9:21 towers go off for prowling gale
+9:26 twofold tempest
+9:33 first green AoE
+9:41 second
+9:48 third
+9:54 fourth
+10:19 champion's circuit¹
+10:23
+10:27
+10:32
+10:36
+10:47 quake 3 ← always 5 pulses
+11:00 UVR³
+11:12 twinbite
+11:32 lone wolf's lament
+11:50 towers
+12:00 hero's blow
+12:12 UVR⁴
+12:19 tower¹ ← full party + pot window?
+12:41 tower² ← invuln
+13:01 tower³ ← kitchen sink. 13:07-13:13
+13:20 tower⁴
+13:41 tower⁵
+13:53 starcleaver
+14:02 enrage
