@@ -8,20 +8,20 @@ from constants import ANSI
 from typing import List
 
 
-def hypergeoPMF(deckSize, drawSteps, hits, k):
+def hypergeoPMF(deckSize, draws, hits, k):
     """
     returns probability of n successes with popSize, sampleSize, successInPop
     :param deckSize: total number of cards remaining in deck
-    :param drawSteps: number of draws
+    :param draws: number of draws
     :param hits: successes in population. 15 lands remaining in deck
     :param k: successes we want in draws
     :return: probability of successes in sample
     """
-    hpd = ss.hypergeom(deckSize, drawSteps, hits)
+    hpd = ss.hypergeom(deckSize, draws, hits)
     return hpd.pmf(k)
 
 
-def hypergeoCDF(deckSize, drawSteps, hits, k):
+def hypergeoCDF(deckSize, draws, hits, k):
     """
     sums up hypergeometric PMF values to come up with cumulative density
     :return: probability of 1 to k successes in sample
@@ -30,7 +30,7 @@ def hypergeoCDF(deckSize, drawSteps, hits, k):
     # note this does not include 0 successes; we start at 1.
     # otherwise we return 1 all the time
     partialProbabilities: List[float] = \
-        [hypergeoPMF(deckSize, drawSteps, hits, x) for x
+        [hypergeoPMF(deckSize, draws, hits, x) for x
          in range(1, k + 1)]
 
     length: int = len(partialProbabilities)
@@ -74,10 +74,10 @@ if __name__ == '__main__':
     while not done:
         userInput: str = input('library draws successPop: ')
         inputs: List[str] = userInput.split(' ')
-        deckSize: int = int(inputs[0])
+        librarySize: int = int(inputs[0])
         drawSteps: int = int(inputs[1])
         totalHits: int = int(inputs[2])
         hitsDesired: int = int(inputs[2]) # always use max successes as ceiling
 
-        totalChances: str = f'{hypergeoCDF(deckSize, drawSteps, totalHits, hitsDesired) * 100:>5.1f}%'
+        totalChances: str = f'{hypergeoCDF(librarySize, drawSteps, totalHits, hitsDesired) * 100:>5.1f}%'
         print(f'draw 1 to max → {totalChances}\n')

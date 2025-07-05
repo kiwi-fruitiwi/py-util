@@ -51,6 +51,12 @@ last_post_times = {}  # {thread_id: unix_timestamp}
 THREAD_TIMEOUT = 600  # 10 minutes
 
 
+import discord
+import time
+import json
+import os
+
+
 @client.event
 async def on_message(message):
     global last_thread_id
@@ -77,23 +83,19 @@ async def on_message(message):
             if should_print_header:
                 content_lines.append(f'`🧵 {escaped_name}`')
                 message_link = f"https://discord.com/channels/{message.guild.id}/{message.channel.id}/{message.id}"
-                content_lines.append(f"`🔗` ({message_link})")
+                content_lines.append(f"{message_link}")
                 last_post_times[thread_id] = current_time
 
             content_lines.append(message.content)
             content = "\n".join(content_lines)
 
-            files = []
-            for attachment in message.attachments:
-                files.append(await attachment.to_file())
+            files = [await attachment.to_file() for attachment in message.attachments]
 
-            # Get or create the webhook for the target channel
             webhooks = await target_channel.webhooks()
             webhook = discord.utils.get(webhooks, name="Mirror Bot")
             if webhook is None:
                 webhook = await target_channel.create_webhook(name="Mirror Bot")
 
-            # Send the message using the webhook with the user's name and avatar
             sent_message = await webhook.send(
                 content=content,
                 username=message.author.display_name,
@@ -102,12 +104,13 @@ async def on_message(message):
                 wait=True
             )
 
-            # update tracking
             last_thread_id = thread_id
-            message_map[str(message.id)] = str(sent_message.id)
+            message_map[str(message.id)] = {
+                "mirrored_id": str(sent_message.id),
+                "webhook_id": webhook.id
+            }
             save_state(message_map)
-            print(f'[ SEND ] 📫 Sent message ID: {sent_message.id}')
-
+            print(f'[ SEND ] 📢 Sent message ID: {sent_message.id}')
 
 
 @client.event
@@ -124,26 +127,35 @@ async def on_message_edit(before, after):
             if not target_channel:
                 return
 
-            # Find the reposted message ID
-            target_message_id = message_map.get(str(after.id))
-            if not target_message_id:
+            info = message_map.get(str(after.id))
+            if not info:
                 print(f"No mapping found for edited message ID {after.id}")
                 return
 
+            webhook_id = info["webhook_id"]
+            mirrored_id = int(info["mirrored_id"])
+
+            webhooks = await target_channel.webhooks()
+            webhook = discord.utils.get(webhooks, id=webhook_id)
+            if webhook is None:
+                print(f"Webhook ID {webhook_id} not found in target channel")
+                return
+
+            new_content = after.content
             try:
-                target_message = await target_channel.fetch_message(int(target_message_id))
-
-                escaped_name = after.channel.name.replace("🥝", "`🥝`")
-                new_content = f"`{after.author.display_name} in 🧵→thread` {escaped_name} `EDIT`:\n{after.content}"
-                await target_message.edit(content=new_content)
-
+                await webhook.edit_message(
+                    message_id=mirrored_id,
+                    content=new_content
+                )
+                print(f"[EDITED] ✅ Updated mirrored message ID: {mirrored_id}")
             except discord.NotFound:
-                print(f"Original reposted message not found for ID {target_message_id}")
+                print(f"Original mirrored message not found for ID {mirrored_id}")
 
 
 @client.event
 async def on_message_delete(message):
     print(f"[DELETE EVENT] message {message.id} deleted")
+
     if message.author.bot:
         return
 
@@ -154,13 +166,25 @@ async def on_message_delete(message):
             if not target_channel:
                 return
 
-            reposted_id = message_map.get(str(message.id))
-            if reposted_id:
-                try:
-                    reposted = await target_channel.fetch_message(int(reposted_id))
-                    await reposted.delete()
-                except discord.NotFound:
-                    print(f"[FAIL] Message {reposted_id} not found in target channel")
-                    pass
+            info = message_map.get(str(message.id))
+            if not info:
+                print(f"No mapping found for deleted message ID {message.id}")
+                return
+
+            webhook_id = info["webhook_id"]
+            mirrored_id = int(info["mirrored_id"])
+
+            webhooks = await target_channel.webhooks()
+            webhook = discord.utils.get(webhooks, id=webhook_id)
+            if webhook is None:
+                print(f"Webhook ID {webhook_id} not found in target channel")
+                return
+
+            try:
+                await webhook.delete_message(mirrored_id)
+                print(f"[DELETED] 🔍 Removed mirrored message ID: {mirrored_id}")
+            except discord.NotFound:
+                print(f"[FAIL] Message {mirrored_id} not found in target channel")
+
 
 client.run(TOKEN)
