@@ -71,11 +71,13 @@ async def on_message(message):
             last_time = last_post_times.get(thread_id, 0)
             should_print_header = (thread_id != last_thread_id) or (current_time - last_time > THREAD_TIMEOUT)
 
-            escaped_name = message.channel.name.replace("🥝", "`🥝`")
+            escaped_name = message.channel.name.replace("🥝", "")
 
             content_lines = []
             if should_print_header:
-                content_lines.append(f"`{message.author.display_name} in 🧵→thread` {escaped_name}:")
+                content_lines.append(f'`🧵 {escaped_name}`')
+                message_link = f"https://discord.com/channels/{message.guild.id}/{message.channel.id}/{message.id}"
+                content_lines.append(f"`🔗` ({message_link})")
                 last_post_times[thread_id] = current_time
 
             content_lines.append(message.content)
