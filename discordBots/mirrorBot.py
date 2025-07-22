@@ -8,8 +8,8 @@ import json
 
 load_dotenv()
 TOKEN = os.getenv('AGGREGATOR_BOT_TOKEN')
-SOURCE_CHANNEL_ID = 1383875109613207603  # the channel with threads
-TARGET_CHANNEL_ID = 1390389351187480606  # the repost channel
+SOURCE_CHANNEL_ID = 1383875109613207603  # the channel with threads: 💎ꟳᴵᴺ PD
+TARGET_CHANNEL_ID = 1390389351187480606  # the repost channel: current-games
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -21,11 +21,12 @@ client = discord.Client(intents=intents)
 STATE_FILE = 'mirrorState.json'
 
 
+# unsure if this actually works in practice between reboots T_T
 def load_state():
     if os.path.exists(STATE_FILE):
         with open(STATE_FILE, "r") as f:
             state = json.load(f)
-            print("[STATE LOADED]")
+            print("[ STATE LOADED ]")
             print(json.dumps(state, indent=2))
     return {}
 
@@ -35,8 +36,7 @@ def save_state(state):
         json.dump(state, f)
 
 
-# This stores the mapping between original messages and reposts
-# { source_message_id: target_message_id }
+# this stores the mapping between original messages and reposts
 message_map = load_state()
 
 
@@ -49,12 +49,6 @@ async def on_ready():
 last_thread_id = None
 last_post_times = {}  # {thread_id: unix_timestamp}
 THREAD_TIMEOUT = 600  # 10 minutes
-
-
-import discord
-import time
-import json
-import os
 
 
 @client.event
@@ -83,10 +77,12 @@ async def on_message(message):
             if should_print_header:
                 content_lines.append(f'`🧵 {escaped_name}`')
                 message_link = f"https://discord.com/channels/{message.guild.id}/{message.channel.id}/{message.id}"
-                content_lines.append(f"{message_link}")
                 last_post_times[thread_id] = current_time
 
             content_lines.append(message.content)
+
+            if should_print_header:
+                content_lines.append(f"\n`message link:` {message_link}")
             content = "\n".join(content_lines)
 
             files = [await attachment.to_file() for attachment in message.attachments]
@@ -110,12 +106,12 @@ async def on_message(message):
                 "webhook_id": webhook.id
             }
             save_state(message_map)
-            print(f'[ SEND ] 📢 Sent message ID: {sent_message.id}')
+            print(f'[ SEND ] 📫 Sent message ID: {sent_message.id}')
 
 
 @client.event
 async def on_message_edit(before, after):
-    print(f"[EDIT EVENT] message {after.id} edited")
+    print(f"[ EDIT EVENT ] message {after.id} edited")
 
     if after.author.bot:
         return
@@ -147,14 +143,14 @@ async def on_message_edit(before, after):
                     message_id=mirrored_id,
                     content=new_content
                 )
-                print(f"[EDITED] ✅ Updated mirrored message ID: {mirrored_id}")
+                print(f"[ EDITED ] ✒️ Updated mirrored message ID: {mirrored_id}")
             except discord.NotFound:
                 print(f"Original mirrored message not found for ID {mirrored_id}")
 
 
 @client.event
 async def on_message_delete(message):
-    print(f"[DELETE EVENT] message {message.id} deleted")
+    print(f"[ DELETE EVENT ] message {message.id} deleted")
 
     if message.author.bot:
         return
@@ -182,9 +178,9 @@ async def on_message_delete(message):
 
             try:
                 await webhook.delete_message(mirrored_id)
-                print(f"[DELETED] 🔍 Removed mirrored message ID: {mirrored_id}")
+                print(f"[ DELETED ] 🔍 Removed mirrored message ID: {mirrored_id}")
             except discord.NotFound:
-                print(f"[FAIL] Message {mirrored_id} not found in target channel")
+                print(f"[ FAIL ] Message {mirrored_id} not found in target channel")
 
 
 client.run(TOKEN)
