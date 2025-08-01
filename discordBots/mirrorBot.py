@@ -4,11 +4,10 @@ import discord
 import os
 import json
 
-# TODO currently loading state.json doesn't preserve state after reboots
-
+# TODO currently loading state.json doesn't preserve state after reboots!ext
 load_dotenv()
 TOKEN = os.getenv('AGGREGATOR_BOT_TOKEN')
-SOURCE_CHANNEL_ID = 1383875109613207603  # the channel with threads: 💎ꟳᴵᴺ PD
+SOURCE_CHANNEL_ID = 1399393869854150787  # the channel with threads: 💎ꟳᴵᴺ PD
 TARGET_CHANNEL_ID = 1390389351187480606  # the repost channel: current-games
 
 intents = discord.Intents.default()
