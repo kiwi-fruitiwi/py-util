@@ -66,6 +66,7 @@ class ANSI(Enum):
     UNDERLINE = '\033[4m'
     ITALIC = '\033[3m'
 
+
     # the default console text output can be considered 'standard white'
     # but the ANSI 'standard white' looks bold
     BLACK = '\033[90m'

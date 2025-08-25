@@ -7,8 +7,16 @@ import json
 # TODO currently loading state.json doesn't preserve state after reboots!ext
 load_dotenv()
 TOKEN = os.getenv('AGGREGATOR_BOT_TOKEN')
-SOURCE_CHANNEL_ID = 1399393869854150787  # the channel with threads: 💎ꟳᴵᴺ PD
+SOURCE_CHANNEL_ID_LIST = {
+	1403766917709172889, # arena open / direct
+	1399393869854150787, # the channel with threads: 🪐ᴱᴼᴱ PD
+}
+
 TARGET_CHANNEL_ID = 1390389351187480606  # the repost channel: current-games
+
+# arena open / direct 1403766917709172889
+# 🪐ᴱᴼᴱ PD 1399393869854150787
+
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -59,7 +67,7 @@ async def on_message(message):
 
     if isinstance(message.channel, discord.Thread):
         parent = message.channel.parent
-        if parent and parent.id == SOURCE_CHANNEL_ID:
+        if parent and parent.id in SOURCE_CHANNEL_ID_LIST:
             target_channel = client.get_channel(TARGET_CHANNEL_ID)
             if not target_channel:
                 print("Could not find target channel.")
@@ -117,7 +125,7 @@ async def on_message_edit(before, after):
 
     if isinstance(after.channel, discord.Thread):
         parent = after.channel.parent
-        if parent and parent.id == SOURCE_CHANNEL_ID:
+        if parent and parent.id in SOURCE_CHANNEL_ID_LIST:
             target_channel = client.get_channel(TARGET_CHANNEL_ID)
             if not target_channel:
                 return
@@ -156,7 +164,7 @@ async def on_message_delete(message):
 
     if isinstance(message.channel, discord.Thread):
         parent = message.channel.parent
-        if parent and parent.id == SOURCE_CHANNEL_ID:
+        if parent and parent.id in SOURCE_CHANNEL_ID_LIST:
             target_channel = client.get_channel(TARGET_CHANNEL_ID)
             if not target_channel:
                 return
