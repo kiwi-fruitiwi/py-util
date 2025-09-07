@@ -1,34 +1,20 @@
-7:46 quake 3
-7:57 UVR¹
-8:09 twinbite
-8:20 hero's blow
-8:31 UVR²
-8:43 quake 3
-8:50 mooncleaver starts → 8:55 platform destroyed
-9:07 elemental purge
-9:14 prowling gale towers appear
-9:21 towers go off for prowling gale
-9:26 twofold tempest
-9:33 first green AoE
-9:41 second
-9:48 third
-9:54 fourth
-10:19 champion's circuit¹
-10:23
-10:27
-10:32
-10:36
-10:47 quake 3 ← always 5 pulses
-11:00 UVR³
-11:12 twinbite
-11:32 lone wolf's lament
-11:50 towers
-12:00 hero's blow
-12:12 UVR⁴
-12:19 tower¹ ← full party + pot window?
-12:41 tower² ← invuln
-13:01 tower³ ← kitchen sink. 13:07-13:13
-13:20 tower⁴
-13:41 tower⁵
-13:53 starcleaver
-14:02 enrage
+2:43 usurper of frost appears
+2:54 quadruple slap → 2:58
+
+3:14 diamond dust
+3:17 untargetable
+3:24 baited proteans⁴
+3:26 starbursts placed
+3:30 knockback
+3:33 starbursts activate
+3:34 → 3:39 sinbound holy exactly 1.5s apart
+
+3:42 shining armor? gaze attack
+3:45 stillness or silence
+4:03 hallowed ray
+4:26 scythe kick from usurper of frost + blue mirror
+4:36 scythe kick from red mirrors
+4:42 banish III
+
+4:52 light rampant
+5:09 powerful light, LP stack

@@ -45,4 +45,4 @@ def applyTimestampOffsets(filePath, offsetSeconds, outputPath=None):
     print(f"Updated file saved to: {outputPath}")
 
 
-applyTimestampOffsets('input.txt', -18)
+applyTimestampOffsets('input.txt', -2)

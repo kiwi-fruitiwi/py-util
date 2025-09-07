@@ -1,4 +1,5 @@
 from dotenv import load_dotenv
+from datetime import datetime
 import time
 import discord
 import os
@@ -8,8 +9,8 @@ import json
 load_dotenv()
 TOKEN = os.getenv('AGGREGATOR_BOT_TOKEN')
 SOURCE_CHANNEL_ID_LIST = {
-	1403766917709172889, # arena open / direct
-	1399393869854150787, # the channel with threads: 🪐ᴱᴼᴱ PD
+    1403766917709172889, # arena open / direct
+    1399393869854150787, # the channel with threads: 🪐ᴱᴼᴱ PD
 }
 
 TARGET_CHANNEL_ID = 1390389351187480606  # the repost channel: current-games
@@ -26,6 +27,12 @@ intents.guilds = True
 
 client = discord.Client(intents=intents)
 STATE_FILE = 'mirrorState.json'
+
+
+def getFormattedTime():
+	now = datetime.now()
+	# format: 11:05:23am 2025.Sept.7
+	return now.strftime("%I:%M:%S%p %Y.%b.%d")
 
 
 # unsure if this actually works in practice between reboots T_T
@@ -113,12 +120,12 @@ async def on_message(message):
                 "webhook_id": webhook.id
             }
             save_state(message_map)
-            print(f'[ SEND ] 📫 Sent message ID: {sent_message.id}')
+            print(f'{getFormattedTime()} [ SEND ] 📫 Sent message ID: {sent_message.id}')
 
 
 @client.event
 async def on_message_edit(before, after):
-    print(f"[ EDIT EVENT ] message {after.id} edited")
+    print(f"{getFormattedTime()} [ EDIT EVENT ] ✒️ message {after.id} edited")
 
     if after.author.bot:
         return
@@ -157,7 +164,7 @@ async def on_message_edit(before, after):
 
 @client.event
 async def on_message_delete(message):
-    print(f"[ DELETE EVENT ] message {message.id} deleted")
+    print(f"{getFormattedTime()} [ DELETE EVENT ] message {message.id} deleted")
 
     if message.author.bot:
         return
