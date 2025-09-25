@@ -11,7 +11,8 @@ from constants import ANSI
 
 def printCardText(cardName: str, scryfallJson):
 	# iterate through scryfall data to find the matching unique card name
-	# then return the text! note scryfall data is not keyed by card name!
+	# then return the text! ⚠️ note that scryfall data is not keyed by card
+	# name! thus iteration
 	for element in scryfallJson:
 		# for now, ignore multiple face cards like invasions and MDFCs
 		# if element['card_faces']:
@@ -24,16 +25,43 @@ def printCardText(cardName: str, scryfallJson):
 		# 	"type_line": "Legendary Creature — Human Ranger",
 		#	"oracle_text": "Whenever the Ring tempts you, ..."
 
-		name: str = element['name']
 
-		# for multi-faced cards like adventures in Wilds of Eldraine 🍁
+		# get the actual name. special case if it's an omenpaths set
+		# scryfall shows 🔑name as the spm name, not 🌌ᴼᴹ¹ 🔑printed_name
+		# there are three cases in two branches:
+		#	normal non-omenpaths set: has 🔑name
+		#     we have to account for ' // ' split cards
+		#	  every card face needs to be output
+		#   omenpaths set: has 🔑name for spm, 🔑printed_name for 🌌ᴼᴹ¹
+		#	  take the printed_name
+		#     but also need to check for ' // ' split cards ← third case
+
+
+		# omenpaths cards that aren't double face: .get() falls back to 🔑name
+		# if 🔑printed_name doesn't exist
+		name: str = element.get('printed_name', element['name'])
+
+		# omenpaths cards that are double face, but we need to get the name
+		# of each face first!
+		if ' // ' in name and 'printed_name' in element['card_faces'][0]:
+			name: str = element['card_faces'][0]['printed_name']
+
+			# seek matches, then print all faces
+			if cardName in name:
+				for face in element['card_faces']:
+					print(f'{getCardFaceText(face, face['printed_name'], element["rarity"])}', end='')
+		else:
+
+			# normal or omenpaths single face cards
+			if cardName == name:
+				print(f'{getCardFaceText(element, name, element["rarity"])}')
+
+		# for non-omenpath multi-faced cards like adventures in Wilds of Eldraine 🍁
 		# iterate through all card faces and print each one
-		if cardName in name and '//' in name:
+		# spaces avoids cards like SP//dr
+		if cardName in name and ' // ' in name:
 			for face in element['card_faces']:
-				print(f'{getCardFaceText(face, face["name"], element["rarity"])}', end='')
-
-		if cardName == name:
-			print(f'{getCardFaceText(element, name, element["rarity"])}')
+				print(f'{getCardFaceText(face, face['name'], element["rarity"])}', end='')
 
 
 def getCardFaceText(face: dict, name: str, rarity: str):

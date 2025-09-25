@@ -50,9 +50,22 @@ def generateNameManacostDict(sfJson):
 		# strip {}, converting {2}{W}{R} to 2WR
 		manaCost: str = cost.replace("{", "").replace("}", "")
 
-		name: str = card['name']
-		if '//' in card['name']:
-			name = card['name'].split(' // ')[0]
+		# 🔑 name has // inside, but the card faces don't
+		# 	so I have to
+		# 		detect //
+		# 		if so, grab card_faces[0]['printed_name']
+		# 		otherwise detect printed_name → name
+		# hard code exception for SP//dr, Piloted by Peni :P
+		#   use ' // ' instead of '//'
+		if ' // ' in card['name']:
+			name: str = card['name'].split(' // ')[0]
+			if ('card_faces' in card) and ('printed_name' in card['card_faces'][0]):
+				name = card['card_faces'][0]['printed_name']
+		else:
+			if 'printed_name' in card:
+				name: str = card['printed_name']
+			else:
+				name: str = card['name']
 
 		results[name] = manaCost
 
