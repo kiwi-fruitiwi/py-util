@@ -51,17 +51,18 @@ def printCardText(cardName: str, scryfallJson):
 				for face in element['card_faces']:
 					print(f'{getCardFaceText(face, face['printed_name'], element["rarity"])}', end='')
 		else:
+			# for non-omenpath multi-faced cards like adventures in Wilds of Eldraine 🍁
+			# iterate through all card faces and print each one
+			# spaces avoids cards like SP//dr
+			if cardName in name and ' // ' in name:
+				for face in element['card_faces']:
+					print(
+						f'{getCardFaceText(face, face['name'], element["rarity"])}',
+						end='')
 
-			# normal or omenpaths single face cards
-			if cardName == name:
-				print(f'{getCardFaceText(element, name, element["rarity"])}')
-
-		# for non-omenpath multi-faced cards like adventures in Wilds of Eldraine 🍁
-		# iterate through all card faces and print each one
-		# spaces avoids cards like SP//dr
-		if cardName in name and ' // ' in name:
-			for face in element['card_faces']:
-				print(f'{getCardFaceText(face, face['name'], element["rarity"])}', end='')
+			else: # normal or omenpaths single face cards
+				if cardName == name:
+					print(f'{getCardFaceText(element, name, element["rarity"])}')
 
 
 def getCardFaceText(face: dict, name: str, rarity: str):

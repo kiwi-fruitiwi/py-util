@@ -208,7 +208,11 @@ def main():
 		# we ignore all but the first token in the input string this way
 		if firstElement[0] == '!':
 			cardName: str = firstElement[1:].strip()  # remove '!' and spaces
-			bestMatch = process.extractOne(cardName, masterJson.keys())
+
+			# 🍓🫐🥭
+			# let's test scryfall name keys
+			allNames = [card["name"] for card in scryfallJson]
+			bestMatch = process.extractOne(cardName, allNames)
 
 			# process always returns a list even if its length is 1
 			printCardText(bestMatch[0], scryfallJson)
@@ -240,7 +244,6 @@ def main():
 		# set up a list of card names matched to our input
 		cardFetchList: List[str] = \
 			getBestCardNameMatches(masterJson.keys(), strippedCardNames)
-
 
 		# handle if we detected the 🌟 subtraction special command op, '-'
 		# TODO maybe don't need flag; can check non-empty string
