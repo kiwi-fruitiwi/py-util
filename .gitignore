@@ -130,4 +130,5 @@ dmypy.json
 
 /17L/data/converted/
 /17L/data/requests/
+/17L/data/*
 /icoConvert

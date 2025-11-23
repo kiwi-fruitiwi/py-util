@@ -11,7 +11,10 @@ TOKEN = os.getenv('AGGREGATOR_BOT_TOKEN')
 SOURCE_CHANNEL_ID_LIST = {
 	1403766917709172889,  # arena open / direct
 	1399393869854150787,  # the channel with threads: 🪐ᴱᴼᴱ PD
-	1420240453428707431   # 🌌ᴼᴹ¹ pick two draft channel
+	1420240453428707431,  # 🌌ᴼᴹ¹ pick two draft channel
+	1440151203215315066   # 🔥🍃💦🌪️ᵀᴸᴬ PD
+
+	# https://discord.com/channels/569606082989654016/1440151203215315066
 }
 
 TARGET_CHANNEL_ID = 1390389351187480606  # the repost channel: current-games
@@ -62,68 +65,100 @@ async def on_ready():
 # Tracks last used thread ID and timestamps
 last_thread_id = None
 last_post_times = {}  # {thread_id: unix_timestamp}
-THREAD_TIMEOUT = 600  # 10 minutes
+THREAD_TIMEOUT = 240  # 4 minutes
+
 
 
 @client.event
 async def on_message(message):
-	global last_thread_id
-
+	# if the message is posted by a bot, do nothing
 	if message.author.bot:
 		return
 
 	if isinstance(message.channel, discord.Thread):
 		parent = message.channel.parent
-		if parent and parent.id in SOURCE_CHANNEL_ID_LIST:
-			target_channel = client.get_channel(TARGET_CHANNEL_ID)
-			if not target_channel:
-				print("Could not find target channel.")
-				return
 
-			thread_id = message.channel.id
-			current_time = time.time()
-			last_time = last_post_times.get(thread_id, 0)
-			should_print_header = (thread_id != last_thread_id) or (
-						current_time - last_time > THREAD_TIMEOUT)
+		# only act if message is specified in SOURCE CHANNEL ID LIST
+		if not (parent and parent.id in SOURCE_CHANNEL_ID_LIST):
+			return
 
-			escaped_name = message.channel.name.replace("🥝", "")
 
-			content_lines = []
-			if should_print_header:
-				content_lines.append(f'`🧵 {escaped_name}`')
-				message_link = f"https://discord.com/channels/{message.guild.id}/{message.channel.id}/{message.id}"
-				last_post_times[thread_id] = current_time
+		target_channel = client.get_channel(TARGET_CHANNEL_ID)
+		if not target_channel:
+			print("[ERROR] Could not find target channel.")
+			return
 
-			content_lines.append(message.content)
+		thread_id = message.channel.id
+		current_time = time.time()
 
-			if should_print_header:
-				content_lines.append(f"\n`message link:` {message_link}")
-			content = "\n".join(content_lines)
+		# get last time we mirrored anything from *this thread*
+		last_time = last_post_times.get(thread_id, 0)
 
-			files = [await attachment.to_file() for attachment in
-					 message.attachments]
+		# print header if:
+		#   this is the first message we've ever mirrored from this thread, OR
+		#   it's been longer than THREAD_TIMEOUT since the last mirrored message
+		is_first_message_in_thread = (thread_id not in last_post_times)
+		timed_out = (current_time - last_time > THREAD_TIMEOUT)
 
-			webhooks = await target_channel.webhooks()
-			webhook = discord.utils.get(webhooks, name="Mirror Bot")
-			if webhook is None:
-				webhook = await target_channel.create_webhook(name="Mirror Bot")
+		should_print_header = is_first_message_in_thread or timed_out
 
-			sent_message = await webhook.send(
-				content=content,
-				username=message.author.display_name,
-				avatar_url=message.author.avatar.url if message.author.avatar else None,
-				files=files,
-				wait=True
+		debug_lines = [
+			f"[DEBUG] thread={thread_id}",
+			f"should_print_header={should_print_header}",
+			f"current_time={current_time}",
+			f"last_time={last_time}",
+			f"delta={current_time - last_time}",
+			f"timeout={THREAD_TIMEOUT}",
+			f"last_thread_id={last_thread_id}",
+		]
+		print("\n".join(debug_lines))
+
+		escaped_name = message.channel.name.replace("🥝", "")
+		content_lines = []
+
+		if should_print_header:
+			content_lines.append(f'`🧵 {escaped_name}`')
+			message_link = (
+				f"https://discord.com/channels/"
+				f"{message.guild.id}/{message.channel.id}/{message.id}"
 			)
 
-			last_thread_id = thread_id
-			message_map[str(message.id)] = {
-				"mirrored_id": str(sent_message.id),
-				"webhook_id": webhook.id
-			}
-			save_state(message_map)
-			print(
-				f'{getFormattedTime()} [ SEND ] 📫 Sent message ID: {sent_message.id}')
+		content_lines.append(message.content or "")
+
+		if should_print_header:
+			content_lines.append(f"\n`message link:` {message_link}")
+
+		content = "\n".join(content_lines)
+
+		files = [await attachment.to_file() for attachment in message.attachments]
+
+		webhooks = await target_channel.webhooks()
+		webhook = discord.utils.get(webhooks, name="Mirror Bot")
+		if webhook is None:
+			webhook = await target_channel.create_webhook(name="Mirror Bot")
+
+		sent_message = await webhook.send(
+			content=content,
+			username=message.author.display_name,
+			avatar_url=message.author.avatar.url if message.author.avatar else None,
+			files=files,
+			wait=True,
+		)
+
+		# ✅ Update last_post_times for THIS THREAD on every mirrored message
+		last_post_times[thread_id] = current_time
+
+		# If you still want last_thread_id for something else, keep it:
+		# global last_thread_id
+		# last_thread_id = thread_id
+
+		message_map[str(message.id)] = {
+			"mirrored_id": str(sent_message.id),
+			"webhook_id": webhook.id,
+		}
+		save_state(message_map)
+
+		print(f"{getFormattedTime()} [ SEND ] 📫 Sent message ID: {sent_message.id}")
 
 
 @client.event

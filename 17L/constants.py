@@ -44,7 +44,7 @@ extraCardsForEachSet: Dict[str, str] = {
 baseRequestURL: str = \
 	f'https://www.17lands.com/card_ratings/data' \
 	f'?expansion={setName}' \
-	f'&format=PickTwoDraft' \
+	f'&format=PremierDraft' \
 	# f'&start_date=2023-09-25' # recent data only, typically last 2 weeks
 
 # a map between player caliber set, e.g. 'all', 'top', 'bottom', 'middle', and
