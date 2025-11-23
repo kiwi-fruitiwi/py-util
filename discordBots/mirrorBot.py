@@ -68,6 +68,29 @@ last_post_times = {}  # {thread_id: unix_timestamp}
 THREAD_TIMEOUT = 240  # 4 minutes
 
 
+def build_mirrored_content(message: discord.Message, include_header: bool) -> str:
+	"""
+	Builds the mirrored message content, optionally including the thread header
+	and the canonical Discord message link.
+	"""
+	escaped_name = message.channel.name.replace("🥝", "")
+	content_lines = []
+
+	if include_header:
+		content_lines.append(f'`🧵 {escaped_name}`')
+
+	# main body
+	content_lines.append(message.content or "")
+
+	if include_header:
+		message_link = (
+			f"https://discord.com/channels/"
+			f"{message.guild.id}/{message.channel.id}/{message.id}"
+		)
+		content_lines.append(f"\n`message link:` {message_link}")
+
+	return "\n".join(content_lines)
+
 
 @client.event
 async def on_message(message):
@@ -81,7 +104,6 @@ async def on_message(message):
 		# only act if message is specified in SOURCE CHANNEL ID LIST
 		if not (parent and parent.id in SOURCE_CHANNEL_ID_LIST):
 			return
-
 
 		target_channel = client.get_channel(TARGET_CHANNEL_ID)
 		if not target_channel:
@@ -113,22 +135,11 @@ async def on_message(message):
 		]
 		print("\n".join(debug_lines))
 
-		escaped_name = message.channel.name.replace("🥝", "")
-		content_lines = []
-
-		if should_print_header:
-			content_lines.append(f'`🧵 {escaped_name}`')
-			message_link = (
-				f"https://discord.com/channels/"
-				f"{message.guild.id}/{message.channel.id}/{message.id}"
-			)
-
-		content_lines.append(message.content or "")
-
-		if should_print_header:
-			content_lines.append(f"\n`message link:` {message_link}")
-
-		content = "\n".join(content_lines)
+		# use helper method to build header content. called in on_edit as well
+		content = build_mirrored_content(
+			message=message,
+			include_header=should_print_header
+		)
 
 		files = [await attachment.to_file() for attachment in message.attachments]
 
@@ -148,13 +159,11 @@ async def on_message(message):
 		# ✅ Update last_post_times for THIS THREAD on every mirrored message
 		last_post_times[thread_id] = current_time
 
-		# If you still want last_thread_id for something else, keep it:
-		# global last_thread_id
-		# last_thread_id = thread_id
-
+		# store mapping + whether this had a header
 		message_map[str(message.id)] = {
 			"mirrored_id": str(sent_message.id),
 			"webhook_id": webhook.id,
+			"had_header": should_print_header,
 		}
 		save_state(message_map)
 
@@ -182,6 +191,7 @@ async def on_message_edit(before, after):
 
 			webhook_id = info["webhook_id"]
 			mirrored_id = int(info["mirrored_id"])
+			had_header = info.get("had_header", False)
 
 			webhooks = await target_channel.webhooks()
 			webhook = discord.utils.get(webhooks, id=webhook_id)
@@ -189,17 +199,20 @@ async def on_message_edit(before, after):
 				print(f"Webhook ID {webhook_id} not found in target channel")
 				return
 
-			new_content = after.content
+			# rebuild mirrored content (keep / drop header based on original)
+			new_content = build_mirrored_content(
+				message=after,
+				include_header=had_header
+			)
+
 			try:
 				await webhook.edit_message(
 					message_id=mirrored_id,
 					content=new_content
 				)
-				print(
-					f"[ EDITED ] ✒️ Updated mirrored message ID: {mirrored_id}")
+				print(f"[ EDITED ] ✒️ Updated mirrored message ID: {mirrored_id}")
 			except discord.NotFound:
-				print(
-					f"Original mirrored message not found for ID {mirrored_id}")
+				print(f"Original mirrored message not found for ID {mirrored_id}")
 
 
 @client.event
