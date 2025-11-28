@@ -234,7 +234,7 @@ def main():
 
 			# there should be only two tokens: colorPair: cardName
 			# and colorPair must be in [WU, WB, WR, WG, etc.]
-			assert len(tokens) == 2
+			# assert len(tokens) == 2 ← can sometimes include URG
 			assert tokens[0].upper() in colorPairs
 
 			# save what our current data set is so it's visible in the output

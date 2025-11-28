@@ -22,8 +22,9 @@ colorPairs: List[str] = [
 	'WU', 'WB', 'WR', 'WG',
 	'UB', 'UR', 'UG',
 	'BR', 'BG',
-	'RG'
-]
+	'RG',
+	'URG'
+] # additional wedges and shards look like WRG, UBG, UBR, etc.
 
 # map between set names and additional inclusions, starting from mkm
 extraCardsForEachSet: Dict[str, str] = {

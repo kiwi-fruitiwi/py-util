@@ -132,3 +132,5 @@ dmypy.json
 /17L/data/requests/
 /17L/data/*
 /icoConvert
+
+/discordBots/mirrorState.json
