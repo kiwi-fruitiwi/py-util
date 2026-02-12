@@ -1,26 +1,78 @@
-0:00 phase start
-0:05 hell's judgment
-0:19 ultimate relativity
-0:23 tethers out
-0:30 first fire
-0:36 stoplight set 1 go off
-0:40 second fire
-0:46 stoplight set 2 go off
-0:50 third fire
-0:56 stoplight set 3 go off
-0:59 rewinds
-1:07 shell crusher
-1:16 shockwave pulsar
-1:24 black halo
-1:33 spell-in-waiting refrain
-1:41 dark water iii prep - stack markers out
-1:49 apoc → 1:51 appearance of first light rotations
-1:52 dark water #1
-1:54 spirit taker
-2:04 dark eruption → "swap"
-2:11 dark water #2
-2:13 darkest dance
-2:16 knockback → "swap"
-2:20 dark water #3
-2:25 shockwave pulsar
-2:39 memory's end
+0:00 fight start
+0:11 crown of arcadia ⚕️
+0:25 impact ← raw steel trophy
+0:41 trophy weapons appear
+0:50 first assault evolved weapon damage. sword lines are 'sharp taste'
+0:55 second weapon: axe stack is 'heavy weight'
+1:00 third weapon: scythe is sweeping victory
+
+1:16 trophy weapons appear
+1:20 void stardust puddle
+1:22 void stardust puddle
+1:24 void stardust puddle
+1:30 crushing comet
+1:35 weapon
+1:40 weapon
+1:45 weapon
+1:47 puddles appear. 1:49, 1:51
+1:56 comet
+2:03 crown of arcadia ⚕️
+2:22 dance of domination trophy ← starts slashing
+2:30 eye of the hurricane
+2:44 raw steel trophy 
+3:00 charybdistopia
+3:15 assault apex: 6 weapons. clockwise order
+3:20
+3:25 
+3:30 
+3:35
+3:40
+3:47 powerful gust: tornado baits!
+3:49 immortal reign?
+4:01 one and only
+
+4:14 great wall of fire tankbuster line 
+4:17 second line
+4:28 orbital omen: portals appear
+4:29 second portals appear
+4:31 second lines appear
+4:36 fire and fury fire cones go off
+4:54 meteorain
+5:02 fearsome fireball
+5:11 fearsome fireball
+5:21 fearsome fireball
+5:31 fearsome fireball
+5:44 triple tyrannhilation
+
+6:03 flatliner
+6:17 majestic meteor. towers appear
+6:18 tethers
+6:30 knockup
+6:38 puddles
+6:40 second puddles
+6:42 third puddles
+6:45 fire breath
+6:49 second towers
+6:50 second tethers
+7:01 knockup
+7:17 fire breath ← majestic meteowrath
+7:28 massive meteor. 5 hits 1 per second
+7:40 knockup
+7:50 arcadion avalanche
+8:02 crown of arcadia
+8:13 great wall of fire
+8:16 second hit
+8:27 orbital omen
+8:31 second lines appear
+8:45 crown of arcadia ⚕️
+8:58 ecliptic stampede markers and prox AoEs appear
+		healer prepositions center south
+9:04 atomic impact every 2s → 9:18
+9:15 towers appear
+
+9:30 fire line AoE baits go off
+9:33 2-way or 4-way fireball
+9:42 crown of arcadia ⚕️
+9:56 heartbreak kick
+10:15 heartbreak kick
+10:36 heartbreak kick
