@@ -3,7 +3,7 @@ from typing import List, Dict
 from enum import Enum
 
 # current set name
-setName: str = 'ecl'
+setName: str = 'msh'
 
 # sample size threshold for being included in mean and stdev calculations
 # generally if # GIH is 50000, # OH floats around 20000. # GD is 30000
@@ -39,7 +39,10 @@ extraCardsForEachSet: Dict[str, str] = {
 	'eoe': '(e:eos) OR (e:spg cn≥119 cn≤128)',
 	'om1': '(e:omb)',
 	'tla': '(e:tla cn≥1 cn≤286) OR (e:tle cn≥1 cn≤61)',
-	'ecl': '(e:spg cn≥129 cn≤148)'
+	'ecl': '(e:spg cn≥129 cn≤148)',
+	'tmt': '(e:pza)',
+	'sos': '(e:soa) OR (set:spg, date=sos)',
+	'msh': '(set:mar)'
 }
 
 # it's possible to leave out start and end date. defaults to entire format!

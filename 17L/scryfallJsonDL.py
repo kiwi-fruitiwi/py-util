@@ -14,6 +14,13 @@ def getScryfallJson():
 	# 'the list' and 'special guests' are part of 🗡️mkm but require large
 	# queries of individual cards
 
+	# scryfall rejects the default python userAgent
+	headers = {
+		"User-Agent": "scryfallJsonDL-script/0.1",
+		"Accept": "application/json;q=0.9,*/*;q=0.8",
+	}
+
+
 	# note we can append '+OR+set:MOM' to add additional sets
 	baseRequestURL: str = f'https://api.scryfall.com/cards/search?q='
 	requestURL: str = f'{baseRequestURL}set:{setName}'
@@ -22,8 +29,11 @@ def getScryfallJson():
 	if setName in extraCardsForEachSet:
 		requestURL += f'+OR+{extraCardsForEachSet[setName]}'
 
-	data = requests.get(requestURL).json()
+	data = requests.get(requestURL, headers=headers).json()
 	print(f'request URL → {requestURL}')
+
+	if "data" not in data:
+		raise RuntimeError(f"Scryfall did not return card data: {data}")
 
 	# final result json ← concatenation of all 🔑:data pages
 	result = data['data']
@@ -32,7 +42,7 @@ def getScryfallJson():
 	while data['has_more']:
 		print(f'🐳 🔑has_more!')
 		nextRequestURL: str = data['next_page']
-		data = requests.get(nextRequestURL).json()
+		data = requests.get(nextRequestURL, headers=headers).json()
 
 		# add new pagination 🔑:data items to the results list
 		result.extend(data['data'])
@@ -43,7 +53,6 @@ def getScryfallJson():
 	# with open(f'scryfall-{setName}.json', 'w', encoding='utf-8') as json_file_handler:
 	with open(f'scryfall.json', 'w', encoding='utf-8') as json_file_handler:
 		json_file_handler.write(json.dumps(result, indent=2))
-
 
 
 getScryfallJson()
