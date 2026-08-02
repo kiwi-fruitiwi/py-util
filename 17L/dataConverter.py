@@ -20,7 +20,7 @@ def convertJson(jsonInputPath: str, jsonOutputPath: str):
 
     # iterate through each card object and create a json object keyed to 'name'
     # note that GIH includes opening hand, whereas GD or 'ever drawn' does not
-    for card in json_data:
+    for card in json_data['data']:
         name: str = card['name']
         alsa: float = card['avg_seen']
         ata: float = card['avg_pick']
@@ -78,9 +78,63 @@ def convert():
             convertJson(pairInput, pairOutput)
 
 
+'''
+https://www.17lands.com/api/card_data?expansion=MSH&event_type=PremierDraft&time_period=ALL_TIME&colors=WU
+'''
+
 
 '''
-sample JSON element from 17L request:
+2026.07.09 different format?
+
+{
+    "name": "Agent Maria Hill",
+    "mtga_id": 104893,
+    "color": "W",
+    "rarity": "uncommon",
+    "url": "https://cards.scryfall.io/large/front/9/e/9e327c67-1cf1-4d82-903c-b41c8e7cf747.jpg?1780572341",
+    "url_back": "",
+    "types": [
+        "Legendary Creature - Human Spy Hero"
+    ],
+    "layout": "standard",
+    "seen_count": 1006,
+    "avg_seen": 3.4483101,
+    "pick_count": 301,
+    "avg_pick": 4.0598007,
+    "game_count": 1732,
+    "pool_count": 1954,
+    "play_rate": 0.8863868986693961,
+    "win_rate": 0.53810624,
+    "opening_hand_game_count": 312,
+    "opening_hand_win_rate": null,
+    "drawn_game_count": 440,
+    "drawn_win_rate": null,
+    "ever_drawn_game_count": 752,
+    "ever_drawn_win_rate": 0.55585106,
+    "never_drawn_game_count": 979,
+    "never_drawn_win_rate": 0.52400409,
+    "drawn_improvement_win_rate": 0.03184696999999992
+},
+
+→ converts to this:
+    "Agent Maria Hill": {
+        "Name": "Agent Maria Hill",
+        "ALSA": 3.4483101,
+        "ATA": 4.0598007,
+        "# OH": 312,
+        "OH WR": null,
+        "# GD": 440,
+        "GD WR": null,
+        "# GIH": 752,
+        "GIH WR": 0.55585106,
+        "IWD": 0.03184696999999992,
+        "URL": "https://cards.scryfall.io/large/front/9/e/9e327c67-1cf1-4d82-903c-b41c8e7cf747.jpg?1780572341",
+        "Color": "W",
+        "Rarity": "U"
+    },
+
+old request, hasn't been changed since 💍ᴸᵀᴿ
+sample JSON element from 17L request: 
 {
 	"seen_count": 6171,
 	"avg_seen": 5.210338680926916,

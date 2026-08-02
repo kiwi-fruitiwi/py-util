@@ -82,7 +82,7 @@ def getRecentAlsaMaps():
 		'''
 		result: Dict = {}
 		for card in recentAllData:
-			alsa: float = card['avg_seen']
+			alsa: float | int = card['avg_seen']
 			name: str = card['name']
 			result[name] = alsa
 

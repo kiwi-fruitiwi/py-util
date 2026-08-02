@@ -3,7 +3,7 @@ import dataConverter
 import dataAggregator
 from datetime import datetime
 
-dataFetcher.fetch()
+# dataFetcher.fetch()
 dataConverter.convert()
 dataAggregator.aggregate()
 

@@ -3,7 +3,7 @@ from typing import List, Dict
 from enum import Enum
 
 # current set name
-setName: str = 'msh'
+setName: str = 'hob'.upper()
 
 # sample size threshold for being included in mean and stdev calculations
 # generally if # GIH is 50000, # OH floats around 20000. # GD is 30000
@@ -22,8 +22,7 @@ colorPairs: List[str] = [
 	'WU', 'WB', 'WR', 'WG',
 	'UB', 'UR', 'UG',
 	'BR', 'BG',
-	'RG',
-	'URG'
+	'RG'
 ] # additional wedges and shards look like WRG, UBG, UBR, etc.
 
 # map between set names and additional inclusions, starting from mkm
@@ -45,12 +44,15 @@ extraCardsForEachSet: Dict[str, str] = {
 	'msh': '(set:mar)'
 }
 
-# it's possible to leave out start and end date. defaults to entire format!
+
 baseRequestURL: str = \
-	f'https://www.17lands.com/card_ratings/data' \
-	f'?expansion={setName}' \
-	f'&format=PremierDraft' \
-	# f'&start_date=2023-09-25' # recent data only, typically last 2 weeks
+    f"https://www.17lands.com/api/card_data" \
+    f"?expansion={setName.upper()}" \
+    f"&event_type=PremierDraft"
+
+# https://www.17lands.com/api/card_data
+# ?expansion=MSH&event_type=PremierDraft
+# &time_period=ALL_TIME&colors=WU
 
 # a map between player caliber set, e.g. 'all', 'top', 'bottom', 'middle', and
 # their 17lands json request URLs
