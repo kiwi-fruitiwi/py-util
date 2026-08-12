@@ -127,12 +127,21 @@ def createMasterJson(caliber: str):
 		else:
 			masterCardData['manaCost'] = nameManacostDict[name]
 
-		del masterCardData['ALSA']
+
+		# we no longer do recent alsa maps.
+		#    TODO can maybe use &startdate in the request instead
+		# del masterCardData['ALSA']
+		# dataSetPath: str = f'data/{caliber}RecentAlsa.json'
+		# with open(dataSetPath, 'r', encoding='utf-8') as jsonFileHandler:
+		# 	alsas: Dict = json.load(jsonFileHandler)
+		# masterCardData['ALSA'] = alsas[name]
+
+		# a safer way to do recentAlsa: make sure it exists first
 		dataSetPath: str = f'data/{caliber}RecentAlsa.json'
 		with open(dataSetPath, 'r', encoding='utf-8') as jsonFileHandler:
 			alsas: Dict = json.load(jsonFileHandler)
-
-		masterCardData['ALSA'] = alsas[name]
+		if name in alsas and alsas[name] is not None:
+			masterCardData['ALSA'] = alsas[name]
 
 		# grab the mana cost from our collapsed scryfall dictionary:
 		# format is [cardName, mana cost] where latter is formatted

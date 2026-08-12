@@ -13,6 +13,14 @@
 # 		&user_group=top
 
 
+
+# update in 2026.08.11 🗝️ᴴᴼᴯ
+# https://www.17lands.com/api/card_data?
+# 	expansion=HOB
+# 	&event_type=PremierDraft
+# 	&time_period=ALL_TIME
+# 	&colors=WU
+
 import json
 import requests
 
@@ -39,13 +47,41 @@ def twoWeeksPrior():
 	return formattedDate
 
 
+# this is now deprecated, but
+# TODO I'd like to get it working again
+# it used to show recent ALSAs with full-format card ratings
+# workflow used to be this:
+# 	full-format 17L data
+#         ↓
+# 	all.json contains all-time ALSA
+#         ↓
+# 	second request covering ~last 2 weeks
+#         ↓
+# 	extract avg_seen
+#         ↓
+# 	write allRecentAlsa.json / topRecentAlsa.json
+#         ↓
+# 	createMasterJson replaces old ALSA with recent ALSA
 def getRecentAlsaMaps():
 	for dataSetName, dataSetURL in caliberRequestMap.items():
-		dataSetURL += f'&start_date={twoWeeksPrior()}'
+		dataSetURL += f'&time_period=LAST_TWO_WEEKS'
 		print(f'🫐 processing {dataSetName} → {dataSetURL}')
 
 		# query 17L for data for 'all' users, usually within last two weeks
-		recentAllData = requests.get(dataSetURL).json()
+
+		# GPT wants to add some error checking to the line below
+		# recentAllData = requests.get(dataSetURL).json()
+		response = requests.get(dataSetURL)
+		response.raise_for_status()
+
+		recentAllData = response.json()
+
+		if isinstance(recentAllData, dict) and recentAllData.get(
+				"status") == "request_error":
+			raise RuntimeError(
+				f"17Lands request failed:\n"
+				f"{json.dumps(recentAllData, indent=2)}"
+			)
 
 		# create new dictionary keyed by cardName, value: float = ALSA
 		# the request returns a list of dictionaries
@@ -81,7 +117,7 @@ def getRecentAlsaMaps():
 			},
 		'''
 		result: Dict = {}
-		for card in recentAllData:
+		for card in recentAllData['data']:
 			alsa: float | int = card['avg_seen']
 			name: str = card['name']
 			result[name] = alsa
@@ -126,7 +162,3 @@ def getRawRequestsFrom17L():
 # get requested json data from 17lands.com for all data sets
 def fetch():
 	getRawRequestsFrom17L()
-
-	# enable this when we don't restrict startDate so ALSAs are more accurate
-	# TODO explain what happens when this isn't run
-	getRecentAlsaMaps()

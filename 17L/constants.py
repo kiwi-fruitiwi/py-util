@@ -50,6 +50,14 @@ baseRequestURL: str = \
     f"?expansion={setName.upper()}" \
     f"&event_type=PremierDraft"
 
+
+# update in 2026.08.11 🗝️ᴴᴼᴯ
+# https://www.17lands.com/api/card_data?
+# 	expansion=HOB
+# 	&event_type=PremierDraft
+# 	&time_period=ALL_TIME
+# 	&colors=WU
+
 # https://www.17lands.com/api/card_data
 # ?expansion=MSH&event_type=PremierDraft
 # &time_period=ALL_TIME&colors=WU
